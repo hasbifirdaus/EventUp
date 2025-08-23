@@ -1,0 +1,324 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------- ENUM -----------------
+enum UsersRoleEnum {
+  customer
+  organizer
+}
+
+enum TransactionStatusEnum {
+  pending
+  paid
+  cancelled
+  expired
+  refunded
+}
+
+enum TicketStatusEnum {
+  available
+  sold
+  checked_in
+  cancelled
+}
+
+enum EventCategoryEnum {
+  music
+  sport
+  seminar
+  workshop
+  conference
+  other
+}
+
+enum PaymentMethodEnum {
+  GOPAY
+  OVO
+  DANA
+  SHOPEEPAY
+  BCA_TRANSFER
+  MANDIRI_TRANSFER
+  FREE
+}
+
+enum PaymentStatusEnum {
+  pending
+  success
+  failed
+  refunded
+}
+
+enum DiscountTypeEnum {
+  fixed
+  percentage
+}
+
+enum AuditLogActionEnum {
+  LOGIN
+  LOGOUT
+  CREATE_EVENT
+  UPDATE_EVENT
+  PURCHASE_TICKET
+  REFUND
+}
+
+
+
+// ----------------- MODELS -----------------
+model User {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username         String            @unique @db.VarChar(50)
+  email            String            @unique @db.VarChar(100)
+  password         String            @db.VarChar(255)
+  firstName        String?           @map("first_name") @db.VarChar(25)
+  lastName         String?           @map("last_name") @db.VarChar(25)
+  role             UsersRoleEnum
+  referralCode     String?           @unique @map("referral_code") @db.VarChar(50)
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  deletedAt        DateTime?         @map("deleted_at")
+
+  organizerProfile OrganizerProfile?
+  events           Event[]
+  transactions     Transaction[]
+  reviews          Review[]
+  points           Point[]
+  referrals        Referral[]        @relation("Referrer")
+  referredBy       Referral[]        @relation("Referred")
+  tickets          Ticket[]
+  auditLogs        AuditLog[]
+}
+
+model OrganizerProfile {
+  id           Int       @id @default(autoincrement())
+  userId       String    @unique @map("user_id") @db.Uuid
+  companyName  String?   @map("company_name")
+  npwp         String?
+  bankAccount  String?   @map("bank_account")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  user         User      @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id             Int               @id @default(autoincrement())
+  title          String            @db.VarChar(100)
+  description    String            @db.Text
+  startDateTime  DateTime          @map("start_date_time")
+  location       String            @db.VarChar(200)
+  category       EventCategoryEnum
+  isActive       Boolean           @default(true)
+  organizerId    String            @map("organizer_id") @db.Uuid
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  deletedAt      DateTime?         @map("deleted_at")
+
+  organizer      User              @relation(fields: [organizerId], references: [id])
+  transactions   Transaction[]
+  reviews        Review[]
+  promotions     Promotion[]
+  ticketTypes    TicketType[]
+  tickets        Ticket[]
+
+  @@index([category])
+  @@index([organizerId]) 
+}
+
+model TicketType {
+  id                Int               @id @default(autoincrement())
+  eventId           Int               @map("event_id")
+  name              String            @db.VarChar(50)
+  price             Decimal           @db.Decimal(10, 2)
+  quota             Int
+  isAvailable       Boolean           @default(true) @map("is_available")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  deletedAt         DateTime?         @map("deleted_at")
+
+  event             Event             @relation(fields: [eventId], references: [id])
+  transactionItems  TransactionItem[]
+
+  
+  @@unique([eventId, name])
+  @@index([eventId])
+}
+
+model Transaction {
+  id               Int                 @id @default(autoincrement())
+  userId           String              @map("user_id") @db.Uuid
+  eventId          Int                 @map("event_id")
+  promotionId      Int?                @map("promotion_id")
+  amount           Decimal             @db.Decimal(10, 2)
+  currency         String              @db.VarChar(3) @default("IDR")
+  status           TransactionStatusEnum @default(pending)
+  redemptionPoints Int?                @map("redemption_points")
+  createdAt        DateTime            @default(now()) @map("created_at")
+  updatedAt        DateTime            @updatedAt @map("updated_at")
+  deletedAt        DateTime?           @map("deleted_at")
+
+  user             User                @relation(fields: [userId], references: [id])
+  event            Event               @relation(fields: [eventId], references: [id])
+  promotion        Promotion?          @relation(fields: [promotionId], references: [id])
+  items            TransactionItem[]
+  payment          Payment?
+
+  @@index([userId])
+  @@index([eventId])
+}
+
+model TransactionItem {
+  id                Int       @id @default(autoincrement())
+  transactionId     Int       @map("transaction_id")
+  ticketTypeId      Int       @map("ticket_type_id")
+  quantity          Int
+  unitPrice         Decimal   @map("unit_price") @db.Decimal(10, 2)
+  discountApplied   Decimal?  @map("discount_applied") @db.Decimal(10, 2)
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  deletedAt         DateTime? @map("deleted_at")
+
+  transaction       Transaction @relation(fields: [transactionId], references: [id])
+  ticketType        TicketType  @relation(fields: [ticketTypeId], references: [id])
+  tickets           Ticket[]
+
+  
+  @@index([transactionId])
+  @@index([ticketTypeId]) 
+}
+
+model Ticket {
+  id                Int              @id @default(autoincrement())
+  eventId           Int              @map("event_id")
+  ownerId           String?          @map("owner_id") @db.Uuid
+  transactionItemId Int              @map("transaction_item_id")
+  ticketCode        String           @unique @db.VarChar(50)
+  status            TicketStatusEnum @default(available)
+  isActive          Boolean          @default(true)
+  seatNumber        String?          @map("seat_number")
+  isSeated          Boolean          @default(false) @map("is_seated") // Kolom baru
+
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
+
+  event             Event            @relation(fields: [eventId], references: [id])
+  owner             User?            @relation(fields: [ownerId], references: [id])
+  transactionItem   TransactionItem  @relation(fields: [transactionItemId], references: [id])
+
+  // Batasan unik komposit yang diperbarui
+  @@unique([eventId, seatNumber, isSeated])
+  @@index([ownerId])
+  @@index([eventId])
+}
+
+model Payment {
+  id                   Int             @id @default(autoincrement())
+  transactionId        Int             @unique @map("transaction_id")
+  method               PaymentMethodEnum
+  status               PaymentStatusEnum
+  paidAt               DateTime?       @map("paid_at")
+  currency             String          @db.VarChar(3) @default("IDR")
+  transactionReference String?         @unique @map("transaction_reference")
+  providerResponse     Json?           @map("provider_response")
+  createdAt            DateTime        @default(now()) @map("created_at")
+  updatedAt            DateTime        @updatedAt @map("updated_at")
+  deletedAt            DateTime?       @map("deleted_at")
+
+  transaction          Transaction     @relation(fields: [transactionId], references: [id])
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  userId     String    @map("user_id") @db.Uuid
+  eventId    Int       @map("event_id")
+  rating     Decimal   @db.Decimal(2,1)
+  comment    String?   @db.Text
+  isVerified Boolean   @default(false) @map("is_verified")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  user       User      @relation(fields: [userId], references: [id])
+  event      Event     @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+  @@index([userId])
+}
+
+model Point {
+  id             Int       @id @default(autoincrement())
+  userId         String    @map("user_id") @db.Uuid
+  amount         Int
+  expirationDate DateTime  @map("expiration_date")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  user           User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model Referral {
+  id              Int       @id @default(autoincrement())
+  referrerId      String    @map("referrer_id") @db.Uuid
+  referredUserId  String    @unique @map("referred_user_id") @db.Uuid
+  discountAmount  Decimal?  @map("discount_amount") @db.Decimal(10, 2)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  referrer        User      @relation("Referrer", fields: [referrerId], references: [id])
+  referredUser    User      @relation("Referred", fields: [referredUserId], references: [id])
+
+  @@index([referrerId]) 
+}
+
+model Promotion {
+  id                Int               @id @default(autoincrement())
+  eventId           Int?              @map("event_id")
+  code              String            @unique @db.VarChar(50)
+  discountAmount    Decimal           @map("discount_amount") @db.Decimal(10, 2)
+  discountType      DiscountTypeEnum  @map("discount_type") @default(fixed)
+  isReferralPromo   Boolean           @map("is_referral_promo") @default(false)
+  maxRedemptions    Int?              @map("max_redemptions")
+  usedRedemptions   Int               @map("used_redemptions") @default(0)
+  startDate         DateTime          @map("start_date")
+  endDate           DateTime          @map("end_date")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+  deletedAt         DateTime?         @map("deleted_at")
+
+  event             Event?            @relation(fields: [eventId], references: [id])
+  transactions      Transaction[]
+
+  @@index([eventId])
+}
+
+model AuditLog {
+  id        Int              @id @default(autoincrement())
+  userId    String           @map("user_id") @db.Uuid
+  action    AuditLogActionEnum
+  details   Json?
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}

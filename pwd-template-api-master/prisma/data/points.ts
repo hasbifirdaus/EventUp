@@ -1,0 +1,92 @@
+export const pointsData = [
+  {
+    id: 601,
+    userId: "c1f7a14e-9b21-4d3b-8e1c-7f5d6a9e8b0d",
+    amount: 5000,
+    expirationDate: new Date("2026-08-23T12:59:52Z"),
+  },
+  {
+    id: 602,
+    userId: "a9e2b0c3-8f1d-4e5a-9c7f-6d8b9a1c0d2e",
+    amount: 5000,
+    expirationDate: new Date("2026-09-23T12:59:52Z"),
+  },
+  {
+    id: 603,
+    userId: "c1f7a14e-9b21-4d3b-8e1c-7f5d6a9e8b0d",
+    amount: 22500,
+    expirationDate: new Date("2026-12-23T12:59:52Z"),
+  },
+  {
+    id: 604,
+    userId: "a9e2b0c3-8f1d-4e5a-9c7f-6d8b9a1c0d2e",
+    amount: 67500,
+    expirationDate: new Date("2026-10-23T12:59:52Z"),
+  },
+  {
+    id: 605,
+    userId: "b0a6e8c7-d1b4-4e2f-9c3d-1f4a5b6c7d8e",
+    amount: 15000,
+    expirationDate: new Date("2026-07-23T12:59:52Z"),
+  },
+  {
+    id: 606,
+    userId: "b0a6e8c7-d1b4-4e2f-9c3d-1f4a5b6c7d8e",
+    amount: 5000,
+    expirationDate: new Date("2026-05-23T12:59:52Z"),
+  },
+  {
+    id: 607,
+    userId: "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b",
+    amount: 50000,
+    expirationDate: new Date("2026-06-23T12:59:52Z"),
+  },
+  {
+    id: 608,
+    userId: "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b",
+    amount: 5000,
+    expirationDate: new Date("2026-08-23T12:59:52Z"),
+  },
+  {
+    id: 609,
+    userId: "a9e2b0c3-8f1d-4e5a-9c7f-6d8b9a1c0d2e",
+    amount: 100000,
+    expirationDate: new Date("2026-03-23T12:59:52Z"),
+  },
+  {
+    id: 610,
+    userId: "diana.p",
+    amount: 5000,
+    expirationDate: new Date("2026-04-23T12:59:52Z"),
+  },
+  {
+    id: 611,
+    userId: "hadi.k",
+    amount: 5000,
+    expirationDate: new Date("2026-05-23T12:59:52Z"),
+  },
+  {
+    id: 612,
+    userId: "joko.s",
+    amount: 5000,
+    expirationDate: new Date("2026-01-23T12:59:52Z"),
+  },
+  {
+    id: 613,
+    userId: "kartika.a",
+    amount: 5000,
+    expirationDate: new Date("2026-08-23T12:59:52Z"),
+  },
+  {
+    id: 614,
+    userId: "mario.p",
+    amount: 5000,
+    expirationDate: new Date("2026-04-23T12:59:52Z"),
+  },
+  {
+    id: 615,
+    userId: "nina.s",
+    amount: 5000,
+    expirationDate: new Date("2026-03-23T12:59:52Z"),
+  },
+];

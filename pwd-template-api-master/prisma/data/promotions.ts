@@ -1,0 +1,40 @@
+import { DiscountTypeEnum } from "../../src/generated/prisma";
+export const promotionsData = [
+  {
+    id: 1,
+    code: "JMF2025DISKON10",
+    discountAmount: 25000.0,
+    discountType: DiscountTypeEnum.fixed,
+    maxRedemptions: 50,
+    usedRedemptions: 2,
+    referralCode: "RIKIS123",
+    referrerId: "c1f7a14e-9b21-4d3b-8e1c-7f5d6a9e8b0d",
+    startDate: new Date("2025-10-01T00:00:00Z"),
+    endDate: new Date("2025-12-31T23:59:59Z"),
+  },
+  {
+    id: 2,
+    code: "FINTECH50OFF",
+    discountAmount: 50.0,
+    discountType: DiscountTypeEnum.percentage,
+    maxRedemptions: 100,
+    usedRedemptions: 1,
+    referralCode: null,
+    referrerId: null,
+    startDate: new Date("2025-08-23T00:00:00Z"),
+    endDate: new Date("2025-09-30T23:59:59Z"),
+  },
+
+  {
+    id: 3,
+    code: "DISKON20PERSEN",
+    discountAmount: 20.0,
+    discountType: DiscountTypeEnum.percentage,
+    maxRedemptions: 200,
+    usedRedemptions: 0,
+    referralCode: null,
+    referrerId: null,
+    startDate: new Date("2025-10-01T00:00:00Z"),
+    endDate: new Date("2025-11-30T23:59:59Z"),
+  },
+];
