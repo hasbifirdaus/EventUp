@@ -4,264 +4,284 @@ import {
 } from "../../src/generated/prisma";
 
 export const paymentsData = [
+  // Transaksi 1
   {
-    id: 401,
-    transactionId: 101,
-    amount: 225000,
+    userUsername: "rikis.s",
+    eventName: "Jakarta Music Fest 2025",
+    amount: 250000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-001",
   },
+  // Transaksi 2
   {
-    id: 402,
-    transactionId: 102,
-    amount: 675000,
+    userUsername: "aditya.p",
+    eventName: "Jakarta Music Fest 2025",
+    amount: 850000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-002",
   },
+  // Transaksi 3
   {
-    id: 403,
-    transactionId: 103,
+    userUsername: "doni.s",
+    eventName: "Konferensi Teknologi Masa Depan",
     amount: 150000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-003",
   },
-
+  // Transaksi 4
   {
-    id: 404,
-    transactionId: 105,
+    userUsername: "rikis.s",
+    eventName: "Retret Yoga dan Meditasi di Bali",
+    amount: 3000000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.BCA_TRANSFER,
+  },
+  // Transaksi 5
+  {
+    userUsername: "yoga.s",
+    eventName: "Workshop Desain UX/UI Intensif",
     amount: 500000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-005",
   },
+  // Transaksi 6
   {
-    id: 405,
-    transactionId: 106,
+    userUsername: "aditya.p",
+    eventName: "Turnamen Futsal Piala Nusantara",
     amount: 1000000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-006",
   },
+  // Transaksi 7
   {
-    id: 406,
-    transactionId: 107,
+    userUsername: "syifa.n",
+    eventName: "Konferensi Data Science Indonesia",
     amount: 250000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-007",
   },
+  // Transaksi 8
   {
-    id: 407,
-    transactionId: 108,
+    userUsername: "agus.d",
+    eventName: "Pameran Kerajinan Tangan Nusantara",
     amount: 75000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.OVO,
-    gatewayRef: "pay-jkt-008",
   },
-
+  // Transaksi 9
   {
-    id: 408,
-    transactionId: 109,
-    amount: 100000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-009",
-  },
-  {
-    id: 409,
-    transactionId: 110,
-    amount: 50000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.SHOPEEPAY,
-    gatewayRef: "pay-jkt-010",
-  },
-
-  {
-    id: 410,
-    transactionId: 111,
-    amount: 150000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-011",
-  },
-  {
-    id: 411,
-    transactionId: 112,
-    amount: 200000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-012",
-  },
-  {
-    id: 412,
-    transactionId: 114,
-    amount: 100000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.OVO,
-    gatewayRef: "pay-jkt-014",
-  },
-  {
-    id: 413,
-    transactionId: 115,
-    amount: 1000000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-015",
-  },
-  {
-    id: 414,
-    transactionId: 116,
-    amount: 75000,
-    status: PaymentStatusEnum.success,
-    method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-016",
-  },
-  {
-    id: 415,
-    transactionId: 117,
+    userUsername: "riki.s",
+    eventName: "Seminar FinTech Masa Depan",
     amount: 125000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-017",
   },
+  // Transaksi 10
   {
-    id: 416,
-    transactionId: 118,
+    userUsername: "lina.s",
+    eventName: "Lomba Lari 10K Sehat",
+    amount: 50000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.SHOPEEPAY,
+  },
+  // Transaksi 11
+  {
+    userUsername: "joko.s",
+    eventName: "Workshop Fotografi Dasar",
     amount: 150000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-018",
   },
+  // Transaksi 12
   {
-    id: 417,
-    transactionId: 119,
+    userUsername: "siti.a",
+    eventName: "Festival Indie Music Bandung",
+    amount: 200000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.BCA_TRANSFER,
+  },
+  // Transaksi 13
+  {
+    userUsername: "rizal.p",
+    eventName: "Konferensi Cybersecurity 2026",
+    amount: 350000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.GOPAY,
+  },
+  // Transaksi 14
+  {
+    userUsername: "andri.w",
+    eventName: "Seminar Investasi Saham",
+    amount: 100000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.OVO,
+  },
+  // Transaksi 15
+  {
+    userUsername: "santi.s",
+    eventName: "Kejuaraan Basket 3x3 Nasional",
+    amount: 1000000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.DANA,
+  },
+  // Transaksi 16
+  {
+    userUsername: "doni.s",
+    eventName: "Festival Budaya Lombok",
+    amount: 375000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.GOPAY,
+  },
+  // Transaksi 17
+  {
+    userUsername: "siti.a",
+    eventName: "Workshop Coding for Kids",
+    amount: 125000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.BCA_TRANSFER,
+  },
+  // Transaksi 18
+  {
+    userUsername: "dian.c",
+    eventName: "Konser Amal 'Suara Hati'",
+    amount: 300000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.DANA,
+  },
+  // Transaksi 19
+  {
+    userUsername: "tari.s",
+    eventName: "Seminar Kesehatan Mental",
     amount: 75000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.OVO,
-    gatewayRef: "pay-jkt-019",
   },
+  // Transaksi 20
   {
-    id: 418,
-    transactionId: 120,
+    userUsername: "wahyu.s",
+    eventName: "E-sport Championship: Mobile Legends",
     amount: 200000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.SHOPEEPAY,
-    gatewayRef: "pay-jkt-020",
   },
+  // Transaksi 21
   {
-    id: 419,
-    transactionId: 121,
+    userUsername: "budi.s",
+    eventName: "Festival Layang-layang",
     amount: 0,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.FREE,
-    gatewayRef: null,
   },
-
+  // Transaksi 22
   {
-    id: 420,
-    transactionId: 122,
-    amount: 300000,
+    userUsername: "dina.s",
+    eventName: "Workshop Public Speaking",
+    amount: 600000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-022",
   },
+  // Transaksi 23
   {
-    id: 421,
-    transactionId: 123,
+    userUsername: "tina.k",
+    eventName: "Konser Klasik Malam Tahun Baru",
     amount: 500000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-023",
   },
+  // Transaksi 24
   {
-    id: 422,
-    transactionId: 124,
-    amount: 100000,
+    userUsername: "erwin.h",
+    eventName: "Seminar Pemasaran Digital",
+    amount: 300000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-024",
   },
+  // Transaksi 25
   {
-    id: 423,
-    transactionId: 125,
+    userUsername: "deni.a",
+    eventName: "Kompetisi Renang Junior",
     amount: 120000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.OVO,
-    gatewayRef: "pay-jkt-025",
   },
+  // Transaksi 26
   {
-    id: 424,
-    transactionId: 126,
+    userUsername: "sulis.r",
+    eventName: "Festival Film Pendek",
     amount: 50000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.SHOPEEPAY,
-    gatewayRef: "pay-jkt-026",
   },
+  // Transaksi 27
   {
-    id: 425,
-    transactionId: 127,
-    amount: 85000,
+    userUsername: "bagus.s",
+    eventName: "Workshop Bahasa Jepang Dasar",
+    amount: 170000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-027",
   },
+  // Transaksi 28
   {
-    id: 426,
-    transactionId: 128,
+    userUsername: "miko.p",
+    eventName: "Java Jazz Festival 2026",
     amount: 750000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-028",
   },
+  // Transaksi 29
   {
-    id: 427,
-    transactionId: 129,
+    userUsername: "rikis.s",
+    eventName: "Seminar Blockchain dan Kripto",
     amount: 150000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-029",
   },
+  // Transaksi 30
   {
-    id: 428,
-    transactionId: 130,
-    amount: 50000,
+    userUsername: "aditya.p",
+    eventName: "Lomba Panjat Tebing",
+    amount: 150000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.OVO,
-    gatewayRef: "pay-jkt-030",
   },
+  // Transaksi 31
   {
-    id: 429,
-    transactionId: 131,
+    userUsername: "syifa.n",
+    eventName: "Festival Wayang Kulit",
     amount: 75000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.SHOPEEPAY,
-    gatewayRef: "pay-jkt-031",
   },
+  // Transaksi 32
   {
-    id: 430,
-    transactionId: 132,
+    userUsername: "agus.d",
+    eventName: "Workshop Desain Web Lanjutan",
     amount: 300000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.DANA,
-    gatewayRef: "pay-jkt-032",
   },
+  // Transaksi 33
   {
-    id: 431,
-    transactionId: 134,
-    amount: 150000,
+    userUsername: "riki.s",
+    eventName: "Jakarta Music Fest 2025",
+    amount: 350000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.GOPAY,
-    gatewayRef: "pay-jkt-034",
   },
+  // Transaksi 34
   {
-    id: 432,
-    transactionId: 135,
-    amount: 1500000,
+    userUsername: "lina.s",
+    eventName: "Konferensi Teknologi Masa Depan",
+    amount: 150000,
     status: PaymentStatusEnum.success,
     method: PaymentMethodEnum.BCA_TRANSFER,
-    gatewayRef: "pay-jkt-035",
+  },
+  // Transaksi 35
+  {
+    userUsername: "joko.s",
+    eventName: "Retret Yoga dan Meditasi di Bali",
+    amount: 3000000,
+    status: PaymentStatusEnum.success,
+    method: PaymentMethodEnum.BCA_TRANSFER,
   },
 ];

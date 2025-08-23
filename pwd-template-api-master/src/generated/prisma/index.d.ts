@@ -6206,9 +6206,11 @@ export namespace Prisma {
     id: number | null
     eventId: number | null
     name: string | null
+    description: string | null
     price: Decimal | null
     quota: number | null
     isAvailable: boolean | null
+    isSeated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -6218,9 +6220,11 @@ export namespace Prisma {
     id: number | null
     eventId: number | null
     name: string | null
+    description: string | null
     price: Decimal | null
     quota: number | null
     isAvailable: boolean | null
+    isSeated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -6230,9 +6234,11 @@ export namespace Prisma {
     id: number
     eventId: number
     name: number
+    description: number
     price: number
     quota: number
     isAvailable: number
+    isSeated: number
     createdAt: number
     updatedAt: number
     deletedAt: number
@@ -6258,9 +6264,11 @@ export namespace Prisma {
     id?: true
     eventId?: true
     name?: true
+    description?: true
     price?: true
     quota?: true
     isAvailable?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -6270,9 +6278,11 @@ export namespace Prisma {
     id?: true
     eventId?: true
     name?: true
+    description?: true
     price?: true
     quota?: true
     isAvailable?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -6282,9 +6292,11 @@ export namespace Prisma {
     id?: true
     eventId?: true
     name?: true
+    description?: true
     price?: true
     quota?: true
     isAvailable?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -6381,9 +6393,11 @@ export namespace Prisma {
     id: number
     eventId: number
     name: string
+    description: string | null
     price: Decimal
     quota: number
     isAvailable: boolean
+    isSeated: boolean | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -6412,9 +6426,11 @@ export namespace Prisma {
     id?: boolean
     eventId?: boolean
     name?: boolean
+    description?: boolean
     price?: boolean
     quota?: boolean
     isAvailable?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -6427,9 +6443,11 @@ export namespace Prisma {
     id?: boolean
     eventId?: boolean
     name?: boolean
+    description?: boolean
     price?: boolean
     quota?: boolean
     isAvailable?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -6440,9 +6458,11 @@ export namespace Prisma {
     id?: boolean
     eventId?: boolean
     name?: boolean
+    description?: boolean
     price?: boolean
     quota?: boolean
     isAvailable?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -6453,15 +6473,17 @@ export namespace Prisma {
     id?: boolean
     eventId?: boolean
     name?: boolean
+    description?: boolean
     price?: boolean
     quota?: boolean
     isAvailable?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
   }
 
-  export type TicketTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "name" | "price" | "quota" | "isAvailable" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["ticketType"]>
+  export type TicketTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "name" | "description" | "price" | "quota" | "isAvailable" | "isSeated" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["ticketType"]>
   export type TicketTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     transactionItems?: boolean | TicketType$transactionItemsArgs<ExtArgs>
@@ -6484,9 +6506,11 @@ export namespace Prisma {
       id: number
       eventId: number
       name: string
+      description: string | null
       price: Prisma.Decimal
       quota: number
       isAvailable: boolean
+      isSeated: boolean | null
       createdAt: Date
       updatedAt: Date
       deletedAt: Date | null
@@ -6918,9 +6942,11 @@ export namespace Prisma {
     readonly id: FieldRef<"TicketType", 'Int'>
     readonly eventId: FieldRef<"TicketType", 'Int'>
     readonly name: FieldRef<"TicketType", 'String'>
+    readonly description: FieldRef<"TicketType", 'String'>
     readonly price: FieldRef<"TicketType", 'Decimal'>
     readonly quota: FieldRef<"TicketType", 'Int'>
     readonly isAvailable: FieldRef<"TicketType", 'Boolean'>
+    readonly isSeated: FieldRef<"TicketType", 'Boolean'>
     readonly createdAt: FieldRef<"TicketType", 'DateTime'>
     readonly updatedAt: FieldRef<"TicketType", 'DateTime'>
     readonly deletedAt: FieldRef<"TicketType", 'DateTime'>
@@ -11078,16 +11104,19 @@ export namespace Prisma {
 
   export type PaymentAvgAggregateOutputType = {
     id: number | null
+    amount: number | null
     transactionId: number | null
   }
 
   export type PaymentSumAggregateOutputType = {
     id: number | null
+    amount: number | null
     transactionId: number | null
   }
 
   export type PaymentMinAggregateOutputType = {
     id: number | null
+    amount: number | null
     transactionId: number | null
     method: $Enums.PaymentMethodEnum | null
     status: $Enums.PaymentStatusEnum | null
@@ -11101,6 +11130,7 @@ export namespace Prisma {
 
   export type PaymentMaxAggregateOutputType = {
     id: number | null
+    amount: number | null
     transactionId: number | null
     method: $Enums.PaymentMethodEnum | null
     status: $Enums.PaymentStatusEnum | null
@@ -11114,6 +11144,7 @@ export namespace Prisma {
 
   export type PaymentCountAggregateOutputType = {
     id: number
+    amount: number
     transactionId: number
     method: number
     status: number
@@ -11130,16 +11161,19 @@ export namespace Prisma {
 
   export type PaymentAvgAggregateInputType = {
     id?: true
+    amount?: true
     transactionId?: true
   }
 
   export type PaymentSumAggregateInputType = {
     id?: true
+    amount?: true
     transactionId?: true
   }
 
   export type PaymentMinAggregateInputType = {
     id?: true
+    amount?: true
     transactionId?: true
     method?: true
     status?: true
@@ -11153,6 +11187,7 @@ export namespace Prisma {
 
   export type PaymentMaxAggregateInputType = {
     id?: true
+    amount?: true
     transactionId?: true
     method?: true
     status?: true
@@ -11166,6 +11201,7 @@ export namespace Prisma {
 
   export type PaymentCountAggregateInputType = {
     id?: true
+    amount?: true
     transactionId?: true
     method?: true
     status?: true
@@ -11267,6 +11303,7 @@ export namespace Prisma {
 
   export type PaymentGroupByOutputType = {
     id: number
+    amount: number
     transactionId: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
@@ -11300,6 +11337,7 @@ export namespace Prisma {
 
   export type PaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    amount?: boolean
     transactionId?: boolean
     method?: boolean
     status?: boolean
@@ -11315,6 +11353,7 @@ export namespace Prisma {
 
   export type PaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    amount?: boolean
     transactionId?: boolean
     method?: boolean
     status?: boolean
@@ -11330,6 +11369,7 @@ export namespace Prisma {
 
   export type PaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    amount?: boolean
     transactionId?: boolean
     method?: boolean
     status?: boolean
@@ -11345,6 +11385,7 @@ export namespace Prisma {
 
   export type PaymentSelectScalar = {
     id?: boolean
+    amount?: boolean
     transactionId?: boolean
     method?: boolean
     status?: boolean
@@ -11357,7 +11398,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionId" | "method" | "status" | "paidAt" | "currency" | "transactionReference" | "providerResponse" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "transactionId" | "method" | "status" | "paidAt" | "currency" | "transactionReference" | "providerResponse" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transaction?: boolean | TransactionDefaultArgs<ExtArgs>
   }
@@ -11375,6 +11416,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      amount: number
       transactionId: number
       method: $Enums.PaymentMethodEnum
       status: $Enums.PaymentStatusEnum
@@ -11810,6 +11852,7 @@ export namespace Prisma {
    */
   interface PaymentFieldRefs {
     readonly id: FieldRef<"Payment", 'Int'>
+    readonly amount: FieldRef<"Payment", 'Int'>
     readonly transactionId: FieldRef<"Payment", 'Int'>
     readonly method: FieldRef<"Payment", 'PaymentMethodEnum'>
     readonly status: FieldRef<"Payment", 'PaymentStatusEnum'>
@@ -18074,9 +18117,11 @@ export namespace Prisma {
     id: 'id',
     eventId: 'eventId',
     name: 'name',
+    description: 'description',
     price: 'price',
     quota: 'quota',
     isAvailable: 'isAvailable',
+    isSeated: 'isSeated',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     deletedAt: 'deletedAt'
@@ -18137,6 +18182,7 @@ export namespace Prisma {
 
   export const PaymentScalarFieldEnum: {
     id: 'id',
+    amount: 'amount',
     transactionId: 'transactionId',
     method: 'method',
     status: 'status',
@@ -18766,9 +18812,11 @@ export namespace Prisma {
     id?: IntFilter<"TicketType"> | number
     eventId?: IntFilter<"TicketType"> | number
     name?: StringFilter<"TicketType"> | string
+    description?: StringNullableFilter<"TicketType"> | string | null
     price?: DecimalFilter<"TicketType"> | Decimal | DecimalJsLike | number | string
     quota?: IntFilter<"TicketType"> | number
     isAvailable?: BoolFilter<"TicketType"> | boolean
+    isSeated?: BoolNullableFilter<"TicketType"> | boolean | null
     createdAt?: DateTimeFilter<"TicketType"> | Date | string
     updatedAt?: DateTimeFilter<"TicketType"> | Date | string
     deletedAt?: DateTimeNullableFilter<"TicketType"> | Date | string | null
@@ -18780,9 +18828,11 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     price?: SortOrder
     quota?: SortOrder
     isAvailable?: SortOrder
+    isSeated?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -18798,9 +18848,11 @@ export namespace Prisma {
     NOT?: TicketTypeWhereInput | TicketTypeWhereInput[]
     eventId?: IntFilter<"TicketType"> | number
     name?: StringFilter<"TicketType"> | string
+    description?: StringNullableFilter<"TicketType"> | string | null
     price?: DecimalFilter<"TicketType"> | Decimal | DecimalJsLike | number | string
     quota?: IntFilter<"TicketType"> | number
     isAvailable?: BoolFilter<"TicketType"> | boolean
+    isSeated?: BoolNullableFilter<"TicketType"> | boolean | null
     createdAt?: DateTimeFilter<"TicketType"> | Date | string
     updatedAt?: DateTimeFilter<"TicketType"> | Date | string
     deletedAt?: DateTimeNullableFilter<"TicketType"> | Date | string | null
@@ -18812,9 +18864,11 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
     price?: SortOrder
     quota?: SortOrder
     isAvailable?: SortOrder
+    isSeated?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -18832,9 +18886,11 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"TicketType"> | number
     eventId?: IntWithAggregatesFilter<"TicketType"> | number
     name?: StringWithAggregatesFilter<"TicketType"> | string
+    description?: StringNullableWithAggregatesFilter<"TicketType"> | string | null
     price?: DecimalWithAggregatesFilter<"TicketType"> | Decimal | DecimalJsLike | number | string
     quota?: IntWithAggregatesFilter<"TicketType"> | number
     isAvailable?: BoolWithAggregatesFilter<"TicketType"> | boolean
+    isSeated?: BoolNullableWithAggregatesFilter<"TicketType"> | boolean | null
     createdAt?: DateTimeWithAggregatesFilter<"TicketType"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TicketType"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"TicketType"> | Date | string | null
@@ -19126,6 +19182,7 @@ export namespace Prisma {
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     id?: IntFilter<"Payment"> | number
+    amount?: IntFilter<"Payment"> | number
     transactionId?: IntFilter<"Payment"> | number
     method?: EnumPaymentMethodEnumFilter<"Payment"> | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFilter<"Payment"> | $Enums.PaymentStatusEnum
@@ -19141,6 +19198,7 @@ export namespace Prisma {
 
   export type PaymentOrderByWithRelationInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
     method?: SortOrder
     status?: SortOrder
@@ -19161,6 +19219,7 @@ export namespace Prisma {
     AND?: PaymentWhereInput | PaymentWhereInput[]
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
+    amount?: IntFilter<"Payment"> | number
     method?: EnumPaymentMethodEnumFilter<"Payment"> | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFilter<"Payment"> | $Enums.PaymentStatusEnum
     paidAt?: DateTimeNullableFilter<"Payment"> | Date | string | null
@@ -19174,6 +19233,7 @@ export namespace Prisma {
 
   export type PaymentOrderByWithAggregationInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
     method?: SortOrder
     status?: SortOrder
@@ -19196,6 +19256,7 @@ export namespace Prisma {
     OR?: PaymentScalarWhereWithAggregatesInput[]
     NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Payment"> | number
+    amount?: IntWithAggregatesFilter<"Payment"> | number
     transactionId?: IntWithAggregatesFilter<"Payment"> | number
     method?: EnumPaymentMethodEnumWithAggregatesFilter<"Payment"> | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumWithAggregatesFilter<"Payment"> | $Enums.PaymentStatusEnum
@@ -19910,9 +19971,11 @@ export namespace Prisma {
 
   export type TicketTypeCreateInput = {
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -19924,9 +19987,11 @@ export namespace Prisma {
     id?: number
     eventId: number
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -19935,9 +20000,11 @@ export namespace Prisma {
 
   export type TicketTypeUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19949,9 +20016,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     eventId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19962,9 +20031,11 @@ export namespace Prisma {
     id?: number
     eventId: number
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -19972,9 +20043,11 @@ export namespace Prisma {
 
   export type TicketTypeUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19984,9 +20057,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     eventId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20275,6 +20350,7 @@ export namespace Prisma {
   }
 
   export type PaymentCreateInput = {
+    amount: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
     paidAt?: Date | string | null
@@ -20289,6 +20365,7 @@ export namespace Prisma {
 
   export type PaymentUncheckedCreateInput = {
     id?: number
+    amount: number
     transactionId: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
@@ -20302,6 +20379,7 @@ export namespace Prisma {
   }
 
   export type PaymentUpdateInput = {
+    amount?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20316,6 +20394,7 @@ export namespace Prisma {
 
   export type PaymentUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     transactionId?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
@@ -20330,6 +20409,7 @@ export namespace Prisma {
 
   export type PaymentCreateManyInput = {
     id?: number
+    amount: number
     transactionId: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
@@ -20343,6 +20423,7 @@ export namespace Prisma {
   }
 
   export type PaymentUpdateManyMutationInput = {
+    amount?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20356,6 +20437,7 @@ export namespace Prisma {
 
   export type PaymentUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     transactionId?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
@@ -21215,6 +21297,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -21239,9 +21326,11 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     price?: SortOrder
     quota?: SortOrder
     isAvailable?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -21258,9 +21347,11 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     price?: SortOrder
     quota?: SortOrder
     isAvailable?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -21270,9 +21361,11 @@ export namespace Prisma {
     id?: SortOrder
     eventId?: SortOrder
     name?: SortOrder
+    description?: SortOrder
     price?: SortOrder
     quota?: SortOrder
     isAvailable?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -21299,6 +21392,14 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -21660,6 +21761,7 @@ export namespace Prisma {
 
   export type PaymentCountOrderByAggregateInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
     method?: SortOrder
     status?: SortOrder
@@ -21674,11 +21776,13 @@ export namespace Prisma {
 
   export type PaymentAvgOrderByAggregateInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
   }
 
   export type PaymentMaxOrderByAggregateInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
     method?: SortOrder
     status?: SortOrder
@@ -21692,6 +21796,7 @@ export namespace Prisma {
 
   export type PaymentMinOrderByAggregateInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
     method?: SortOrder
     status?: SortOrder
@@ -21705,6 +21810,7 @@ export namespace Prisma {
 
   export type PaymentSumOrderByAggregateInput = {
     id?: SortOrder
+    amount?: SortOrder
     transactionId?: SortOrder
   }
 
@@ -22688,6 +22794,10 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type EventUpdateOneRequiredWithoutTicketTypesNestedInput = {
     create?: XOR<EventCreateWithoutTicketTypesInput, EventUncheckedCreateWithoutTicketTypesInput>
     connectOrCreate?: EventCreateOrConnectWithoutTicketTypesInput
@@ -23396,6 +23506,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -23410,6 +23525,14 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTransactionStatusEnumFilter<$PrismaModel = never> = {
@@ -24427,9 +24550,11 @@ export namespace Prisma {
 
   export type TicketTypeCreateWithoutEventInput = {
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -24439,9 +24564,11 @@ export namespace Prisma {
   export type TicketTypeUncheckedCreateWithoutEventInput = {
     id?: number
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -24640,9 +24767,11 @@ export namespace Prisma {
     id?: IntFilter<"TicketType"> | number
     eventId?: IntFilter<"TicketType"> | number
     name?: StringFilter<"TicketType"> | string
+    description?: StringNullableFilter<"TicketType"> | string | null
     price?: DecimalFilter<"TicketType"> | Decimal | DecimalJsLike | number | string
     quota?: IntFilter<"TicketType"> | number
     isAvailable?: BoolFilter<"TicketType"> | boolean
+    isSeated?: BoolNullableFilter<"TicketType"> | boolean | null
     createdAt?: DateTimeFilter<"TicketType"> | Date | string
     updatedAt?: DateTimeFilter<"TicketType"> | Date | string
     deletedAt?: DateTimeNullableFilter<"TicketType"> | Date | string | null
@@ -24973,6 +25102,7 @@ export namespace Prisma {
   }
 
   export type PaymentCreateWithoutTransactionInput = {
+    amount: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
     paidAt?: Date | string | null
@@ -24986,6 +25116,7 @@ export namespace Prisma {
 
   export type PaymentUncheckedCreateWithoutTransactionInput = {
     id?: number
+    amount: number
     method: $Enums.PaymentMethodEnum
     status: $Enums.PaymentStatusEnum
     paidAt?: Date | string | null
@@ -25173,6 +25304,7 @@ export namespace Prisma {
   }
 
   export type PaymentUpdateWithoutTransactionInput = {
+    amount?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25186,6 +25318,7 @@ export namespace Prisma {
 
   export type PaymentUncheckedUpdateWithoutTransactionInput = {
     id?: IntFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     method?: EnumPaymentMethodEnumFieldUpdateOperationsInput | $Enums.PaymentMethodEnum
     status?: EnumPaymentStatusEnumFieldUpdateOperationsInput | $Enums.PaymentStatusEnum
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25233,9 +25366,11 @@ export namespace Prisma {
 
   export type TicketTypeCreateWithoutTransactionItemsInput = {
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -25246,9 +25381,11 @@ export namespace Prisma {
     id?: number
     eventId: number
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -25349,9 +25486,11 @@ export namespace Prisma {
 
   export type TicketTypeUpdateWithoutTransactionItemsInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -25362,9 +25501,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     eventId?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26851,9 +26992,11 @@ export namespace Prisma {
   export type TicketTypeCreateManyEventInput = {
     id?: number
     name: string
+    description?: string | null
     price: Decimal | DecimalJsLike | number | string
     quota: number
     isAvailable?: boolean
+    isSeated?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -26995,9 +27138,11 @@ export namespace Prisma {
 
   export type TicketTypeUpdateWithoutEventInput = {
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27007,9 +27152,11 @@ export namespace Prisma {
   export type TicketTypeUncheckedUpdateWithoutEventInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27019,9 +27166,11 @@ export namespace Prisma {
   export type TicketTypeUncheckedUpdateManyWithoutEventInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quota?: IntFieldUpdateOperationsInput | number
     isAvailable?: BoolFieldUpdateOperationsInput | boolean
+    isSeated?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
