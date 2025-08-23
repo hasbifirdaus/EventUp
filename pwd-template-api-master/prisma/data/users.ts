@@ -19,7 +19,6 @@ export const usersData = [
     role: UsersRoleEnum.customer,
     referralCode: "SITIN456",
   },
-
   {
     username: "budi.e",
     email: "budi.effendi@eventmaster.com",
