@@ -206,6 +206,7 @@ exports.Prisma.TicketScalarFieldEnum = {
   status: 'status',
   isActive: 'isActive',
   seatNumber: 'seatNumber',
+  isSeated: 'isSeated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
