@@ -9871,6 +9871,7 @@ export namespace Prisma {
     status: $Enums.TicketStatusEnum | null
     isActive: boolean | null
     seatNumber: string | null
+    isSeated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -9885,6 +9886,7 @@ export namespace Prisma {
     status: $Enums.TicketStatusEnum | null
     isActive: boolean | null
     seatNumber: string | null
+    isSeated: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     deletedAt: Date | null
@@ -9899,6 +9901,7 @@ export namespace Prisma {
     status: number
     isActive: number
     seatNumber: number
+    isSeated: number
     createdAt: number
     updatedAt: number
     deletedAt: number
@@ -9927,6 +9930,7 @@ export namespace Prisma {
     status?: true
     isActive?: true
     seatNumber?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -9941,6 +9945,7 @@ export namespace Prisma {
     status?: true
     isActive?: true
     seatNumber?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -9955,6 +9960,7 @@ export namespace Prisma {
     status?: true
     isActive?: true
     seatNumber?: true
+    isSeated?: true
     createdAt?: true
     updatedAt?: true
     deletedAt?: true
@@ -10056,6 +10062,7 @@ export namespace Prisma {
     status: $Enums.TicketStatusEnum
     isActive: boolean
     seatNumber: string | null
+    isSeated: boolean
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -10089,6 +10096,7 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     seatNumber?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -10106,6 +10114,7 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     seatNumber?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -10123,6 +10132,7 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     seatNumber?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
@@ -10140,12 +10150,13 @@ export namespace Prisma {
     status?: boolean
     isActive?: boolean
     seatNumber?: boolean
+    isSeated?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     deletedAt?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "ownerId" | "transactionItemId" | "ticketCode" | "status" | "isActive" | "seatNumber" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventId" | "ownerId" | "transactionItemId" | "ticketCode" | "status" | "isActive" | "seatNumber" | "isSeated" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     owner?: boolean | Ticket$ownerArgs<ExtArgs>
@@ -10178,6 +10189,7 @@ export namespace Prisma {
       status: $Enums.TicketStatusEnum
       isActive: boolean
       seatNumber: string | null
+      isSeated: boolean
       createdAt: Date
       updatedAt: Date
       deletedAt: Date | null
@@ -10615,6 +10627,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Ticket", 'TicketStatusEnum'>
     readonly isActive: FieldRef<"Ticket", 'Boolean'>
     readonly seatNumber: FieldRef<"Ticket", 'String'>
+    readonly isSeated: FieldRef<"Ticket", 'Boolean'>
     readonly createdAt: FieldRef<"Ticket", 'DateTime'>
     readonly updatedAt: FieldRef<"Ticket", 'DateTime'>
     readonly deletedAt: FieldRef<"Ticket", 'DateTime'>
@@ -18113,6 +18126,7 @@ export namespace Prisma {
     status: 'status',
     isActive: 'isActive',
     seatNumber: 'seatNumber',
+    isSeated: 'isSeated',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     deletedAt: 'deletedAt'
@@ -19020,6 +19034,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFilter<"Ticket"> | $Enums.TicketStatusEnum
     isActive?: BoolFilter<"Ticket"> | boolean
     seatNumber?: StringNullableFilter<"Ticket"> | string | null
+    isSeated?: BoolFilter<"Ticket"> | boolean
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Ticket"> | Date | string | null
@@ -19037,6 +19052,7 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     seatNumber?: SortOrderInput | SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -19048,7 +19064,7 @@ export namespace Prisma {
   export type TicketWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     ticketCode?: string
-    eventId_seatNumber?: TicketEventIdSeatNumberCompoundUniqueInput
+    eventId_seatNumber_isSeated?: TicketEventIdSeatNumberIsSeatedCompoundUniqueInput
     AND?: TicketWhereInput | TicketWhereInput[]
     OR?: TicketWhereInput[]
     NOT?: TicketWhereInput | TicketWhereInput[]
@@ -19058,13 +19074,14 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFilter<"Ticket"> | $Enums.TicketStatusEnum
     isActive?: BoolFilter<"Ticket"> | boolean
     seatNumber?: StringNullableFilter<"Ticket"> | string | null
+    isSeated?: BoolFilter<"Ticket"> | boolean
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Ticket"> | Date | string | null
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     transactionItem?: XOR<TransactionItemScalarRelationFilter, TransactionItemWhereInput>
-  }, "id" | "ticketCode" | "eventId_seatNumber">
+  }, "id" | "ticketCode" | "eventId_seatNumber_isSeated">
 
   export type TicketOrderByWithAggregationInput = {
     id?: SortOrder
@@ -19075,6 +19092,7 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     seatNumber?: SortOrderInput | SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
@@ -19097,6 +19115,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumWithAggregatesFilter<"Ticket"> | $Enums.TicketStatusEnum
     isActive?: BoolWithAggregatesFilter<"Ticket"> | boolean
     seatNumber?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
+    isSeated?: BoolWithAggregatesFilter<"Ticket"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Ticket"> | Date | string | null
@@ -20161,6 +20180,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20178,6 +20198,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20188,6 +20209,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20205,6 +20227,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20219,6 +20242,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -20229,6 +20253,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -20243,6 +20268,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -21507,9 +21533,10 @@ export namespace Prisma {
     isNot?: TransactionItemWhereInput
   }
 
-  export type TicketEventIdSeatNumberCompoundUniqueInput = {
+  export type TicketEventIdSeatNumberIsSeatedCompoundUniqueInput = {
     eventId: number
     seatNumber: string
+    isSeated: boolean
   }
 
   export type TicketCountOrderByAggregateInput = {
@@ -21521,6 +21548,7 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     seatNumber?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -21541,6 +21569,7 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     seatNumber?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -21555,6 +21584,7 @@ export namespace Prisma {
     status?: SortOrder
     isActive?: SortOrder
     seatNumber?: SortOrder
+    isSeated?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     deletedAt?: SortOrder
@@ -23811,6 +23841,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -23826,6 +23857,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -24095,6 +24127,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFilter<"Ticket"> | $Enums.TicketStatusEnum
     isActive?: BoolFilter<"Ticket"> | boolean
     seatNumber?: StringNullableFilter<"Ticket"> | string | null
+    isSeated?: BoolFilter<"Ticket"> | boolean
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
     deletedAt?: DateTimeNullableFilter<"Ticket"> | Date | string | null
@@ -24430,6 +24463,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -24445,6 +24479,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -25229,6 +25264,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -25244,6 +25280,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -26494,6 +26531,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -26712,6 +26750,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26727,6 +26766,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26740,6 +26780,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -26826,6 +26867,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -26990,6 +27032,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27005,6 +27048,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27018,6 +27062,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27121,6 +27166,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatusEnum
     isActive?: boolean
     seatNumber?: string | null
+    isSeated?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     deletedAt?: Date | string | null
@@ -27131,6 +27177,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27146,6 +27193,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27159,6 +27207,7 @@ export namespace Prisma {
     status?: EnumTicketStatusEnumFieldUpdateOperationsInput | $Enums.TicketStatusEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     seatNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isSeated?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
