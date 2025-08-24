@@ -75,9 +75,11 @@ CREATE TABLE "TicketType" (
     "id" SERIAL NOT NULL,
     "event_id" INTEGER NOT NULL,
     "name" VARCHAR(50) NOT NULL,
+    "description" TEXT,
     "price" DECIMAL(10,2) NOT NULL,
     "quota" INTEGER NOT NULL,
     "is_available" BOOLEAN NOT NULL DEFAULT true,
+    "isSeated" BOOLEAN,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -138,6 +140,7 @@ CREATE TABLE "Ticket" (
 -- CreateTable
 CREATE TABLE "Payment" (
     "id" SERIAL NOT NULL,
+    "amount" INTEGER NOT NULL,
     "transaction_id" INTEGER NOT NULL,
     "method" "PaymentMethodEnum" NOT NULL,
     "status" "PaymentStatusEnum" NOT NULL,
@@ -197,6 +200,7 @@ CREATE TABLE "Referral" (
 CREATE TABLE "Promotion" (
     "id" SERIAL NOT NULL,
     "event_id" INTEGER,
+    "user_id" UUID,
     "code" VARCHAR(50) NOT NULL,
     "discount_amount" DECIMAL(10,2) NOT NULL,
     "discount_type" "DiscountTypeEnum" NOT NULL DEFAULT 'fixed',
@@ -270,7 +274,7 @@ CREATE INDEX "Ticket_owner_id_idx" ON "Ticket"("owner_id");
 CREATE INDEX "Ticket_event_id_idx" ON "Ticket"("event_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Ticket_event_id_seat_number_is_seated_key" ON "Ticket"("event_id", "seat_number", "is_seated");
+CREATE UNIQUE INDEX "Ticket_event_id_seat_number_key" ON "Ticket"("event_id", "seat_number");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_transaction_id_key" ON "Payment"("transaction_id");

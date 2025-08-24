@@ -32,7 +32,7 @@ export const transactionsData = [
     createdAt: "2025-10-08T15:00:00Z",
   },
   {
-    userUsername: "rikis.s",
+    userUsername: "riki.s", // KESALAHAN INI TELAH DIPERBAIKI DARI "rikis.s"
     eventName: "Retret Yoga dan Meditasi di Bali",
     ticketTypeName: "VIP",
     promotionCode: null,
@@ -86,7 +86,7 @@ export const transactionsData = [
     eventName: "Seminar FinTech Masa Depan",
     ticketTypeName: "Standard",
     promotionCode: "FINTECH50OFF",
-    amount: 62500, // 50% dari 125000
+    amount: 62500,
     status: TransactionStatusEnum.paid,
     redemptionPoints: 0,
     createdAt: "2025-10-20T10:00:00Z",
@@ -282,7 +282,7 @@ export const transactionsData = [
     createdAt: "2026-02-25T10:00:00Z",
   },
   {
-    userUsername: "rikis.s",
+    userUsername: "riki.s",
     eventName: "Seminar Blockchain dan Kripto",
     ticketTypeName: "Basic",
     promotionCode: null,

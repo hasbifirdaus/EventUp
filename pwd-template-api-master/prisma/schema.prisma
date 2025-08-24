@@ -222,7 +222,7 @@ model Ticket {
   transactionItem   TransactionItem  @relation(fields: [transactionItemId], references: [id])
 
   // Batasan unik komposit yang diperbarui
-  @@unique([eventId, seatNumber, isSeated])
+  @@unique([eventId, seatNumber])
   @@index([ownerId])
   @@index([eventId])
 }
@@ -294,6 +294,7 @@ model Referral {
 model Promotion {
   id                Int               @id @default(autoincrement())
   eventId           Int?              @map("event_id")
+  userId            String?   @map("user_id") @db.Uuid
   code              String            @unique @db.VarChar(50)
   discountAmount    Decimal           @map("discount_amount") @db.Decimal(10, 2)
   discountType      DiscountTypeEnum  @map("discount_type") @default(fixed)

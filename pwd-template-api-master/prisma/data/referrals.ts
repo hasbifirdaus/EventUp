@@ -4,8 +4,8 @@ export const referralsData = [
     referredUsername: "doni.s",
   },
   {
-    referrerUsername: "rikis.s",
-    referredUsername: "riki.s",
+    referrerUsername: "riki.s",
+    referredUsername: "siti.n",
   },
   {
     referrerUsername: "doni.s",

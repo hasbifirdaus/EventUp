@@ -9,6 +9,7 @@ import {
   PaymentStatusEnum,
   DiscountTypeEnum,
   AuditLogActionEnum,
+  Prisma,
 } from "../src/generated/prisma";
 
 // Import your data files
@@ -32,31 +33,31 @@ async function main() {
 
   // Hapus semua data yang ada untuk menghindari duplikasi dan konflik relasi
   // Urutan penghapusan harus terbalik dari urutan pembuatan karena foreign key
-  await prisma.payment.deleteMany();
-  await prisma.ticket.deleteMany();
-  await prisma.transactionItem.deleteMany();
-  await prisma.review.deleteMany();
-  await prisma.transaction.deleteMany();
-  await prisma.ticketType.deleteMany();
-  await prisma.promotion.deleteMany();
-  await prisma.event.deleteMany();
-  await prisma.organizerProfile.deleteMany();
-  await prisma.point.deleteMany();
-  await prisma.referral.deleteMany();
-  await prisma.auditLog.deleteMany();
-  await prisma.user.deleteMany();
+  // await prisma.payment.deleteMany();
+  // await prisma.ticket.deleteMany();
+  // await prisma.transactionItem.deleteMany();
+  // await prisma.review.deleteMany();
+  // await prisma.transaction.deleteMany();
+  // await prisma.ticketType.deleteMany();
+  // await prisma.promotion.deleteMany();
+  // await prisma.event.deleteMany();
+  // await prisma.organizerProfile.deleteMany();
+  // await prisma.point.deleteMany();
+  // await prisma.referral.deleteMany();
+  // await prisma.auditLog.deleteMany();
+  // await prisma.user.deleteMany();
 
-  console.log("All existing data has been deleted. Ready to seed.");
+  // console.log("All existing data has been deleted. Ready to seed.");
 
-  // Maps untuk menyimpan ID yang baru dibuat
-  const userMap = new Map();
-  const eventMap = new Map();
-  const promotionMap = new Map();
-  const ticketTypeMap = new Map();
-  const transactionMap = new Map();
-  const transactionItemMap = new Map();
+  // Maps untuk menyimpan ID.
+  const userMap = new Map<string, string>();
+  const eventMap = new Map<string, number>();
+  const promotionMap = new Map<string, number>();
+  const ticketTypeMap = new Map<string, number>();
+  const transactionMap = new Map<string, number>();
+  const transactionItemMap = new Map<string, number>();
 
-  // --- Langkah 1: Seed User (model tanpa dependensi)
+  // --- Langkah 1: Seed User
   console.log("\nSeeding User data...");
   const createdUsers = await prisma.user.createManyAndReturn({
     data: usersData,
@@ -64,10 +65,9 @@ async function main() {
   createdUsers.forEach((user) => userMap.set(user.username, user.id));
   console.log(`✅ ${createdUsers.length} users created.`);
 
-  // --- Langkah 2: Seed OrganizerProfile dan Referral (bergantung pada User)
-  console.log("Seeding OrganizerProfiles and Referrals...");
-  const organizerProfilesToCreate = organizerProfilesData.map((p) => ({
-    // Hapus properti 'username' dari sini
+  // --- Langkah 2: Seed OrganizerProfile dan Referral
+  console.log("Seeding OrganizerProfiles...");
+  const organizerProfilesToCreate = organizerProfilesData.map((p: any) => ({
     companyName: p.companyName,
     npwp: p.npwp,
     bankAccount: p.bankAccount,
@@ -78,13 +78,33 @@ async function main() {
     `✅ ${organizerProfilesToCreate.length} organizer profiles created.`
   );
 
-  // --- Langkah 3: Seed Events dan Promotions (bergantung pada User)
-  console.log("Seeding Events and Promotions...");
-  const eventsToCreate = eventsData.map((e) => ({
-    // Hapus properti 'organizerUsername' dari sini
+  console.log("Seeding Referrals...");
+  const referralsToCreate: Prisma.ReferralCreateManyInput[] = referralsData
+    .map((r: any) => {
+      const referrerId = userMap.get(r.referrerUsername);
+      const referredUserId = userMap.get(r.referredUsername);
+      if (!referrerId || !referredUserId) {
+        console.error(
+          `Skipping referral from '${r.referrerUsername}' to '${r.referredUsername}' due to missing user ID.`
+        );
+        return null;
+      }
+      return {
+        referrerId,
+        referredUserId,
+        discountAmount: r.discountAmount,
+      };
+    })
+    .filter((r) => r !== null) as Prisma.ReferralCreateManyInput[];
+  await prisma.referral.createMany({ data: referralsToCreate });
+  console.log(`✅ ${referralsToCreate.length} referrals created.`);
+
+  // --- Langkah 3: Seed Events
+  console.log("Seeding Events...");
+  const eventsToCreate = eventsData.map((e: any) => ({
     title: e.title,
     description: e.description,
-    startDateTime: e.startDateTime,
+    startDateTime: new Date(e.startDateTime),
     location: e.location,
     category: e.category,
     isActive: e.isActive,
@@ -96,24 +116,42 @@ async function main() {
   createdEvents.forEach((event) => eventMap.set(event.title, event.id));
   console.log(`✅ ${createdEvents.length} events created.`);
 
-  // --- Langkah 4: Seed TicketTypes (bergantung pada Event)
+  // --- Langkah 4: Seed Promotions dan TicketTypes
+  console.log("Seeding Promotions...");
+  const promotionsToCreate: Prisma.PromotionCreateManyInput[] =
+    promotionsData.map((p: any) => ({
+      eventId: p.eventName ? eventMap.get(p.eventName) : null,
+      code: p.code,
+      discountAmount: p.discountAmount,
+      discountType: p.discountType,
+      isReferralPromo: p.isReferralPromo,
+      maxRedemptions: p.maxRedemptions,
+      usedRedemptions: p.usedRedemptions,
+      startDate: p.startDate,
+      endDate: p.endDate,
+    }));
+  const createdPromotions = await prisma.promotion.createManyAndReturn({
+    data: promotionsToCreate,
+  });
+  createdPromotions.forEach((p) => promotionMap.set(p.code, p.id));
+  console.log(`✅ ${createdPromotions.length} promotions created.`);
+
   console.log("Seeding TicketTypes...");
-  const ticketTypesToCreate = ticketTypesData.map((tt) => ({
-    // Hapus properti 'eventName' dari sini
+  const ticketTypesToCreate = ticketTypesData.map((tt: any) => ({
+    eventId: eventMap.get(tt.eventName)!,
     name: tt.name,
     description: tt.description,
     price: tt.price,
     quota: tt.quota,
     isAvailable: tt.isAvailable,
     isSeated: tt.isSeated,
-    eventId: eventMap.get(tt.eventName)!,
   }));
   const createdTicketTypes = await prisma.ticketType.createManyAndReturn({
     data: ticketTypesToCreate,
   });
   createdTicketTypes.forEach((tt) => {
     const originalTicketType = ticketTypesData.find(
-      (data) =>
+      (data: any) =>
         data.name === tt.name && eventMap.get(data.eventName) === tt.eventId
     );
     if (originalTicketType) {
@@ -122,192 +160,176 @@ async function main() {
   });
   console.log(`✅ ${createdTicketTypes.length} ticket types created.`);
 
-  // --- Langkah 5: Seed Transactions (bergantung pada User, Event, Promotion)
-  console.log("Seeding Transactions...");
+  // --- Langkah 5, 6, 7: Seed Transactions, TransactionItems, Tickets, dan Payments secara berurutan
+  console.log("\nSeeding Transactions, Items, and Payments sequentially...");
+  let transactionCount = 0;
+  let transactionItemCount = 0;
+  let ticketCount = 0;
+  let paymentCount = 0;
 
-  const transactionsToCreate = transactionsData
-    .map((t) => {
-      const userId = userMap.get(t.userUsername);
-      const eventId = eventMap.get(t.eventName);
-      const promotionId = t.promotionCode
-        ? promotionMap.get(t.promotionCode)
-        : null;
+  for (const t of transactionsData) {
+    const userId = userMap.get(t.userUsername);
+    const eventId = eventMap.get(t.eventName);
+    const promotionId = t.promotionCode
+      ? promotionMap.get(t.promotionCode)
+      : null;
 
-      if (!userId || !eventId) {
-        console.error(
-          `Skipping transaction for user '${t.userUsername}' or event '${t.eventName}' due to missing ID.`
-        );
-        return null;
-      }
+    if (!userId || !eventId) {
+      console.error(
+        `Skipping transaction for user '${t.userUsername}' or event '${t.eventName}' due to missing ID.`
+      );
+      continue;
+    }
 
-      return {
+    // CREATE TRANSACTION
+    const createdTransaction = await prisma.transaction.create({
+      data: {
+        userId,
+        eventId,
+        promotionId,
         amount: t.amount,
         status: t.status,
         redemptionPoints: t.redemptionPoints,
         createdAt: new Date(t.createdAt),
-        userId: userId,
-        eventId: eventId,
-        // Hapus 'ticketTypeId' dari sini
-        promotionId: promotionId,
-      };
-    })
-    .filter(Boolean) as any;
+      },
+    });
+    transactionCount++;
 
-  const createdTransactions = await prisma.transaction.createManyAndReturn({
-    data: transactionsToCreate,
-  });
+    // CREATE TRANSACTION ITEMS & TICKETS
+    const relatedTransactionItems = transactionItemsData.filter(
+      (ti) => ti.userUsername === t.userUsername && ti.eventName === t.eventName
+    );
 
-  createdTransactions.forEach((t) =>
-    transactionMap.set(`${t.userId}-${t.eventId}`, t.id)
-  );
-  console.log(`✅ ${createdTransactions.length} transactions created.`);
-
-  // --- Langkah 6: Seed TransactionItems (bergantung pada Transaction, TicketType)
-  console.log("Seeding TransactionItems...");
-
-  const transactionItemsToCreate = transactionItemsData
-    .map((ti) => {
-      const userId = userMap.get(ti.userUsername);
-      const eventId = eventMap.get(ti.eventName);
-      const transactionId = transactionMap.get(`${userId}-${eventId}`);
+    for (const ti of relatedTransactionItems) {
       const ticketTypeId = ticketTypeMap.get(
         `${ti.eventName}-${ti.ticketTypeName}`
       );
-
-      // Log a warning and return null if any ID is missing
-      if (!transactionId || !ticketTypeId) {
+      if (!ticketTypeId) {
         console.error(
           `Skipping transaction item for user '${ti.userUsername}', event '${ti.eventName}', or ticket type '${ti.ticketTypeName}' due to missing ID.`
         );
-        return null;
+        continue;
       }
 
-      return {
-        quantity: ti.quantity,
-        unitPrice: ti.unitPrice,
-        transactionId,
-        ticketTypeId,
-      };
-    })
-    .filter(Boolean) as any; // The fix is here: 'as any'
+      const createdTransactionItem = await prisma.transactionItem.create({
+        data: {
+          transactionId: createdTransaction.id,
+          ticketTypeId,
+          quantity: ti.quantity,
+          unitPrice: ti.unitPrice,
+          discountApplied: ti.discountApplied || 0,
+        },
+      });
+      transactionItemCount++;
 
-  const createdTransactionItems =
-    await prisma.transactionItem.createManyAndReturn({
-      data: transactionItemsToCreate,
-    });
+      // CREATE TICKETS
+      const originalTicketType = ticketTypesData.find(
+        (tt: any) =>
+          tt.name === ti.ticketTypeName &&
+          eventMap.get(tt.eventName) === eventId
+      );
 
-  createdTransactionItems.forEach((ti, index) => {
-    const originalItem = transactionItemsData[index];
-    if (originalItem) {
-      transactionItemMap.set(`${originalItem.userUsername}-${ti.id}`, ti.id);
+      const isSeated = originalTicketType?.isSeated || false;
+
+      for (let i = 0; i < ti.quantity; i++) {
+        await prisma.ticket.create({
+          data: {
+            eventId: eventId,
+            ownerId: userId,
+            transactionItemId: createdTransactionItem.id,
+            ticketCode: `TKT-${createdTransactionItem.id}-${i + 1}`,
+            status: TicketStatusEnum.sold,
+            isSeated: isSeated,
+            seatNumber: isSeated
+              ? `A-${createdTransactionItem.id}-${i + 1}`
+              : null,
+          },
+        });
+        ticketCount++;
+      }
     }
-  });
 
-  console.log(
-    `✅ ${createdTransactionItems.length} transaction items created.`
-  );
-  // --- Langkah 7: Seed Payments, Reviews, Points, dan AuditLogs
-  console.log("\nSeeding Payments, Reviews, Points, and AuditLogs...");
+    // CREATE PAYMENTS
+    const relatedPayments = paymentsData.filter(
+      (p) => p.userUsername === t.userUsername && p.eventName === t.eventName
+    );
+    for (const p of relatedPayments) {
+      await prisma.payment.create({
+        data: {
+          amount: p.amount,
+          transactionId: createdTransaction.id,
+          method: p.method,
+          status: p.status,
+        },
+      });
+      paymentCount++;
+    }
+  }
 
-  // Seed Payments
-  console.log("Seeding Payments...");
-  const paymentsToCreate = paymentsData
-    .map((p) => {
-      const userId = userMap.get(p.userUsername);
-      const eventId = eventMap.get(p.eventName);
-      const transactionId = transactionMap.get(`${userId}-${eventId}`);
+  console.log(`✅ ${transactionCount} transactions created.`);
+  console.log(`✅ ${transactionItemCount} transaction items created.`);
+  console.log(`✅ ${ticketCount} tickets created.`);
+  console.log(`✅ ${paymentCount} payments created.`);
 
-      if (!transactionId) {
-        console.error(
-          `Skipping payment for user '${p.userUsername}' and event '${p.eventName}' due to missing transaction ID.`
-        );
-        return null;
-      }
-
-      return {
-        amount: p.amount,
-        status: p.status,
-        method: p.method,
-        transactionId: transactionId,
-      };
-    })
-    .filter(Boolean) as any;
-
-  await prisma.payment.createMany({
-    data: paymentsToCreate,
-  });
-  console.log(`✅ ${paymentsToCreate.length} payments created.`);
-
-  // Seed Reviews
-  console.log("Seeding Reviews...");
-  const reviewsToCreate = reviewsData
-    .map((r) => {
+  // --- Langkah 8: Seed Reviews, Points, dan AuditLogs (Sama seperti sebelumnya)
+  console.log("\nSeeding Reviews, Points, and AuditLogs...");
+  const reviewsToCreate: Prisma.ReviewCreateManyInput[] = reviewsData
+    .map((r: any) => {
       const userId = userMap.get(r.userUsername);
       const eventId = eventMap.get(r.eventName);
-
       if (!userId || !eventId) {
         console.error(
           `Skipping review for user '${r.userUsername}' or event '${r.eventName}' due to missing ID.`
         );
         return null;
       }
-
       return {
+        userId,
+        eventId,
         rating: r.rating,
         comment: r.comment,
         createdAt: new Date(r.createdAt),
-        userId: userId,
-        eventId: eventId,
       };
     })
-    .filter(Boolean) as any;
-
+    .filter(Boolean) as Prisma.ReviewCreateManyInput[];
   await prisma.review.createMany({ data: reviewsToCreate });
   console.log(`✅ ${reviewsToCreate.length} reviews created.`);
 
-  // Seed Points
-  console.log("Seeding Points...");
-  const pointsToCreate = pointsData
-    .map((p) => {
+  const pointsToCreate: Prisma.PointCreateManyInput[] = pointsData
+    .map((p: any) => {
       const userId = userMap.get(p.userUsername);
-
       if (!userId) {
         console.error(
           `Skipping points for user '${p.userUsername}' due to missing ID.`
         );
         return null;
       }
-
       return {
+        userId,
         amount: p.amount,
-        expirationDate: p.expirationDate,
-        userId: userId,
+        expirationDate: new Date(p.expirationDate),
       };
     })
-    .filter(Boolean) as any;
+    .filter(Boolean) as Prisma.PointCreateManyInput[];
   await prisma.point.createMany({ data: pointsToCreate });
   console.log(`✅ ${pointsToCreate.length} points created.`);
 
-  // Seed AuditLogs
-  console.log("Seeding AuditLogs...");
-  const auditLogsToCreate = auditLogsData
-    .map((al) => {
+  const auditLogsToCreate: Prisma.AuditLogCreateManyInput[] = auditLogsData
+    .map((al: any) => {
       const userId = userMap.get(al.userUsername);
-
       if (!userId) {
         console.error(
           `Skipping audit log for user '${al.userUsername}' due to missing ID.`
         );
         return null;
       }
-
       return {
+        userId,
         action: al.action,
         details: al.details,
-        userId: userId,
       };
     })
-    .filter(Boolean) as any;
+    .filter(Boolean) as Prisma.AuditLogCreateManyInput[];
   await prisma.auditLog.createMany({ data: auditLogsToCreate });
   console.log(`✅ ${auditLogsToCreate.length} audit logs created.`);
 }
