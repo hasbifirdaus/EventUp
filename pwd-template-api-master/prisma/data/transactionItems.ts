@@ -1,11 +1,12 @@
 export const transactionItemsData = [
   // Transaksi 1
   {
-    userUsername: "rikis.s",
+    userUsername: "riki.s",
     eventName: "Jakarta Music Fest 2025",
     ticketTypeName: "Early Bird",
     quantity: 1,
     unitPrice: 250000,
+    discountApplied: 0,
   },
   // Transaksi 2
   {
@@ -14,6 +15,7 @@ export const transactionItemsData = [
     ticketTypeName: "Presale 1",
     quantity: 1,
     unitPrice: 350000,
+    discountApplied: 0,
   },
   {
     userUsername: "aditya.p",
@@ -21,6 +23,7 @@ export const transactionItemsData = [
     ticketTypeName: "Early Bird",
     quantity: 2,
     unitPrice: 250000,
+    discountApplied: 0,
   },
   // Transaksi 3
   {
@@ -29,14 +32,16 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 150000,
+    discountApplied: 0,
   },
   // Transaksi 4
   {
-    userUsername: "rikis.s",
+    userUsername: "riki.s",
     eventName: "Retret Yoga dan Meditasi di Bali",
     ticketTypeName: "VIP",
     quantity: 2,
     unitPrice: 1500000,
+    discountApplied: 0,
   },
   // Transaksi 5
   {
@@ -45,6 +50,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 500000,
+    discountApplied: 0,
   },
   // Transaksi 6
   {
@@ -53,6 +59,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 1000000,
+    discountApplied: 100000, //diskon dari promo SPORTPROMO10
   },
   // Transaksi 7
   {
@@ -61,6 +68,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 250000,
+    discountApplied: 0,
   },
   // Transaksi 8
   {
@@ -69,6 +77,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 75000,
+    discountApplied: 0,
   },
   // Transaksi 9
   {
@@ -77,6 +86,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 125000,
+    discountApplied: 62500, // diskon 50% dari promo FINTECH50OFF
   },
   // Transaksi 10
   {
@@ -85,6 +95,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 50000,
+    discountApplied: 0,
   },
   // Transaksi 11
   {
@@ -93,6 +104,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 150000,
+    discountApplied: 0,
   },
   // Transaksi 12
   {
@@ -101,6 +113,7 @@ export const transactionItemsData = [
     ticketTypeName: "Presale",
     quantity: 1,
     unitPrice: 200000,
+    discountApplied: 0,
   },
   // Transaksi 13
   {
@@ -109,6 +122,7 @@ export const transactionItemsData = [
     ticketTypeName: "Early Bird",
     quantity: 1,
     unitPrice: 350000,
+    discountApplied: 0,
   },
   // Transaksi 14
   {
@@ -117,6 +131,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 100000,
+    discountApplied: 0,
   },
   // Transaksi 15
   {
@@ -125,6 +140,7 @@ export const transactionItemsData = [
     ticketTypeName: "Peserta",
     quantity: 1,
     unitPrice: 1000000,
+    discountApplied: 0,
   },
   // Transaksi 16
   {
@@ -133,6 +149,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 75000,
+    discountApplied: 0,
   },
   // Transaksi 17
   {
@@ -141,6 +158,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 125000,
+    discountApplied: 0,
   },
   // Transaksi 18
   {
@@ -149,6 +167,7 @@ export const transactionItemsData = [
     ticketTypeName: "Reguler",
     quantity: 1,
     unitPrice: 150000,
+    discountApplied: 0,
   },
   // Transaksi 19
   {
@@ -157,6 +176,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 75000,
+    discountApplied: 0,
   },
   // Transaksi 20
   {
@@ -165,6 +185,7 @@ export const transactionItemsData = [
     ticketTypeName: "Peserta",
     quantity: 1,
     unitPrice: 200000,
+    discountApplied: 0,
   },
   // Transaksi 21
   {
@@ -173,6 +194,7 @@ export const transactionItemsData = [
     ticketTypeName: "Gratis",
     quantity: 1,
     unitPrice: 0,
+    discountApplied: 0,
   },
   // Transaksi 22
   {
@@ -181,6 +203,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 300000,
+    discountApplied: 0,
   },
   // Transaksi 23
   {
@@ -189,6 +212,7 @@ export const transactionItemsData = [
     ticketTypeName: "VIP",
     quantity: 1,
     unitPrice: 500000,
+    discountApplied: 0,
   },
   // Transaksi 24
   {
@@ -197,6 +221,7 @@ export const transactionItemsData = [
     ticketTypeName: "Normal",
     quantity: 1,
     unitPrice: 100000,
+    discountApplied: 0,
   },
   // Transaksi 25
   {
@@ -205,6 +230,7 @@ export const transactionItemsData = [
     ticketTypeName: "Peserta",
     quantity: 1,
     unitPrice: 120000,
+    discountApplied: 0,
   },
   // Transaksi 26
   {
@@ -213,6 +239,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 50000,
+    discountApplied: 0,
   },
   // Transaksi 27
   {
@@ -221,6 +248,7 @@ export const transactionItemsData = [
     ticketTypeName: "Basic",
     quantity: 1,
     unitPrice: 85000,
+    discountApplied: 0,
   },
   // Transaksi 28
   {
@@ -229,14 +257,16 @@ export const transactionItemsData = [
     ticketTypeName: "Reguler",
     quantity: 1,
     unitPrice: 750000,
+    discountApplied: 0,
   },
   // Transaksi 29
   {
-    userUsername: "rikis.s",
+    userUsername: "riki.s",
     eventName: "Seminar Blockchain dan Kripto",
     ticketTypeName: "Basic",
     quantity: 1,
     unitPrice: 150000,
+    discountApplied: 0,
   },
   // Transaksi 30
   {
@@ -245,6 +275,7 @@ export const transactionItemsData = [
     ticketTypeName: "Peserta",
     quantity: 1,
     unitPrice: 50000,
+    discountApplied: 0,
   },
   // Transaksi 31
   {
@@ -253,6 +284,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 75000,
+    discountApplied: 0,
   },
   // Transaksi 32
   {
@@ -261,6 +293,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 250000,
+    discountApplied: 0,
   },
   // Transaksi 33
   {
@@ -269,6 +302,7 @@ export const transactionItemsData = [
     ticketTypeName: "Presale 1",
     quantity: 1,
     unitPrice: 350000,
+    discountApplied: 0,
   },
   // Transaksi 34
   {
@@ -277,6 +311,7 @@ export const transactionItemsData = [
     ticketTypeName: "Standard",
     quantity: 1,
     unitPrice: 150000,
+    discountApplied: 0,
   },
   // Transaksi 35
   {
@@ -285,5 +320,6 @@ export const transactionItemsData = [
     ticketTypeName: "VIP",
     quantity: 2,
     unitPrice: 1500000,
+    discountApplied: 0,
   },
 ];

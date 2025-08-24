@@ -319,4 +319,22 @@ export const ticketTypesData = [
     isAvailable: true,
     isSeated: false,
   },
+  {
+    eventName: "Workshop Desain Web Lanjutan",
+    name: "Standard",
+    description: "Akses ke sesi workshop, materi, dan sertifikat.",
+    price: 250000,
+    quota: 50,
+    isAvailable: true,
+    isSeated: false,
+  },
+  {
+    eventName: "Festival Wayang Kulit",
+    name: "Standard",
+    description: "Tiket masuk umum.",
+    price: 75000,
+    quota: 200,
+    isAvailable: true,
+    isSeated: false,
+  },
 ];
