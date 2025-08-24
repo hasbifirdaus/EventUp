@@ -6,7 +6,7 @@
 node_modules/
 **/node_modules/
 
-pwd-template-api-master/src/generated/
+/pwd-template-api-master/src/generated/
 
 # Logs
 **/logs/
