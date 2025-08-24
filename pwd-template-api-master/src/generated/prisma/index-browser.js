@@ -163,9 +163,11 @@ exports.Prisma.TicketTypeScalarFieldEnum = {
   id: 'id',
   eventId: 'eventId',
   name: 'name',
+  description: 'description',
   price: 'price',
   quota: 'quota',
   isAvailable: 'isAvailable',
+  isSeated: 'isSeated',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -214,6 +216,7 @@ exports.Prisma.TicketScalarFieldEnum = {
 
 exports.Prisma.PaymentScalarFieldEnum = {
   id: 'id',
+  amount: 'amount',
   transactionId: 'transactionId',
   method: 'method',
   status: 'status',

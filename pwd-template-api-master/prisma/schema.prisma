@@ -140,20 +140,21 @@ model Event {
 }
 
 model TicketType {
-  id                Int               @id @default(autoincrement())
-  eventId           Int               @map("event_id")
-  name              String            @db.VarChar(50)
-  price             Decimal           @db.Decimal(10, 2)
-  quota             Int
-  isAvailable       Boolean           @default(true) @map("is_available")
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("updated_at")
-  deletedAt         DateTime?         @map("deleted_at")
+  id          Int      @id @default(autoincrement())
+  eventId     Int      @map("event_id")
+  name        String   @db.VarChar(50)
+  description String?  // <-- Tambahkan kolom ini
+  price       Decimal  @db.Decimal(10, 2)
+  quota       Int
+  isAvailable Boolean  @default(true) @map("is_available")
+  isSeated    Boolean? // <-- Tambahkan kolom ini
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 
-  event             Event             @relation(fields: [eventId], references: [id])
-  transactionItems  TransactionItem[]
+  event            Event           @relation(fields: [eventId], references: [id])
+  transactionItems TransactionItem[]
 
-  
   @@unique([eventId, name])
   @@index([eventId])
 }
@@ -228,6 +229,7 @@ model Ticket {
 
 model Payment {
   id                   Int             @id @default(autoincrement())
+  amount               Int
   transactionId        Int             @unique @map("transaction_id")
   method               PaymentMethodEnum
   status               PaymentStatusEnum
