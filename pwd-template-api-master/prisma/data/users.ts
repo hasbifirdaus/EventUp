@@ -7,7 +7,7 @@ export const usersData = [
     password: "hashed_password_1",
     firstName: "Riki",
     lastName: "Sanjaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIKIS123",
   },
   {
@@ -16,7 +16,7 @@ export const usersData = [
     password: "hashed_password_2",
     firstName: "Siti",
     lastName: "Nurhayati",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SITIN456",
   },
   {
@@ -25,7 +25,7 @@ export const usersData = [
     password: "hashed_password_3",
     firstName: "Budi",
     lastName: "Effendi",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "lisa.m",
@@ -33,7 +33,7 @@ export const usersData = [
     password: "hashed_password_4",
     firstName: "Lisa",
     lastName: "Mulyani",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "andi.w",
@@ -41,7 +41,7 @@ export const usersData = [
     password: "hashed_password_5",
     firstName: "Andi",
     lastName: "Wijaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ANDIWCUSTOM",
   },
   {
@@ -50,7 +50,7 @@ export const usersData = [
     password: "hashed_password_6",
     firstName: "Agung",
     lastName: "Prakoso",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "beta.w",
@@ -58,7 +58,7 @@ export const usersData = [
     password: "hashed_password_7",
     firstName: "Beta",
     lastName: "Wijayanti",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "bayu.s",
@@ -66,7 +66,7 @@ export const usersData = [
     password: "hashed_password_8",
     firstName: "Bayu",
     lastName: "Santoso",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "BAYUSANTOSOS",
   },
   {
@@ -75,7 +75,7 @@ export const usersData = [
     password: "hashed_password_9",
     firstName: "Cindy",
     lastName: "Lestari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "CINDYL",
   },
   {
@@ -84,7 +84,7 @@ export const usersData = [
     password: "hashed_password_10",
     firstName: "Yoga",
     lastName: "Pratama",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "YOGAPRT",
   },
   {
@@ -93,7 +93,7 @@ export const usersData = [
     password: "hashed_password_11",
     firstName: "Diana",
     lastName: "Pratama",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "DIANAPRT",
   },
   {
@@ -102,7 +102,7 @@ export const usersData = [
     password: "hashed_password_12",
     firstName: "Faisal",
     lastName: "Ali",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "ghina.s",
@@ -110,7 +110,7 @@ export const usersData = [
     password: "hashed_password_13",
     firstName: "Ghina",
     lastName: "Safira",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "GHINASAFIRA",
   },
   {
@@ -119,7 +119,7 @@ export const usersData = [
     password: "hashed_password_14",
     firstName: "Hadi",
     lastName: "Kusuma",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "HADIKSM",
   },
   {
@@ -128,7 +128,7 @@ export const usersData = [
     password: "hashed_password_15",
     firstName: "Irma",
     lastName: "Wijaya",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "joko.s",
@@ -136,7 +136,7 @@ export const usersData = [
     password: "hashed_password_16",
     firstName: "Joko",
     lastName: "Santoso",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "JOKOSANTO",
   },
   {
@@ -145,7 +145,7 @@ export const usersData = [
     password: "hashed_password_17",
     firstName: "Kartika",
     lastName: "Anggraeni",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "KARTIKAA",
   },
   {
@@ -154,7 +154,7 @@ export const usersData = [
     password: "hashed_password_18",
     firstName: "Laila",
     lastName: "Nuraini",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "mario.p",
@@ -162,7 +162,7 @@ export const usersData = [
     password: "hashed_password_19",
     firstName: "Mario",
     lastName: "Pratama",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "MARIOPRT",
   },
   {
@@ -171,7 +171,7 @@ export const usersData = [
     password: "hashed_password_20",
     firstName: "Nina",
     lastName: "Sari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "NINASARI",
   },
   {
@@ -180,7 +180,7 @@ export const usersData = [
     password: "hashed_password_21",
     firstName: "Oky",
     lastName: "Wijaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "OKYWIJAYA",
   },
   {
@@ -189,7 +189,7 @@ export const usersData = [
     password: "hashed_password_22",
     firstName: "Purnama",
     lastName: "Anggun",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "ratih.d",
@@ -197,7 +197,7 @@ export const usersData = [
     password: "hashed_password_23",
     firstName: "Ratih",
     lastName: "Dewi",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "RATIHDEWI",
   },
   {
@@ -206,7 +206,7 @@ export const usersData = [
     password: "hashed_password_24",
     firstName: "Santo",
     lastName: "Rahardjo",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SANTORAHARDJO",
   },
   {
@@ -215,7 +215,7 @@ export const usersData = [
     password: "hashed_password_25",
     firstName: "Tari",
     lastName: "Santos",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "umi.l",
@@ -223,7 +223,7 @@ export const usersData = [
     password: "hashed_password_26",
     firstName: "Umi",
     lastName: "Lestari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "UMILESTARI",
   },
   {
@@ -232,7 +232,7 @@ export const usersData = [
     password: "hashed_password_27",
     firstName: "Vicky",
     lastName: "Andri",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "VICKYANDRI",
   },
   {
@@ -241,7 +241,7 @@ export const usersData = [
     password: "hashed_password_28",
     firstName: "Wahyu",
     lastName: "Saputra",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "yuni.m",
@@ -249,7 +249,7 @@ export const usersData = [
     password: "hashed_password_29",
     firstName: "Yuni",
     lastName: "Marisa",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "YUNIMARISA",
   },
   {
@@ -258,7 +258,7 @@ export const usersData = [
     password: "hashed_password_30",
     firstName: "Zaki",
     lastName: "Hidayat",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ZAKIHIDAYAT",
   },
   {
@@ -267,7 +267,7 @@ export const usersData = [
     password: "hashed_password_31",
     firstName: "Amelia",
     lastName: "Wijaya",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "bimo.k",
@@ -275,7 +275,7 @@ export const usersData = [
     password: "hashed_password_32",
     firstName: "Bimo",
     lastName: "Kusumo",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "BIMOKSMO",
   },
   {
@@ -284,7 +284,7 @@ export const usersData = [
     password: "hashed_password_33",
     firstName: "Citra",
     lastName: "Dewi",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "CITRADEWI",
   },
   {
@@ -293,7 +293,7 @@ export const usersData = [
     password: "hashed_password_34",
     firstName: "Dino",
     lastName: "Ramadhan",
-    role: UsersRoleEnum.organizer,
+    role: UsersRoleEnum.ORGANIZER,
   },
   {
     username: "erlina.s",
@@ -301,7 +301,7 @@ export const usersData = [
     password: "hashed_password_35",
     firstName: "Erlina",
     lastName: "Sari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ERLINASARI",
   },
   {
@@ -310,7 +310,7 @@ export const usersData = [
     password: "hashed_password_37",
     firstName: "Aditya",
     lastName: "Prasetyo",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ADITYAPRT",
   },
   {
@@ -319,7 +319,7 @@ export const usersData = [
     password: "hashed_password_38",
     firstName: "Doni",
     lastName: "Saputra",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "DONISAP",
   },
   {
@@ -328,7 +328,7 @@ export const usersData = [
     password: "hashed_password_39",
     firstName: "Yoga",
     lastName: "Sanjaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "YOGASAN",
   },
   {
@@ -337,7 +337,7 @@ export const usersData = [
     password: "hashed_password_40",
     firstName: "Syifa",
     lastName: "Nuraini",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SYIFANURA",
   },
   {
@@ -346,7 +346,7 @@ export const usersData = [
     password: "hashed_password_41",
     firstName: "Agus",
     lastName: "Dirgantara",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "AGUSDIRG",
   },
   {
@@ -355,7 +355,7 @@ export const usersData = [
     password: "hashed_password_42",
     firstName: "Lina",
     lastName: "Santoso",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "LINASAN",
   },
   {
@@ -364,7 +364,7 @@ export const usersData = [
     password: "hashed_password_43",
     firstName: "Andri",
     lastName: "Wijaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ANDRIWIJ",
   },
   {
@@ -373,7 +373,7 @@ export const usersData = [
     password: "hashed_password_44",
     firstName: "Santi",
     lastName: "Sari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SANTISARI",
   },
   {
@@ -382,7 +382,7 @@ export const usersData = [
     password: "hashed_password_45",
     firstName: "Sulis",
     lastName: "Rahayu",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SULISRAHAYU",
   },
   {
@@ -391,7 +391,7 @@ export const usersData = [
     password: "hashed_password_46",
     firstName: "Bagus",
     lastName: "Setyawan",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "BAGUSSETY",
   },
   {
@@ -400,7 +400,7 @@ export const usersData = [
     password: "hashed_password_47",
     firstName: "Miko",
     lastName: "Pratama",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "MIKOPRT",
   },
   {
@@ -409,7 +409,7 @@ export const usersData = [
     password: "hashed_password_48",
     firstName: "Dina",
     lastName: "Sari",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "DINASARI",
   },
   {
@@ -418,7 +418,7 @@ export const usersData = [
     password: "hashed_password_49",
     firstName: "Tina",
     lastName: "Kartika",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "TINAKRTK",
   },
   {
@@ -427,7 +427,7 @@ export const usersData = [
     password: "hashed_password_50",
     firstName: "Erwin",
     lastName: "Hidayat",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "ERWINHDYT",
   },
   {
@@ -436,7 +436,7 @@ export const usersData = [
     password: "hashed_password_51",
     firstName: "Deni",
     lastName: "Anggara",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "DENIANGR",
   },
   {
@@ -445,7 +445,7 @@ export const usersData = [
     password: "hashed_password_52",
     firstName: "Rikis",
     lastName: "Sanjaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIKISSANJAYA",
   },
   {
@@ -454,7 +454,7 @@ export const usersData = [
     password: "hashed_password_53",
     firstName: "Siti",
     lastName: "Aminah",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "SITIAMINAH",
   },
   {
@@ -463,7 +463,7 @@ export const usersData = [
     password: "hashed_password_54",
     firstName: "Rizal",
     lastName: "Pratama",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIZALPRATAMA",
   },
   {
@@ -472,7 +472,7 @@ export const usersData = [
     password: "hashed_password_55",
     firstName: "Dian",
     lastName: "Cahaya",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "DIANCAHAYA",
   },
   {
@@ -481,7 +481,7 @@ export const usersData = [
     password: "hashed_password_56",
     firstName: "Budi",
     lastName: "Setiawan",
-    role: UsersRoleEnum.customer,
+    role: UsersRoleEnum.CUSTOMER,
     referralCode: "BUDISETIAWAN",
   },
 ];
