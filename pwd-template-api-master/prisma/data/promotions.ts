@@ -4,7 +4,7 @@ export const promotionsData = [
   {
     code: "JMF2025DISKON10",
     discountAmount: 25000.0,
-    discountType: DiscountTypeEnum.fixed,
+    discountType: DiscountTypeEnum.FIXED,
     eventName: "Jakarta Music Fest 2025",
     isReferralPromo: false,
     maxRedemptions: 50,
@@ -15,7 +15,7 @@ export const promotionsData = [
   {
     code: "FINTECH50OFF",
     discountAmount: 50.0,
-    discountType: DiscountTypeEnum.percentage,
+    discountType: DiscountTypeEnum.PERCENTAGE,
     eventName: "Seminar FinTech Masa Depan",
     isReferralPromo: false,
     maxRedemptions: 100,
@@ -26,7 +26,7 @@ export const promotionsData = [
   {
     code: "DISKON20PERSEN",
     discountAmount: 20.0,
-    discountType: DiscountTypeEnum.percentage,
+    discountType: DiscountTypeEnum.PERCENTAGE,
     eventName: null, // Promosi ini tidak terikat pada event tertentu
     isReferralPromo: false,
     maxRedemptions: 200,
@@ -37,7 +37,7 @@ export const promotionsData = [
   {
     code: "FREEMUSIC100",
     discountAmount: 100000.0,
-    discountType: DiscountTypeEnum.fixed,
+    discountType: DiscountTypeEnum.FIXED,
     eventName: "Festival Indie Music Bandung",
     isReferralPromo: false,
     maxRedemptions: null, // Tidak ada batasan
@@ -48,7 +48,7 @@ export const promotionsData = [
   {
     code: "SPORTPROMO10",
     discountAmount: 10.0,
-    discountType: DiscountTypeEnum.percentage,
+    discountType: DiscountTypeEnum.PERCENTAGE,
     eventName: "Turnamen Futsal Piala Nusantara",
     isReferralPromo: false,
     maxRedemptions: 75,

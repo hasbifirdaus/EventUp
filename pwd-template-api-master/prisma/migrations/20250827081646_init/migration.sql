@@ -1,23 +1,23 @@
 -- CreateEnum
-CREATE TYPE "UsersRoleEnum" AS ENUM ('customer', 'organizer');
+CREATE TYPE "UsersRoleEnum" AS ENUM ('CUSTOMER', 'ORGANIZER', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "TransactionStatusEnum" AS ENUM ('pending', 'paid', 'cancelled', 'expired', 'refunded');
+CREATE TYPE "TransactionStatusEnum" AS ENUM ('PENDING', 'PAID', 'CANCELLED', 'EXPIRED', 'REFUNDED');
 
 -- CreateEnum
-CREATE TYPE "TicketStatusEnum" AS ENUM ('available', 'sold', 'checked_in', 'cancelled');
+CREATE TYPE "TicketStatusEnum" AS ENUM ('AVAILABLE', 'SOLD', 'CHECKED_IN', 'CANCELLED');
 
 -- CreateEnum
-CREATE TYPE "EventCategoryEnum" AS ENUM ('music', 'sport', 'seminar', 'workshop', 'conference', 'other');
+CREATE TYPE "EventCategoryEnum" AS ENUM ('MUSIC', 'SPORT', 'SEMINAR', 'WORKSHOP', 'CONFERENCE', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "PaymentMethodEnum" AS ENUM ('GOPAY', 'OVO', 'DANA', 'SHOPEEPAY', 'BCA_TRANSFER', 'MANDIRI_TRANSFER', 'FREE');
 
 -- CreateEnum
-CREATE TYPE "PaymentStatusEnum" AS ENUM ('pending', 'success', 'failed', 'refunded');
+CREATE TYPE "PaymentStatusEnum" AS ENUM ('PENDING', 'SUCCESS', 'FAILED', 'REFUNDED');
 
 -- CreateEnum
-CREATE TYPE "DiscountTypeEnum" AS ENUM ('fixed', 'percentage');
+CREATE TYPE "DiscountTypeEnum" AS ENUM ('FIXED', 'PERCENTAGE');
 
 -- CreateEnum
 CREATE TYPE "AuditLogActionEnum" AS ENUM ('LOGIN', 'LOGOUT', 'CREATE_EVENT', 'UPDATE_EVENT', 'PURCHASE_TICKET', 'REFUND');
@@ -30,7 +30,8 @@ CREATE TABLE "User" (
     "password" VARCHAR(255) NOT NULL,
     "first_name" VARCHAR(25),
     "last_name" VARCHAR(25),
-    "role" "UsersRoleEnum" NOT NULL,
+    "image_profile_url" VARCHAR(255),
+    "role" "UsersRoleEnum" NOT NULL DEFAULT 'CUSTOMER',
     "referral_code" VARCHAR(50),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -57,9 +58,11 @@ CREATE TABLE "OrganizerProfile" (
 CREATE TABLE "Event" (
     "id" SERIAL NOT NULL,
     "title" VARCHAR(100) NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "start_date_time" TIMESTAMP(3) NOT NULL,
-    "location" VARCHAR(200) NOT NULL,
+    "end_date_time" TIMESTAMP(3) NOT NULL,
+    "location" VARCHAR(200),
+    "image_url" VARCHAR(255),
     "category" "EventCategoryEnum" NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "organizer_id" UUID NOT NULL,
@@ -92,11 +95,11 @@ CREATE TABLE "Transaction" (
     "id" SERIAL NOT NULL,
     "user_id" UUID NOT NULL,
     "event_id" INTEGER NOT NULL,
-    "promotion_id" INTEGER,
-    "amount" DECIMAL(10,2) NOT NULL,
+    "total_amount" DECIMAL(10,2) NOT NULL,
     "currency" VARCHAR(3) NOT NULL DEFAULT 'IDR',
-    "status" "TransactionStatusEnum" NOT NULL DEFAULT 'pending',
-    "redemption_points" INTEGER,
+    "status" "TransactionStatusEnum" NOT NULL DEFAULT 'PENDING',
+    "point_used" INTEGER,
+    "promotion_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -123,13 +126,13 @@ CREATE TABLE "TransactionItem" (
 CREATE TABLE "Ticket" (
     "id" SERIAL NOT NULL,
     "event_id" INTEGER NOT NULL,
+    "ticket_type_id" INTEGER NOT NULL,
     "owner_id" UUID,
     "transaction_item_id" INTEGER NOT NULL,
     "ticketCode" VARCHAR(50) NOT NULL,
-    "status" "TicketStatusEnum" NOT NULL DEFAULT 'available',
+    "status" "TicketStatusEnum" NOT NULL DEFAULT 'AVAILABLE',
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "seat_number" TEXT,
-    "is_seated" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -140,7 +143,7 @@ CREATE TABLE "Ticket" (
 -- CreateTable
 CREATE TABLE "Payment" (
     "id" SERIAL NOT NULL,
-    "amount" INTEGER NOT NULL,
+    "amount" DECIMAL(10,2) NOT NULL,
     "transaction_id" INTEGER NOT NULL,
     "method" "PaymentMethodEnum" NOT NULL,
     "status" "PaymentStatusEnum" NOT NULL,
@@ -188,7 +191,6 @@ CREATE TABLE "Referral" (
     "id" SERIAL NOT NULL,
     "referrer_id" UUID NOT NULL,
     "referred_user_id" UUID NOT NULL,
-    "discount_amount" DECIMAL(10,2),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -201,9 +203,10 @@ CREATE TABLE "Promotion" (
     "id" SERIAL NOT NULL,
     "event_id" INTEGER,
     "user_id" UUID,
+    "name" VARCHAR(100),
     "code" VARCHAR(50) NOT NULL,
     "discount_amount" DECIMAL(10,2) NOT NULL,
-    "discount_type" "DiscountTypeEnum" NOT NULL DEFAULT 'fixed',
+    "discount_type" "DiscountTypeEnum" NOT NULL DEFAULT 'FIXED',
     "is_referral_promo" BOOLEAN NOT NULL DEFAULT false,
     "max_redemptions" INTEGER,
     "used_redemptions" INTEGER NOT NULL DEFAULT 0,
@@ -247,6 +250,9 @@ CREATE INDEX "Event_category_idx" ON "Event"("category");
 CREATE INDEX "Event_organizer_id_idx" ON "Event"("organizer_id");
 
 -- CreateIndex
+CREATE INDEX "Event_start_date_time_idx" ON "Event"("start_date_time");
+
+-- CreateIndex
 CREATE INDEX "TicketType_event_id_idx" ON "TicketType"("event_id");
 
 -- CreateIndex
@@ -257,6 +263,9 @@ CREATE INDEX "Transaction_user_id_idx" ON "Transaction"("user_id");
 
 -- CreateIndex
 CREATE INDEX "Transaction_event_id_idx" ON "Transaction"("event_id");
+
+-- CreateIndex
+CREATE INDEX "Transaction_promotion_id_idx" ON "Transaction"("promotion_id");
 
 -- CreateIndex
 CREATE INDEX "TransactionItem_transaction_id_idx" ON "TransactionItem"("transaction_id");
@@ -272,6 +281,9 @@ CREATE INDEX "Ticket_owner_id_idx" ON "Ticket"("owner_id");
 
 -- CreateIndex
 CREATE INDEX "Ticket_event_id_idx" ON "Ticket"("event_id");
+
+-- CreateIndex
+CREATE INDEX "Ticket_ticket_type_id_idx" ON "Ticket"("ticket_type_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Ticket_event_id_seat_number_key" ON "Ticket"("event_id", "seat_number");
@@ -316,13 +328,13 @@ ALTER TABLE "Event" ADD CONSTRAINT "Event_organizer_id_fkey" FOREIGN KEY ("organ
 ALTER TABLE "TicketType" ADD CONSTRAINT "TicketType_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_promotion_id_fkey" FOREIGN KEY ("promotion_id") REFERENCES "Promotion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_promotion_id_fkey" FOREIGN KEY ("promotion_id") REFERENCES "Promotion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TransactionItem" ADD CONSTRAINT "TransactionItem_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "Transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -338,6 +350,9 @@ ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_owner_id_fkey" FOREIGN KEY ("owner_i
 
 -- AddForeignKey
 ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_transaction_item_id_fkey" FOREIGN KEY ("transaction_item_id") REFERENCES "TransactionItem"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_ticket_type_id_fkey" FOREIGN KEY ("ticket_type_id") REFERENCES "TicketType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Payment" ADD CONSTRAINT "Payment_transaction_id_fkey" FOREIGN KEY ("transaction_id") REFERENCES "Transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -356,6 +371,9 @@ ALTER TABLE "Referral" ADD CONSTRAINT "Referral_referrer_id_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "Referral" ADD CONSTRAINT "Referral_referred_user_id_fkey" FOREIGN KEY ("referred_user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Promotion" ADD CONSTRAINT "Promotion_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Promotion" ADD CONSTRAINT "Promotion_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "Event"("id") ON DELETE SET NULL ON UPDATE CASCADE;

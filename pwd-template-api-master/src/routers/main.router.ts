@@ -1,22 +1,14 @@
-import { SampleRouter } from './sample.router';
-import { Router } from 'express';
+import { Router } from "express";
+import authRouter from "./auth.route"; // Impor authRouter yang sudah dibuat
 
-export class MainRouter {
-  private router: Router;
-  private sampleRouter: SampleRouter;
+const mainRouter = Router();
 
-  constructor() {
-    this.router = Router();
-    this.sampleRouter = new SampleRouter();
+// Endpoint untuk auth
+mainRouter.use("/api/auth", authRouter);
 
-    this.initializeRoutes();
-  }
+// Endpoint untuk test (opsional)
+mainRouter.get("/api/ping", (req, res) => {
+  res.status(200).json({ message: "pong" });
+});
 
-  private initializeRoutes(): void {
-    this.router.use('/api/samples', this.sampleRouter.getRouter());
-  }
-
-  public getRouter(): Router {
-    return this.router;
-  }
-}
+export default mainRouter;

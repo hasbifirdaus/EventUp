@@ -9,7 +9,7 @@ export const paymentsData = [
     userUsername: "rikis.s",
     eventName: "Jakarta Music Fest 2025",
     amount: 250000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 2
@@ -17,7 +17,7 @@ export const paymentsData = [
     userUsername: "aditya.p",
     eventName: "Jakarta Music Fest 2025",
     amount: 850000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 3
@@ -25,7 +25,7 @@ export const paymentsData = [
     userUsername: "doni.s",
     eventName: "Konferensi Teknologi Masa Depan",
     amount: 150000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 4
@@ -33,7 +33,7 @@ export const paymentsData = [
     userUsername: "rikis.s",
     eventName: "Retret Yoga dan Meditasi di Bali",
     amount: 3000000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 5
@@ -41,7 +41,7 @@ export const paymentsData = [
     userUsername: "yoga.s",
     eventName: "Workshop Desain UX/UI Intensif",
     amount: 500000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 6
@@ -49,7 +49,7 @@ export const paymentsData = [
     userUsername: "aditya.p",
     eventName: "Turnamen Futsal Piala Nusantara",
     amount: 1000000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 7
@@ -57,7 +57,7 @@ export const paymentsData = [
     userUsername: "syifa.n",
     eventName: "Konferensi Data Science Indonesia",
     amount: 250000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 8
@@ -65,7 +65,7 @@ export const paymentsData = [
     userUsername: "agus.d",
     eventName: "Pameran Kerajinan Tangan Nusantara",
     amount: 75000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.OVO,
   },
   // Transaksi 9
@@ -73,7 +73,7 @@ export const paymentsData = [
     userUsername: "riki.s",
     eventName: "Seminar FinTech Masa Depan",
     amount: 125000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 10
@@ -81,7 +81,7 @@ export const paymentsData = [
     userUsername: "lina.s",
     eventName: "Lomba Lari 10K Sehat",
     amount: 50000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.SHOPEEPAY,
   },
   // Transaksi 11
@@ -89,7 +89,7 @@ export const paymentsData = [
     userUsername: "joko.s",
     eventName: "Workshop Fotografi Dasar",
     amount: 150000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 12
@@ -97,7 +97,7 @@ export const paymentsData = [
     userUsername: "siti.a",
     eventName: "Festival Indie Music Bandung",
     amount: 200000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 13
@@ -105,7 +105,7 @@ export const paymentsData = [
     userUsername: "rizal.p",
     eventName: "Konferensi Cybersecurity 2026",
     amount: 350000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 14
@@ -113,7 +113,7 @@ export const paymentsData = [
     userUsername: "andri.w",
     eventName: "Seminar Investasi Saham",
     amount: 100000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.OVO,
   },
   // Transaksi 15
@@ -121,7 +121,7 @@ export const paymentsData = [
     userUsername: "santi.s",
     eventName: "Kejuaraan Basket 3x3 Nasional",
     amount: 1000000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 16
@@ -129,7 +129,7 @@ export const paymentsData = [
     userUsername: "doni.s",
     eventName: "Festival Budaya Lombok",
     amount: 375000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 17
@@ -137,7 +137,7 @@ export const paymentsData = [
     userUsername: "siti.a",
     eventName: "Workshop Coding for Kids",
     amount: 125000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 18
@@ -145,7 +145,7 @@ export const paymentsData = [
     userUsername: "dian.c",
     eventName: "Konser Amal 'Suara Hati'",
     amount: 300000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 19
@@ -153,7 +153,7 @@ export const paymentsData = [
     userUsername: "tari.s",
     eventName: "Seminar Kesehatan Mental",
     amount: 75000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.OVO,
   },
   // Transaksi 20
@@ -161,7 +161,7 @@ export const paymentsData = [
     userUsername: "wahyu.s",
     eventName: "E-sport Championship: Mobile Legends",
     amount: 200000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.SHOPEEPAY,
   },
   // Transaksi 21
@@ -169,7 +169,7 @@ export const paymentsData = [
     userUsername: "budi.s",
     eventName: "Festival Layang-layang",
     amount: 0,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.FREE,
   },
   // Transaksi 22
@@ -177,7 +177,7 @@ export const paymentsData = [
     userUsername: "dina.s",
     eventName: "Workshop Public Speaking",
     amount: 600000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 23
@@ -185,7 +185,7 @@ export const paymentsData = [
     userUsername: "tina.k",
     eventName: "Konser Klasik Malam Tahun Baru",
     amount: 500000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 24
@@ -193,7 +193,7 @@ export const paymentsData = [
     userUsername: "erwin.h",
     eventName: "Seminar Pemasaran Digital",
     amount: 300000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 25
@@ -201,7 +201,7 @@ export const paymentsData = [
     userUsername: "deni.a",
     eventName: "Kompetisi Renang Junior",
     amount: 120000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.OVO,
   },
   // Transaksi 26
@@ -209,7 +209,7 @@ export const paymentsData = [
     userUsername: "sulis.r",
     eventName: "Festival Film Pendek",
     amount: 50000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.SHOPEEPAY,
   },
   // Transaksi 27
@@ -217,7 +217,7 @@ export const paymentsData = [
     userUsername: "bagus.s",
     eventName: "Workshop Bahasa Jepang Dasar",
     amount: 170000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 28
@@ -225,7 +225,7 @@ export const paymentsData = [
     userUsername: "miko.p",
     eventName: "Java Jazz Festival 2026",
     amount: 750000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 29
@@ -233,7 +233,7 @@ export const paymentsData = [
     userUsername: "rikis.s",
     eventName: "Seminar Blockchain dan Kripto",
     amount: 150000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 30
@@ -241,7 +241,7 @@ export const paymentsData = [
     userUsername: "aditya.p",
     eventName: "Lomba Panjat Tebing",
     amount: 150000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.OVO,
   },
   // Transaksi 31
@@ -249,7 +249,7 @@ export const paymentsData = [
     userUsername: "syifa.n",
     eventName: "Festival Wayang Kulit",
     amount: 75000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.SHOPEEPAY,
   },
   // Transaksi 32
@@ -257,7 +257,7 @@ export const paymentsData = [
     userUsername: "agus.d",
     eventName: "Workshop Desain Web Lanjutan",
     amount: 300000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.DANA,
   },
   // Transaksi 33
@@ -265,7 +265,7 @@ export const paymentsData = [
     userUsername: "riki.s",
     eventName: "Jakarta Music Fest 2025",
     amount: 350000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.GOPAY,
   },
   // Transaksi 34
@@ -273,7 +273,7 @@ export const paymentsData = [
     userUsername: "lina.s",
     eventName: "Konferensi Teknologi Masa Depan",
     amount: 150000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
   // Transaksi 35
@@ -281,7 +281,7 @@ export const paymentsData = [
     userUsername: "joko.s",
     eventName: "Retret Yoga dan Meditasi di Bali",
     amount: 3000000,
-    status: PaymentStatusEnum.success,
+    status: PaymentStatusEnum.SUCCESS,
     method: PaymentMethodEnum.BCA_TRANSFER,
   },
 ];
