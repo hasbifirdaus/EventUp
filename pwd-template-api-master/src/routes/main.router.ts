@@ -5,14 +5,10 @@ import authenticationRoute from "./authentication.route";
 
 const route = Router();
 
+// Endpoint untuk auth
 route.use("/api/authentication", authenticationRoute);
 
 export default route;
-
-// const mainRouter = Router();
-
-// // Endpoint untuk auth
-// mainRouter.use("/api/auth", authRouter);
 
 // // Endpoint untuk test (opsional)
 // mainRouter.get("/api/ping", (req, res) => {
