@@ -23,7 +23,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-// Start the server
+//running app
 app.listen(port, () => {
-  console.log(`[API] Running in port: ${port}`);
+  console.log(`[🔥API] Running in http://localhost:${port}/`);
 });

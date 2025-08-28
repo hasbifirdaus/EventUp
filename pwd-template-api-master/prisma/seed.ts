@@ -266,16 +266,13 @@ async function main() {
             );
           }
 
-          // FIX: Corrected property names to match the Prisma schema.
           const createdTransaction = await prisma.transaction.create({
             data: {
               userId,
               eventId,
               promotionId,
-              // Per your schema, the property name is totalAmount
               totalAmount: new Prisma.Decimal(t.amount),
               status: t.status as TransactionStatusEnum,
-              // Per your schema, the property name is pointUsed
               pointUsed: t.redemptionPoints,
               createdAt: new Date(transactionDate),
             },
@@ -337,12 +334,10 @@ async function main() {
               for (let j = 0; j < originalItemData.quantity; j++) {
                 ticketsToCreate.push({
                   eventId,
-                  // FIX: Changed 'ticket_type_id' back to 'ticketTypeId' to match the correct schema for createMany.
                   ticketTypeId: createdItem.ticketTypeId,
                   ownerId: userId,
                   transactionItemId: createdItem.id,
                   ticketCode: `TKT-${uuidv4()}`,
-                  // FIX: Use the correct status enum, not a field from the data.
                   status: TicketStatusEnum.SOLD,
                   seatNumber: isSeated
                     ? `A-${eventId}-${createdItem.id}-${j + 1}`

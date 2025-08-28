@@ -6,7 +6,7 @@ const mainRouter = Router();
 // Endpoint untuk auth
 mainRouter.use("/api/auth", authRouter);
 
-// Endpoint untuk test (opsional)
+// Endpoint untuk test
 mainRouter.get("/api/ping", (req, res) => {
   res.status(200).json({ message: "pong" });
 });
