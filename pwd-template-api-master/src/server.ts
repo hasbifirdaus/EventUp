@@ -1,27 +1,22 @@
 import express, { Express, NextFunction, Request, Response } from "express";
-import mainRouter from "./routers/main.router";
+import dotenv from "dotenv";
 import cors from "cors";
-import { config } from "./config/index"; // Menggunakan config dari file yang sudah ada
+import { config } from "./config/index";
+import authRouter from "./routes/auth.routes";
+import dashboardRouter from "./routes/dashboard.routes";
+import referralRouter from "./routes/referral/referral.routes";
+import eventRouter from "./routes/event.routes";
 
 const app: Express = express();
 const port: number = parseInt(config.port as string, 10) || 8000; // Mengubah tipe port menjadi number
 
-// Middleware
 app.use(cors()); // Semua client dapat mengakses API kita
-app.use(express.json());
+app.use(express.json()); //Untuk membaca body request dalam format JSON
 
-// Main route
-app.use(mainRouter);
-
-// Error handling middleware
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack); // Cetak stack trace untuk debugging
-  res.status(500).json({
-    success: false,
-    message: err?.message || "Something broke!",
-    data: {},
-  });
-});
+app.use("/api", authRouter);
+app.use("/api/dashboard", dashboardRouter);
+app.use("/api/referral", referralRouter);
+app.use("/api/events", eventRouter);
 
 //running app
 app.listen(port, () => {
