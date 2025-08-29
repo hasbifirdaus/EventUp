@@ -1,60 +1,104 @@
-import { Prisma, UsersRoleEnum } from "../generated/prisma";
-import { hashPassword, comparePassword } from "../utils/password.util";
-import { generateToken } from "../utils/jwt.util";
-import { handleReferral } from "./referral.service";
-import prisma from "../prisma/client";
+import bcrypt from "bcryptjs";
+import { PrismaClient } from "../generated/prisma";
+import { v4 as uuidv4 } from "uuid"; // Untuk membuat kode referral unik
+import jwt from "jsonwebtoken";
 
-export const registerUser = async (
-  userData: Prisma.UserCreateInput & { referralCode?: string }
-) => {
-  const { referralCode, ...rest } = userData;
+const prisma = new PrismaClient();
 
-  // Check if username or email already exists
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      OR: [{ username: rest.username }, { email: rest.email }],
-    },
-  });
+// Fungsi untuk mendaftarkan pengguna baru
+export const registerUser = async (data: {
+  username: string;
+  email: string;
+  password: string;
+  referralCode?: string;
+}) => {
+  try {
+    // 1. Hash password untuk keamanan
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  if (existingUser) {
-    throw new Error("Username or email is already taken.");
+    // 2. Buat kode referral unik untuk pengguna baru
+    const newReferralCode = uuidv4().slice(0, 8).toUpperCase();
+
+    // 3. Simpan pengguna baru ke database
+    const newUser = await prisma.user.create({
+      data: {
+        username: data.username,
+        email: data.email,
+        password: hashedPassword,
+        referralCode: newReferralCode,
+        // Role secara default sudah 'CUSTOMER' di skema Prisma Anda
+      },
+    });
+
+    // 4. Periksa apakah ada kode referral yang digunakan saat pendaftaran
+    if (data.referralCode) {
+      // Cari pemilik kode referral yang digunakan
+      const referrer = await prisma.user.findUnique({
+        where: { referralCode: data.referralCode },
+      });
+
+      if (referrer) {
+        // Logika untuk memberikan poin ke pemilik kode referral
+        await prisma.point.create({
+          data: {
+            userId: referrer.id,
+            amount: 10000,
+            expirationDate: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000), // 3 bulan
+          },
+        });
+
+        // Logika untuk memberikan kupon diskon ke pengguna baru
+        await prisma.promotion.create({
+          data: {
+            userId: newUser.id,
+            code: `${newReferralCode.slice(0, 5)}-DISCOUNT`,
+            discountAmount: 10,
+            discountType: "PERCENTAGE",
+            isReferralPromo: true,
+            startDate: new Date(),
+            endDate: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000), // 3 bulan
+          },
+        });
+
+        // Simpan relasi referral di tabel Referral
+        await prisma.referral.create({
+          data: {
+            referrerId: referrer.id,
+            referredUserId: newUser.id,
+          },
+        });
+      }
+    }
+
+    return newUser;
+  } catch (error) {
+    throw new Error("Pendaftaran gagal. Pastikan data unik.");
   }
-
-  // Hash the password before saving
-  const hashedPassword = await hashPassword(rest.password);
-
-  const newUser = await prisma.user.create({
-    data: {
-      ...rest,
-      password: hashedPassword,
-      role: UsersRoleEnum.CUSTOMER,
-    },
-  });
-
-  // Handle referral logic if a code was provided
-  if (referralCode) {
-    await handleReferral(prisma, newUser.email, referralCode);
-  }
-
-  // Generate JWT token
-  const token = generateToken({ userId: newUser.id, role: newUser.role });
-
-  // Return user data without the password
-  const { password, ...userWithoutPassword } = newUser;
-  return { user: userWithoutPassword, token };
 };
 
-export const loginUser = async (email: string, password: string) => {
-  const user = await prisma.user.findUnique({ where: { email } });
+// Fungsi untuk login pengguna
+export const loginUser = async (data: { email: string; password: string }) => {
+  // 1. Cari pengguna berdasarkan email
+  const user = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
 
-  if (!user || !(await comparePassword(password, user.password))) {
-    throw new Error("Invalid email or password.");
+  if (!user) {
+    throw new Error("Email atau password salah.");
   }
 
-  // Generate JWT token
-  const token = generateToken({ userId: user.id, role: user.role });
+  // 2. Bandingkan password yang dimasukkan dengan yang di database
+  const isPasswordValid = await bcrypt.compare(data.password, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Email atau password salah.");
+  }
 
-  // Return user data without the password
-  const { password: userPassword, ...userWithoutPassword } = user;
-  return { user: userWithoutPassword, token };
+  // 3. Buat JWT (JSON Web Token)
+  const token = jwt.sign(
+    { userId: user.id, role: user.role },
+    process.env.JWT_SECRET_KEY as string,
+    { expiresIn: "1h" } // Token akan kedaluwarsa dalam 1 jam
+  );
+
+  return { token, user };
 };

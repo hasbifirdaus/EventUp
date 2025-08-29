@@ -1,0 +1,82 @@
+// src/controllers/event.controller.ts
+import { Request, Response } from "express";
+import { PrismaClient } from "../generated/prisma";
+
+const prisma = new PrismaClient();
+
+// API untuk membuat event baru (hanya untuk organizer)
+export const createEvent = async (req: any, res: Response) => {
+  try {
+    const {
+      title,
+      description,
+      startDateTime,
+      endDateTime,
+      location,
+      imageUrl,
+      category,
+    } = req.body;
+    const organizerId = req.user.userId;
+
+    const newEvent = await prisma.event.create({
+      data: {
+        title,
+        description,
+        startDateTime: new Date(startDateTime),
+        endDateTime: new Date(endDateTime),
+        location,
+        imageUrl,
+        category,
+        organizerId,
+      },
+    });
+
+    res
+      .status(201)
+      .json({ message: "Event berhasil dibuat.", event: newEvent });
+  } catch (error) {
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+// API untuk melihat semua event
+export const getEvents = async (req: Request, res: Response) => {
+  try {
+    const events = await prisma.event.findMany({
+      where: { deletedAt: null },
+      include: {
+        organizer: {
+          select: {
+            username: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        startDateTime: "asc",
+      },
+    });
+    res.status(200).json(events);
+  } catch (error) {
+    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+//API Untuk melihat detail evetn
+export const getEventById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found." });
+    }
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ message: "Server error." });
+  }
+};
