@@ -80,3 +80,55 @@ export const getEventById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error." });
   }
 };
+
+//Function untuk updateEvent
+export const updateEvent = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const {
+      title,
+      description,
+      startDateTime,
+      endDateTime,
+      location,
+      imageUrl,
+      category,
+      isActive,
+    } = req.body;
+
+    const updateEvent = await prisma.event.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title,
+        description,
+        startDateTime: startDateTime ? new Date(startDateTime) : undefined,
+        endDateTime: endDateTime ? new Date(endDateTime) : undefined,
+        location,
+        imageUrl,
+        category,
+        isActive,
+      },
+    });
+    res.status(200).json(updateEvent);
+  } catch (error) {
+    res.status(500).json({ message: "Server error.", error });
+  }
+};
+
+//Function untuk deleteEvent
+export const deleteEvent = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    await prisma.event.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.status(204).send(); //No Content
+  } catch (error) {
+    res.status(500).json({ message: "Server error.", error });
+  }
+};
