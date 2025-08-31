@@ -9,6 +9,7 @@ export const usersData = [
     lastName: "Sanjaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIKIS123",
+    phoneNumber: "0811111111",
   },
   {
     username: "siti.n",
@@ -18,6 +19,7 @@ export const usersData = [
     lastName: "Nurhayati",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SITIN456",
+    phoneNumber: "0811111112",
   },
   {
     username: "budi.e",
@@ -26,6 +28,7 @@ export const usersData = [
     firstName: "Budi",
     lastName: "Effendi",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "0811111113",
   },
   {
     username: "lisa.m",
@@ -34,6 +37,7 @@ export const usersData = [
     firstName: "Lisa",
     lastName: "Mulyani",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "0811111114",
   },
   {
     username: "andi.w",
@@ -43,6 +47,7 @@ export const usersData = [
     lastName: "Wijaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ANDIWCUSTOM",
+    phoneNumber: "0811111115",
   },
   {
     username: "agung.p",
@@ -51,6 +56,7 @@ export const usersData = [
     firstName: "Agung",
     lastName: "Prakoso",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "0811111116",
   },
   {
     username: "beta.w",
@@ -59,6 +65,7 @@ export const usersData = [
     firstName: "Beta",
     lastName: "Wijayanti",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "0811111117",
   },
   {
     username: "bayu.s",
@@ -68,6 +75,7 @@ export const usersData = [
     lastName: "Santoso",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "BAYUSANTOSOS",
+    phoneNumber: "0811111118",
   },
   {
     username: "cindy.l",
@@ -77,6 +85,7 @@ export const usersData = [
     lastName: "Lestari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "CINDYL",
+    phoneNumber: "0811111119",
   },
   {
     username: "yoga.pratama",
@@ -86,6 +95,7 @@ export const usersData = [
     lastName: "Pratama",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "YOGAPRT",
+    phoneNumber: "08111111110",
   },
   {
     username: "diana.p",
@@ -95,6 +105,7 @@ export const usersData = [
     lastName: "Pratama",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "DIANAPRT",
+    phoneNumber: "08111111111",
   },
   {
     username: "faisal.a",
@@ -103,6 +114,7 @@ export const usersData = [
     firstName: "Faisal",
     lastName: "Ali",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111112",
   },
   {
     username: "ghina.s",
@@ -112,6 +124,7 @@ export const usersData = [
     lastName: "Safira",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "GHINASAFIRA",
+    phoneNumber: "0811111113",
   },
   {
     username: "hadi.k",
@@ -121,6 +134,7 @@ export const usersData = [
     lastName: "Kusuma",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "HADIKSM",
+    phoneNumber: "08111111114",
   },
   {
     username: "irma.w",
@@ -129,6 +143,7 @@ export const usersData = [
     firstName: "Irma",
     lastName: "Wijaya",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111115",
   },
   {
     username: "joko.s",
@@ -138,6 +153,7 @@ export const usersData = [
     lastName: "Santoso",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "JOKOSANTO",
+    phoneNumber: "08111111116",
   },
   {
     username: "kartika.a",
@@ -147,6 +163,7 @@ export const usersData = [
     lastName: "Anggraeni",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "KARTIKAA",
+    phoneNumber: "08111111117",
   },
   {
     username: "laila.n",
@@ -155,6 +172,7 @@ export const usersData = [
     firstName: "Laila",
     lastName: "Nuraini",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111118",
   },
   {
     username: "mario.p",
@@ -164,6 +182,7 @@ export const usersData = [
     lastName: "Pratama",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "MARIOPRT",
+    phoneNumber: "08111111119",
   },
   {
     username: "nina.s",
@@ -173,6 +192,7 @@ export const usersData = [
     lastName: "Sari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "NINASARI",
+    phoneNumber: "08111111120",
   },
   {
     username: "oky.w",
@@ -182,6 +202,7 @@ export const usersData = [
     lastName: "Wijaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "OKYWIJAYA",
+    phoneNumber: "08111111121",
   },
   {
     username: "purnama.a",
@@ -190,6 +211,7 @@ export const usersData = [
     firstName: "Purnama",
     lastName: "Anggun",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111122",
   },
   {
     username: "ratih.d",
@@ -199,6 +221,7 @@ export const usersData = [
     lastName: "Dewi",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "RATIHDEWI",
+    phoneNumber: "08111111123",
   },
   {
     username: "santo.r",
@@ -208,6 +231,7 @@ export const usersData = [
     lastName: "Rahardjo",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SANTORAHARDJO",
+    phoneNumber: "08111111124",
   },
   {
     username: "tari.s",
@@ -216,6 +240,7 @@ export const usersData = [
     firstName: "Tari",
     lastName: "Santos",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111125",
   },
   {
     username: "umi.l",
@@ -225,6 +250,7 @@ export const usersData = [
     lastName: "Lestari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "UMILESTARI",
+    phoneNumber: "08111111126",
   },
   {
     username: "vicky.a",
@@ -234,6 +260,7 @@ export const usersData = [
     lastName: "Andri",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "VICKYANDRI",
+    phoneNumber: "08111111127",
   },
   {
     username: "wahyu.s",
@@ -242,6 +269,7 @@ export const usersData = [
     firstName: "Wahyu",
     lastName: "Saputra",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111128",
   },
   {
     username: "yuni.m",
@@ -251,6 +279,7 @@ export const usersData = [
     lastName: "Marisa",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "YUNIMARISA",
+    phoneNumber: "08111111129",
   },
   {
     username: "zaki.h",
@@ -260,6 +289,7 @@ export const usersData = [
     lastName: "Hidayat",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ZAKIHIDAYAT",
+    phoneNumber: "08111111130",
   },
   {
     username: "amelia.w",
@@ -268,6 +298,7 @@ export const usersData = [
     firstName: "Amelia",
     lastName: "Wijaya",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111131",
   },
   {
     username: "bimo.k",
@@ -277,6 +308,7 @@ export const usersData = [
     lastName: "Kusumo",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "BIMOKSMO",
+    phoneNumber: "08111111132",
   },
   {
     username: "citra.d",
@@ -286,6 +318,7 @@ export const usersData = [
     lastName: "Dewi",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "CITRADEWI",
+    phoneNumber: "08111111133",
   },
   {
     username: "dino.r",
@@ -294,6 +327,7 @@ export const usersData = [
     firstName: "Dino",
     lastName: "Ramadhan",
     role: UsersRoleEnum.ORGANIZER,
+    phoneNumber: "08111111134",
   },
   {
     username: "erlina.s",
@@ -303,6 +337,7 @@ export const usersData = [
     lastName: "Sari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ERLINASARI",
+    phoneNumber: "08111111135",
   },
   {
     username: "aditya.p",
@@ -312,6 +347,7 @@ export const usersData = [
     lastName: "Prasetyo",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ADITYAPRT",
+    phoneNumber: "08111111137",
   },
   {
     username: "doni.s",
@@ -321,6 +357,7 @@ export const usersData = [
     lastName: "Saputra",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "DONISAP",
+    phoneNumber: "08111111138",
   },
   {
     username: "yoga.s",
@@ -330,6 +367,7 @@ export const usersData = [
     lastName: "Sanjaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "YOGASAN",
+    phoneNumber: "08111111138",
   },
   {
     username: "syifa.n",
@@ -339,6 +377,7 @@ export const usersData = [
     lastName: "Nuraini",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SYIFANURA",
+    phoneNumber: "08111111140",
   },
   {
     username: "agus.d",
@@ -348,6 +387,7 @@ export const usersData = [
     lastName: "Dirgantara",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "AGUSDIRG",
+    phoneNumber: "08111111141",
   },
   {
     username: "lina.s",
@@ -357,6 +397,7 @@ export const usersData = [
     lastName: "Santoso",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "LINASAN",
+    phoneNumber: "08111111142",
   },
   {
     username: "andri.w",
@@ -366,6 +407,7 @@ export const usersData = [
     lastName: "Wijaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ANDRIWIJ",
+    phoneNumber: "08111111143",
   },
   {
     username: "santi.s",
@@ -375,6 +417,7 @@ export const usersData = [
     lastName: "Sari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SANTISARI",
+    phoneNumber: "08111111144",
   },
   {
     username: "sulis.r",
@@ -384,6 +427,7 @@ export const usersData = [
     lastName: "Rahayu",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SULISRAHAYU",
+    phoneNumber: "08111111145",
   },
   {
     username: "bagus.s",
@@ -393,6 +437,7 @@ export const usersData = [
     lastName: "Setyawan",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "BAGUSSETY",
+    phoneNumber: "08111111146",
   },
   {
     username: "miko.p",
@@ -402,6 +447,7 @@ export const usersData = [
     lastName: "Pratama",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "MIKOPRT",
+    phoneNumber: "08111111147",
   },
   {
     username: "dina.s",
@@ -411,6 +457,7 @@ export const usersData = [
     lastName: "Sari",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "DINASARI",
+    phoneNumber: "08111111148",
   },
   {
     username: "tina.k",
@@ -420,6 +467,7 @@ export const usersData = [
     lastName: "Kartika",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "TINAKRTK",
+    phoneNumber: "08111111149",
   },
   {
     username: "erwin.h",
@@ -429,6 +477,7 @@ export const usersData = [
     lastName: "Hidayat",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "ERWINHDYT",
+    phoneNumber: "08111111150",
   },
   {
     username: "deni.a",
@@ -438,6 +487,7 @@ export const usersData = [
     lastName: "Anggara",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "DENIANGR",
+    phoneNumber: "08111111151",
   },
   {
     username: "rikis.s",
@@ -447,6 +497,7 @@ export const usersData = [
     lastName: "Sanjaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIKISSANJAYA",
+    phoneNumber: "08111111152",
   },
   {
     username: "siti.a",
@@ -456,6 +507,7 @@ export const usersData = [
     lastName: "Aminah",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "SITIAMINAH",
+    phoneNumber: "08111111153",
   },
   {
     username: "rizal.p",
@@ -465,6 +517,7 @@ export const usersData = [
     lastName: "Pratama",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "RIZALPRATAMA",
+    phoneNumber: "08111111154",
   },
   {
     username: "dian.c",
@@ -474,6 +527,7 @@ export const usersData = [
     lastName: "Cahaya",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "DIANCAHAYA",
+    phoneNumber: "08111111155",
   },
   {
     username: "budi.s",
@@ -483,5 +537,6 @@ export const usersData = [
     lastName: "Setiawan",
     role: UsersRoleEnum.CUSTOMER,
     referralCode: "BUDISETIAWAN",
+    phoneNumber: "08111111156",
   },
 ];

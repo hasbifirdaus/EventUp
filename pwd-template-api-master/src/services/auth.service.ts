@@ -1,9 +1,7 @@
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "../generated/prisma";
+import { prisma } from "../utils/prisma";
 import { v4 as uuidv4 } from "uuid"; // Untuk membuat kode referral unik
 import jwt from "jsonwebtoken";
-
-const prisma = new PrismaClient();
 
 // Fungsi untuk mendaftarkan pengguna baru
 export const registerUser = async (data: {
@@ -38,29 +36,35 @@ export const registerUser = async (data: {
       });
 
       if (referrer) {
-        // Logika untuk memberikan poin ke pemilik kode referral
+        //tentukan tanggal kadaluwarsa 3 bulan dari sekarang
+        const expirationDate = new Date();
+        expirationDate.setMonth(expirationDate.getMonth() + 3);
+
+        //5.Berikan 10.point kepada pemilik kode referral
         await prisma.point.create({
           data: {
             userId: referrer.id,
             amount: 10000,
-            expirationDate: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000), // 3 bulan
+            expirationDate,
           },
         });
 
-        // Logika untuk memberikan kupon diskon ke pengguna baru
+        // 6. memberikan kupon diskon 10% ke pengguna baru
+        const referralPromotionCode = ` referral-${uuidv4().substring(0, 8).toUpperCase()}`;
         await prisma.promotion.create({
           data: {
             userId: newUser.id,
-            code: `${newReferralCode.slice(0, 5)}-DISCOUNT`,
+            name: "Diskon Pendaftaran Referral",
+            code: referralPromotionCode,
             discountAmount: 10,
             discountType: "PERCENTAGE",
             isReferralPromo: true,
             startDate: new Date(),
-            endDate: new Date(Date.now() + 3 * 30 * 24 * 60 * 60 * 1000), // 3 bulan
+            endDate: expirationDate,
           },
         });
 
-        // Simpan relasi referral di tabel Referral
+        // 7.Simpan relasi referral di tabel Referral
         await prisma.referral.create({
           data: {
             referrerId: referrer.id,

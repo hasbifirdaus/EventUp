@@ -1,24 +1,29 @@
 import express, { Express, NextFunction, Request, Response } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import { config } from "./config/index";
+
 import authRouter from "./routes/auth.routes";
 import dashboardRouter from "./routes/dashboard.routes";
 import referralRouter from "./routes/referral/referral.routes";
 import eventRouter from "./routes/event.routes";
 import pointAndPromotionRouter from "./routes/pointAndPromotion.routes";
+import transactionRouter from "./routes/transaction.routes";
+import { handleMidtransNotification } from "./controllers/midtrans.webhook.controller";
 
 const app: Express = express();
-const port: number = parseInt(config.port as string, 10) || 8000; // Mengubah tipe port menjadi number
+const port: number = 8000;
 
-app.use(cors()); // Semua client dapat mengakses API kita
-app.use(express.json()); //Untuk membaca body request dalam format JSON
+app.use(cors());
+app.use(express.json());
 
 app.use("/api", authRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/referral", referralRouter);
 app.use("/api/events", eventRouter);
 app.use("/api", pointAndPromotionRouter);
+app.use("/api/transactions", transactionRouter);
+
+app.post("/api/midtrans-webhook", handleMidtransNotification);
+app.post("/api/midtrans-webhook/", handleMidtransNotification);
 
 //running app
 app.listen(port, () => {
