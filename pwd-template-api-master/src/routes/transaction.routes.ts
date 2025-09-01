@@ -6,7 +6,11 @@ import { createSnapPaymentToken } from "../controllers/payment.controller";
 
 const transactionRouter = Router();
 
-transactionRouter.post("/", authMiddleware, asyncHandler(createTransaction));
+transactionRouter.post(
+  "/create",
+  authMiddleware,
+  asyncHandler(createTransaction)
+);
 
 transactionRouter.post(
   "/create-snap-token",

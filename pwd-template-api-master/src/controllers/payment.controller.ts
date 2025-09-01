@@ -26,12 +26,33 @@ export const createSnapPaymentToken = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Transaction not found." });
     }
 
+    // Buat daftar item dari transaksi
     const itemDetails = transaction.items.map((item) => ({
       id: `TICKET-${item.ticketTypeId}`,
       name: item.ticketType.name,
       price: item.unitPrice.toNumber(),
       quantity: item.quantity,
     }));
+
+    // Hitung total harga item tanpa diskon
+    let grossAmountFromItems = itemDetails.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    // Hitung total diskon (selisih antara harga asli dan harga final)
+    const totalDiscount =
+      grossAmountFromItems - transaction.totalAmount.toNumber();
+
+    // Jika ada diskon, tambahkan item diskon ke daftar
+    if (totalDiscount > 0) {
+      itemDetails.push({
+        id: `DISCOUNT-${transaction.promotionId || "POINTS"}`,
+        name: `Discount (${transaction.promotionId ? "Promo" : "Poin"})`,
+        price: -totalDiscount, // Harga negatif untuk mengurangi total
+        quantity: 1,
+      });
+    }
 
     const snapPayload = {
       transaction_details: {
