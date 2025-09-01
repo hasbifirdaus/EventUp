@@ -1,8 +1,5 @@
-// src/controllers/transaction.controller.ts
-
 import { Request, Response } from "express";
 import { prisma } from "../utils/prisma";
-import { snap } from "../config/midtrans.config";
 
 export const createTransaction = async (req: any, res: Response) => {
   try {
@@ -11,14 +8,28 @@ export const createTransaction = async (req: any, res: Response) => {
 
     await prisma.$transaction(async (tx) => {
       let totalPrice = 0;
+      const transactionItemsToCreate = [];
+
+      // Loop untuk validasi dan perhitungan total harga
       for (const item of items) {
         const ticketType = await tx.ticketType.findUnique({
           where: { id: item.ticketTypeId },
         });
+
         if (!ticketType || ticketType.quota < item.quantity) {
           throw new Error("Not enough tickets available.");
         }
-        totalPrice += Number(ticketType.price) * item.quantity;
+
+        // Simpan harga dari database ke dalam variabel
+        const unitPrice = ticketType.price.toNumber();
+        totalPrice += unitPrice * item.quantity;
+
+        // Simpan data item untuk pembuatan transaksi di akhir
+        transactionItemsToCreate.push({
+          ticketTypeId: item.ticketTypeId,
+          quantity: item.quantity,
+          unitPrice: unitPrice, // Gunakan harga dari database di sini
+        });
       }
 
       let finalPrice = totalPrice;
@@ -76,28 +87,15 @@ export const createTransaction = async (req: any, res: Response) => {
                 })
               )?.id
             : null,
+          items: {
+            // Gunakan array yang sudah berisi unitPrice
+            create: transactionItemsToCreate,
+          },
         },
       });
 
-      const user = await tx.user.findUnique({ where: { id: userId } });
-      const midtransTransaction = {
-        transaction_details: {
-          order_id: `INV-${new Date().getTime()}-${newTransaction.id}`,
-          gross_amount: Number(finalPrice),
-        },
-        credit_card: { secure: true },
-        customer_details: {
-          first_name: user?.firstName || user?.username,
-          last_name: user?.lastName,
-          email: user?.email,
-        },
-      };
-
-      const snapResponse = await snap.createTransaction(midtransTransaction);
-
       res.status(201).json({
         transactionId: newTransaction.id,
-        redirectUrl: snapResponse.redirect_url,
       });
     });
   } catch (error: any) {

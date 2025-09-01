@@ -10,14 +10,57 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Semua kolom wajib diisi." });
     }
 
-    const newUser = await registerUser({
-      username,
-      email,
-      password,
-      referralCode,
+    const newUser = await prisma.$transaction(async (tx) => {
+      // Step 1: Daftarkan pengguna baru
+      const user = await registerUser({
+        username,
+        email,
+        password,
+        referralCode,
+      });
+
+      // Step 2: Proses logika referralCode jika ada
+      if (referralCode) {
+        // Cari pengguna yang memiliki kode referral tersebut (pemberi referral)
+        const referrer = await tx.user.findUnique({
+          where: { referralCode },
+        });
+
+        if (referrer) {
+          // Hitung tanggal kadaluarsa 3 bulan dari sekarang
+          const expiryDate = new Date();
+          expiryDate.setMonth(expiryDate.getMonth() + 3);
+
+          // Berikan 10.000 poin kepada pemilik kode referral
+          await tx.point.create({
+            data: {
+              userId: referrer.id,
+              amount: 10000,
+              expirationDate: expiryDate,
+            },
+          });
+
+          // Buat promosi diskon 10% untuk pengguna baru
+          await tx.promotion.create({
+            data: {
+              userId: user.id,
+              name: "Referral Discount",
+              code: `REFERRAL-${user.id}`, // Kode unik untuk pengguna baru
+              discountAmount: 10,
+              discountType: "PERCENTAGE",
+              isReferralPromo: true,
+              maxRedemptions: 1, // Hanya bisa digunakan sekali
+              startDate: new Date(),
+              endDate: expiryDate,
+            },
+          });
+        }
+      }
+
+      return user;
     });
 
-    //Jangan kirim password kembali!
+    // Jangan kirim password kembali!
     const { password: _, ...userWithoutPassword } = newUser;
 
     res.status(201).json({
@@ -58,7 +101,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getUserProfile = async (req: any, res: Response) => {
   try {
-    const userId = req.user.userId; //Ambil userId dari token yang sudah diverifikas
+    const userId = req.user.userId; //Ambil userId dari token yang sudah diverifikasi
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
