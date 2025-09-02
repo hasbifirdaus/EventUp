@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser } from "../services/auth.service";
 import { prisma } from "../utils/prisma";
+import jwt from "jsonwebtoken";
+import { error } from "console";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -82,11 +84,12 @@ export const login = async (req: Request, res: Response) => {
         .json({ message: "Email dan password wajib diisi." });
     }
 
-    const { token, user } = await loginUser({ email, password });
+    const { token, refreshToken, user } = await loginUser({ email, password });
 
     res.status(200).json({
       message: "Login berhasil",
       token,
+      refreshToken,
       user: {
         id: user.id,
         username: user.username,
@@ -119,5 +122,41 @@ export const getUserProfile = async (req: any, res: Response) => {
     res.status(200).json(user);
   } catch (error: any) {
     res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  }
+};
+
+export const refresh = async (req: Request, res: Response) => {
+  try {
+    const { refreshToken } = req.body as { refreshToken?: string };
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token diperlukan." });
+    }
+
+    // cek apakah ada di DB
+    const storedToken = await prisma.refreshToken.findFirst({
+      where: { token: refreshToken },
+    });
+    if (!storedToken) {
+      return res.status(403).json({ message: "Refresh token tidak valid." });
+    }
+
+    // verifikasi refresh token
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_SECRET_KEY as string
+    ) as { userId: string };
+
+    // generate access token baru
+    const newAccessToken = jwt.sign(
+      { userId: decoded.userId },
+      process.env.JWT_SECRET_KEY as string,
+      { expiresIn: "15m" }
+    );
+
+    return res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ message: "Refresh token tidak valid / kadaluarsa." });
   }
 };

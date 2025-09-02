@@ -55,7 +55,7 @@ const OrganizerDashboardPage = () => {
       try {
         localStorage.setItem(
           "token",
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OGU3YzYwZC1lZDIyLTQ5OTUtOGEzYS1iNTQxMTUwMWQwMTMiLCJyb2xlIjoiT1JHQU5JWkVSIiwiaWF0IjoxNzU2Njk2NzY0LCJleHAiOjE3NTY3MDAzNjR9.yd2epNs_WmvjhCUo8Qa5cSS9_Ce18krcWBR-k_v_s0g"
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OGU3YzYwZC1lZDIyLTQ5OTUtOGEzYS1iNTQxMTUwMWQwMTMiLCJyb2xlIjoiT1JHQU5JWkVSIiwiaWF0IjoxNzU2NzQ2NTIwLCJleHAiOjE3NTY3NTAxMjB9.8cG6LPFeaBfNPaRaBdBZT2rVOelqGEGq18xoZGC1YVQ"
         );
         const token = localStorage.getItem("token"); // ambil dari localStorage
 

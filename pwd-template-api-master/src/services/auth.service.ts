@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../utils/prisma";
 import { v4 as uuidv4 } from "uuid"; // Untuk membuat kode referral unik
 import jwt from "jsonwebtoken";
+import { http } from "winston";
 
 // Fungsi untuk mendaftarkan pengguna baru
 export const registerUser = async (data: {
@@ -24,7 +25,7 @@ export const registerUser = async (data: {
         email: data.email,
         password: hashedPassword,
         referralCode: newReferralCode,
-        // Role secara default sudah 'CUSTOMER' di skema Prisma Anda
+        // Role secara default sudah 'CUSTOMER' di skema Prisma
       },
     });
 
@@ -40,7 +41,7 @@ export const registerUser = async (data: {
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 3);
 
-        //5.Berikan 10.point kepada pemilik kode referral
+        //5.Berikan 10.000 point kepada pemilik kode referral
         await prisma.point.create({
           data: {
             userId: referrer.id,
@@ -104,5 +105,20 @@ export const loginUser = async (data: { email: string; password: string }) => {
     { expiresIn: "1h" } // Token akan kedaluwarsa dalam 1 jam
   );
 
-  return { token, user };
+  //Refresh Token
+  const refreshToken = jwt.sign(
+    { userId: user.id },
+    process.env.JWT_REFRESH_SECRET_KEY as string,
+    { expiresIn: "7d" }
+  );
+
+  //simpan refresh token ke DB biar bisa revoke kalau perlu
+  await prisma.refreshToken.create({
+    data: {
+      userId: user.id,
+      token: refreshToken,
+    },
+  });
+
+  return { token, refreshToken, user };
 };
