@@ -102,6 +102,7 @@ model User {
   promotions        Promotion[]
   tickets           Ticket[]
   auditLogs         AuditLog[]
+  RefreshTokens     RefreshToken[]
 }
 
 model OrganizerProfile {
@@ -332,3 +333,13 @@ model AuditLog {
 
   @@index([userId])
 }
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime @default(now())
+}
+
