@@ -1,17 +1,39 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
+import { loginValidationSchema } from "./_schemas/loginValidationSchema";
+import api from "@/utils/api";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function Login() {
+  type TsetAccessToken = {
+    accessToken: string;
+  };
+
   const router = useRouter();
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
+    validationSchema: loginValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        const res = await api.post<TsetAccessToken>("/login", values);
+        setAccessToken(res.data.accessToken);
+        toast.success("Login berhasil!");
+        router.push("/");
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Login gagal");
+      }
+    },
+  });
+
   return (
     <div className="bg-gray-100 h-screen grid grid-cols-1 ">
       <section className=" text-black w-full  bg-[url('/img/login/pattern-blue.png')] bg-cover bg-center h-[33vh]">
         <form
-          action=""
+          onSubmit={formik?.handleSubmit}
           className="bg-neutral-50 rounded-lg flex flex-col gap-1.5 shadow-lg p-8 w-md max-w-2xl mt-36 mx-auto"
         >
           <div className="flex flex-col items-center ">
@@ -35,9 +57,15 @@ export default function Login() {
             <input
               type="email"
               name="email"
+              value={formik?.values?.email}
+              onChange={formik?.handleChange}
+              placeholder=""
               className="w-full p-3 border border-gray-300 rounded-sm h-12 my-2.5"
             />
           </div>
+          {formik?.errors.email && formik?.touched.email && (
+            <div id="feedback">{formik?.errors.email}</div>
+          )}
           <div>
             <label htmlFor="" className="text-gray-500 font-light">
               Password
@@ -45,10 +73,19 @@ export default function Login() {
             <input
               type="password"
               name="password"
+              value={formik?.values.password}
+              onChange={formik?.handleChange}
+              placeholder=""
               className="w-full p-3 border border-gray-300 rounded-sm h-12 mt-2.5 mb-3"
             />
           </div>
-          <button className=" w-full bg-blue-800 rounded-sm h-12 text-sm text-neutral-100 tracking-wider font-bold cursor-pointer">
+          {formik?.errors.password && formik?.touched?.password && (
+            <div id="feedback">{formik?.errors.password}</div>
+          )}
+          <button
+            type="submit"
+            className=" w-full bg-blue-800 rounded-sm h-12 text-sm text-neutral-100 tracking-wider font-bold cursor-pointer"
+          >
             Masuk
           </button>
         </form>

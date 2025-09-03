@@ -5,14 +5,30 @@ import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { registerValidationSchema } from "./_schemas/registerValidationSchema";
+import api from "@/utils/api";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
+  const formik = useFormik({
+    initialValues: { username: "", email: "", password: "", referralCode: "" },
+    validationSchema: registerValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        await api.post("/register", values);
+        toast.success("Pendaftaran berhasil? silahkan login");
+        router.push("/login");
+      } catch (err: any) {
+        toast.error(err.response?.data?.message || "Pendaftaran gagal");
+      }
+    },
+  });
+
   return (
     <div className="bg-gray-100 h-screen grid grid-cols-1 ">
       <section className=" text-black w-full  bg-[url('/img/login/pattern-blue.png')] bg-cover bg-center h-[33vh]">
         <form
-          action=""
+          onSubmit={formik.handleSubmit}
           className="bg-neutral-50 rounded-lg flex flex-col gap-1.5 shadow-lg p-8 w-md max-w-2xl mt-36 mx-auto"
         >
           <div className="flex flex-col items-center ">
@@ -34,8 +50,11 @@ export default function Login() {
               Username
             </label>
             <input
-              type="Username"
-              name="Username"
+              type="text"
+              name="username"
+              placeholder=""
+              onChange={formik.handleChange}
+              value={formik.values.username}
               className="w-full p-3 border border-gray-300 rounded-sm h-12 my-2.5"
             />
           </div>
@@ -47,6 +66,9 @@ export default function Login() {
             <input
               type="email"
               name="email"
+              placeholder=""
+              onChange={formik.handleChange}
+              value={formik.values.email}
               className="w-full p-3 border border-gray-300 rounded-sm h-12 my-2.5"
             />
           </div>
@@ -57,6 +79,9 @@ export default function Login() {
             <input
               type="password"
               name="password"
+              placeholder=""
+              onChange={formik.handleChange}
+              value={formik.values.password}
               className="w-full p-3 border border-gray-300 rounded-sm h-12 mt-2.5 mb-3"
             />
           </div>
@@ -66,12 +91,18 @@ export default function Login() {
               Kode Referral
             </label>
             <input
-              type="Kode Referral"
-              name="Kode Referral"
+              type="text"
+              name="referralCode"
+              placeholder="Massukkan kode referral bila ada"
+              onChange={formik.handleChange}
+              value={formik.values.referralCode}
               className="w-full p-3 border border-gray-300 rounded-sm h-12 my-2.5"
             />
           </div>
-          <button className=" w-full bg-blue-800 rounded-sm h-12 text-sm text-neutral-100 tracking-wider font-bold cursor-pointer">
+          <button
+            type="submit"
+            className=" w-full bg-blue-800 rounded-sm h-12 text-sm text-neutral-100 tracking-wider font-bold cursor-pointer"
+          >
             Daftar
           </button>
         </form>

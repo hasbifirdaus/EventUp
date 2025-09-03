@@ -12,7 +12,12 @@ import historyRouter from "./routes/history.routes";
 const app: Express = express();
 const port: number = 8000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // asal frontend
+    credentials: true, // izinkan cookie / header auth
+  })
+);
 app.use(express.json());
 
 app.use("/api", authRouter);
