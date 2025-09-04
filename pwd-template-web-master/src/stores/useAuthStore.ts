@@ -31,11 +31,3 @@ export const useAuthStore = create<Authstate>()(
     }
   )
 );
-
-// export const useAuthStore = create<Authstate>((set) => ({
-//   accessToken: null, //awalnya null
-//   user: null,
-//   setAccessToken: (token: string | null) => set({ accessToken: token }),
-//   setUser: (user) => set({ user }),
-//   logout: () => set({ accessToken: null, user: null }),
-// }));
