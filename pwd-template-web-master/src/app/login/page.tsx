@@ -28,10 +28,14 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         const res = await api.post<TLoginResponse>("/login", values);
-        setAccessToken(res.data.token);
-        setUser(res.data.user);
-        toast.success("Login berhasil!");
-        router.push("/");
+        if (res.data.token) {
+          setAccessToken(res.data.token);
+          setUser(res.data.user);
+          toast.success("Login berhasil!");
+          router.push("/");
+        } else {
+          toast.error("Login gagal, token tidak ditemukan");
+        }
       } catch (err: any) {
         toast.error(err.response?.data?.message || "Login gagal");
       }

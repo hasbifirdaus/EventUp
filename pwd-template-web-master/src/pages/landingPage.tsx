@@ -38,14 +38,14 @@ const LandingPage = () => {
         className="bg-blue-900 h-20 flex items-center justify-between "
       >
         <div className="flex items-center gap-0.5">
-          <a href="#">
+          <Link href="#">
             <img
               id="logo"
               alt="Logo EventUp"
               src="img/logo/logo_EventUp.png"
               className="h-40 "
             />
-          </a>
+          </Link>
           <input
             placeholder="Cari event seru disini"
             className="bg-white w-2xl h-8 text-black border-black border-0 rounded-sm p-2"

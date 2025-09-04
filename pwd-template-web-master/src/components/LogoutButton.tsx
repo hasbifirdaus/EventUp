@@ -9,7 +9,6 @@ export default function LogoutButton() {
 
   const handleLogout = () => {
     logout(); //Clear token & user dari store
-    localStorage.removeItem("auth-storage"); //clear storage persist
     router.push("/");
   };
 
