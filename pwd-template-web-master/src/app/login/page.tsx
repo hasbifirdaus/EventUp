@@ -7,20 +7,29 @@ import { toast } from "react-toastify";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function Login() {
-  type TsetAccessToken = {
-    accessToken: string;
+  type TLoginResponse = {
+    token: string;
+    refreshToken: string;
+    user: {
+      id: string;
+      username: string;
+      email: string;
+      role: string;
+    };
   };
 
   const router = useRouter();
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setUser = useAuthStore((state) => state.setUser);
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
       try {
-        const res = await api.post<TsetAccessToken>("/login", values);
-        setAccessToken(res.data.accessToken);
+        const res = await api.post<TLoginResponse>("/login", values);
+        setAccessToken(res.data.token);
+        setUser(res.data.user);
         toast.success("Login berhasil!");
         router.push("/");
       } catch (err: any) {
