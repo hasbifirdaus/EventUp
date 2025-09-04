@@ -31,6 +31,15 @@ app.use("/api/history", historyRouter);
 app.post("/api/midtrans-webhook", handleMidtransNotification);
 app.post("/api/midtrans-webhook/", handleMidtransNotification);
 
+//Error handler middleware
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  res.status(500).json({
+    success: false,
+    message: err?.message,
+    data: [],
+  });
+});
+
 //running app
 app.listen(port, () => {
   console.log(`[🔥API] Running in http://localhost:${port}/`);

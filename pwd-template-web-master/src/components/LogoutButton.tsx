@@ -1,10 +1,24 @@
+"use client";
+
 import { useAuthStore } from "@/stores/useAuthStore";
-import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
-const LogoutButton = () => {
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+export default function LogoutButton() {
+  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter();
 
-  const handleLogout = async () => {
-    setAccessToken(null);
+  const handleLogout = () => {
+    logout(); //Clear token & user dari store
+    localStorage.removeItem("auth-storage"); //clear storage persist
+    router.push("/");
   };
-};
+
+  return (
+    <button
+      onClick={handleLogout}
+      className="px-4 py-2  bg-gray-300 text-red-500 rounded-lg hover:bg-gray-400 hover:font-bold"
+    >
+      Keluar
+    </button>
+  );
+}

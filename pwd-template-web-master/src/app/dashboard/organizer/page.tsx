@@ -14,6 +14,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useRouter } from "next/navigation";
 
 interface StatEntry {
   day?: string;
@@ -50,16 +52,16 @@ const OrganizerDashboardPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [range, setRange] = useState<"daily" | "monthly" | "yearly">("monthly");
 
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const router = useRouter();
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        localStorage.setItem(
-          "token",
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OGU3YzYwZC1lZDIyLTQ5OTUtOGEzYS1iNTQxMTUwMWQwMTMiLCJyb2xlIjoiT1JHQU5JWkVSIiwiaWF0IjoxNzU2NzQ2NTIwLCJleHAiOjE3NTY3NTAxMjB9.8cG6LPFeaBfNPaRaBdBZT2rVOelqGEGq18xoZGC1YVQ"
-        );
-        const token = localStorage.getItem("token"); // ambil dari localStorage
+        if (!accessToken) {
+          // router.push("/")
+          // return;
 
-        if (!token) {
           throw new Error(
             "Token otentikasi tidak ditemukan. Silakan login terlebih dahulu."
           );
@@ -69,7 +71,7 @@ const OrganizerDashboardPage = () => {
           "http://localhost:8000/api/dashboard/organizer",
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
