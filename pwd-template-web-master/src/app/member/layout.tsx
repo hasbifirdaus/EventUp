@@ -121,10 +121,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               {currentTitle}
             </h4>
             <div className="flex gap-5 items-center">
-              <button className="cursor-pointer border-[1px] border-black rounded-md text-black p-3 font-semibold flex items-center gap-1">
-                <FaCalendarPlus className="" />
-                Buat Event
-              </button>
+              <Link href="/create-event">
+                <button className="cursor-pointer border-[1px] border-black rounded-md text-black p-3 font-semibold flex items-center gap-1">
+                  <FaCalendarPlus className="" />
+                  Buat Event
+                </button>
+              </Link>
               <h3 className="border border-gray-200 bg-gray-200 rounded-full p-1.5 flex items-center gap-2">
                 <FaUser className="min-h-6 min-w-6 p-1 bg-blue-200 rounded-full text-blue-700 text-sm flex-shrink-0" />
                 {user?.email}
