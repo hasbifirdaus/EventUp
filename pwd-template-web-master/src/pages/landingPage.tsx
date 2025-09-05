@@ -126,7 +126,7 @@ const LandingPage = () => {
 
                 <hr className="border-0 h-[0.5px] w-full bg-[#ccc] mt-4 mb-2.5" />
                 <Link
-                  href="/dashboard/organizer"
+                  href="/member"
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >

@@ -102,7 +102,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
   const token = jwt.sign(
     { userId: user.id, role: user.role },
     process.env.JWT_SECRET_KEY as string,
-    { expiresIn: "1h" } // Token akan kedaluwarsa dalam 1 jam
+    { expiresIn: "3d" } // Token akan kedaluwarsa dalam 1 jam
   );
 
   //Refresh Token
