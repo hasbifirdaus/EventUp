@@ -44,7 +44,7 @@ const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
-const OrganizerDashboardPage = () => {
+export default function DashboardOrganizer() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
@@ -52,19 +52,34 @@ const OrganizerDashboardPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [range, setRange] = useState<"daily" | "monthly" | "yearly">("monthly");
 
-  const accessToken = useAuthStore((state) => state.accessToken);
-  const router = useRouter();
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Mengakses state Zustand hanya setelah terhidrasi di sisi klien
+  useEffect(() => {
+    const { accessToken, _hasHydrated } = useAuthStore.getState();
+    setAccessToken(accessToken);
+    setIsHydrated(_hasHydrated);
+
+    const unsubscribe = useAuthStore.subscribe((state) => {
+      setAccessToken(state.accessToken);
+      setIsHydrated(state._hasHydrated);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
     const fetchDashboardData = async () => {
       try {
         if (!accessToken) {
-          // router.push("/")
-          // return;
-
-          throw new Error(
-            "Token otentikasi tidak ditemukan. Silakan login terlebih dahulu."
-          );
+          // Ganti useRouter dengan navigasi langsung
+          window.location.href = "/";
+          return;
         }
 
         const response = await axios.get<DashboardData>(
@@ -78,11 +93,11 @@ const OrganizerDashboardPage = () => {
 
         setDashboardData(response.data);
       } catch (err: any) {
-        setError(
-          err.response?.data?.message ||
-            err.message ||
-            "Gagal memuat data dasbor."
-        );
+        if (err.response) {
+          setError(err.response.data.message || "Gagal memuat data dashboard.");
+        } else {
+          setError("Terjadi kesalahan. Silakan coba lagi.");
+        }
         console.error("Error fetching dashboard data:", err);
       } finally {
         setLoading(false);
@@ -90,7 +105,7 @@ const OrganizerDashboardPage = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [accessToken, isHydrated]);
 
   const formatLabel = (entry: StatEntry): string => {
     if (entry.day)
@@ -102,8 +117,8 @@ const OrganizerDashboardPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-6xl border border-gray-100">
+    <div className="bg-white min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-[75rem] border border-gray-100 mx-auto">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2 text-center">
           Dasbor Organizer
         </h1>
@@ -188,7 +203,7 @@ const OrganizerDashboardPage = () => {
                   : "Tahunan"}
               </h2>
               {dashboardData.stats[range].length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
+                <ResponsiveContainer width="100%" height={250}>
                   <LineChart
                     data={dashboardData.stats[range].map((entry) => ({
                       ...entry,
@@ -231,6 +246,4 @@ const OrganizerDashboardPage = () => {
       </div>
     </div>
   );
-};
-
-export default OrganizerDashboardPage;
+}
