@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
 import LogoutButton from "@/components/LogoutButton";
+import LandingPageJonathan from "./landingPageJonathan";
 
 const LandingPage = () => {
   const [open, setOpen] = useState(false);
@@ -37,7 +38,7 @@ const LandingPage = () => {
         id="navbar"
         className="bg-blue-900 h-20 flex items-center justify-between "
       >
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center ">
           <Link href="#">
             <img
               id="logo"
@@ -46,10 +47,6 @@ const LandingPage = () => {
               className="h-40 "
             />
           </Link>
-          <input
-            placeholder="Cari event seru disini"
-            className="bg-white w-2xl h-8 text-black border-black border-0 rounded-sm p-2"
-          ></input>
         </div>
 
         <nav
@@ -130,11 +127,6 @@ const LandingPage = () => {
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >
-                  <img
-                    src="/img/logo/logo_EventUp.png"
-                    alt="img-dashboard"
-                    className="w-10 bg-gray-300 p-2 mr-4 rounded-full"
-                  />
                   <p className="w-full hover:font-bold ">Dashboard</p>
                   <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                     &gt;
@@ -146,11 +138,6 @@ const LandingPage = () => {
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >
-                  <img
-                    src="/img/logo/logo_EventUp.png"
-                    alt="img-event-saya"
-                    className="w-10 bg-gray-300 p-2 mr-4 rounded-full"
-                  />
                   <p className="w-full hover:font-bold ">Event Saya</p>
                   <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                     &gt;
@@ -164,11 +151,6 @@ const LandingPage = () => {
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >
-                  <img
-                    src="/img/logo/logo_EventUp.png"
-                    alt="img-edit-profile"
-                    className="w-10 bg-gray-300 p-2 mr-4 rounded-full"
-                  />
                   <p className="w-full hover:font-bold ">Edit Profile</p>
                   <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                     &gt;
@@ -179,11 +161,6 @@ const LandingPage = () => {
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >
-                  <img
-                    src="/img/logo/logo_EventUp.png"
-                    alt="settings-and-privicy"
-                    className="w-10 bg-gray-300 p-2 mr-4 rounded-full"
-                  />
                   <p className="w-full hover:font-bold">Settings & privacy</p>
                   <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                     &gt;
@@ -194,11 +171,6 @@ const LandingPage = () => {
                   id="sub-menu-link"
                   className="group flex items-center text-d no-underline mt-3"
                 >
-                  <img
-                    src="/img/logo/logo_EventUp.png"
-                    alt="help-and-support"
-                    className="w-10 bg-gray-300 p-2 mr-4 rounded-full"
-                  />
                   <p className="w-full  hover:font-bold">Help & Support</p>
                   <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                     &gt;
@@ -212,10 +184,7 @@ const LandingPage = () => {
           )}
         </nav>
       </section>
-      <section id="widget"></section>
-      <section id="event"></section>
-      <section id="promotion"></section>
-      <footer></footer>
+      <LandingPageJonathan />
     </div>
   );
 };
