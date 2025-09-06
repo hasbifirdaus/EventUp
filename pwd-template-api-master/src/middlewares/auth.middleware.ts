@@ -24,14 +24,26 @@ export const authMiddleware = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as {
       userId: string;
-      role: string;
+      roles: string[];
     };
-
-    //3.Simpan data pengguna dari token ke objek request
-    req.user = decoded;
+    req.user = decoded; //menyimpan data pengguna ke objek request
     next(); //Lanjutkan ke handler rute berikutnya
   } catch (error) {
     res.status(401).json({ message: "Token tidak valid." });
     return;
   }
+};
+
+//Middleware untuk otorisasi berbasis peran (hanya untuk peran tertentu)
+export const authorizeRole = (roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const userRoles = (req as any).user.roles;
+    const hasPermission = roles.some((role) => userRoles.includes(role));
+
+    if (!hasPermission) {
+      return res
+        .status(403)
+        .json({ message: "Forbidden : Anda tidak memiliki akses" });
+    }
+  };
 };
