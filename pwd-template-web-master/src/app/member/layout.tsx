@@ -14,11 +14,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   //mapping path ke judul
   const pageTitles: Record<string, string> = {
-    "/dashboard": "Dashboard",
-    "/events": "Event Saya",
-    "/profile": "Edit Profile",
-    "/settings": "Settings & Privacy",
-    "/help": "Help & Support",
+    "/member": "Dashboard",
+    "/member/events": "Event Saya",
+    "/member/profile": "Profile",
+    "/informasiLegal": "Informasi Legal",
+    "/rekening": "Rekening",
+    "/pengaturan": "Pengaturan",
   };
 
   const currentTitle = pageTitles[pathname] || "Dashboard";
@@ -26,9 +27,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       id="section-member-organizer"
-      className="bg-neutral-100 min-h-screen w-full mx-auto"
+      className="bg-neutral-100 min-h-screen max-w-full mx-auto"
     >
-      <section id="section-member-organizer" className="flex">
+      <section
+        id="section-member-organizer"
+        className="flex max-w-[90rem] lg:max-w-full"
+      >
         <aside
           id="sidebar-member-organizer "
           className="bg-blue-900 min-h-screen flex flex-col w-[14%]"
@@ -48,7 +52,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           >
             <h4 className="pt-4 px-4 text-xs font-bold mb-3">Dashboard</h4>
             <Link
-              href="/dashboard"
+              href="/member"
               id="sub-menu-link"
               className={`flex items-center gap-6 p-2 ${
                 pathname === "/dashboard" ? "bg-blue-600 font-bold" : ""
@@ -58,7 +62,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <p className="w-full group-hover:translate-x-1.5">Dashboard</p>
             </Link>
             <Link
-              href="/events"
+              href="/member/events"
               id="sub-menu-link"
               className={`flex items-center gap-6 p-2 transition-transform duration-500 group   ${
                 pathname === "/events" ? "bg-blue-600 font-bold" : ""
@@ -73,38 +77,46 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <h4 className="pt-4 px-4 text-xs font-bold mb-3">Akun</h4>
 
             <Link
-              href="/profile"
+              href="/member/profile"
               id="sub-menu-link"
               className={`flex items-center gap-6 p-2 transition-transform duration-500 group   ${
                 pathname === "/profile" ? "bg-blue-600 font-bold" : ""
               }`}
             >
               <GoHomeFill className="w-6 h-6  " />
-              <p className="w-full group-hover:translate-x-1.5">Edit Profile</p>
+              <p className="w-full group-hover:translate-x-1.5">Profile</p>
             </Link>
             <Link
-              href="/settings"
+              href="/informasiLegal"
               id="sub-menu-link"
               className={`flex items-center gap-6 p-2 transition-transform duration-500 group   ${
-                pathname === "/settings" ? "bg-blue-600 font-bold" : ""
+                pathname === "/informasiLegal" ? "bg-blue-600 font-bold" : ""
               }`}
             >
               <GoHomeFill className="w-6 h-6  " />
               <p className="w-full group-hover:translate-x-1.5">
-                Settings & privacy
+                Informasi Legal
               </p>
             </Link>
             <Link
-              href="/help"
+              href="/rekening"
               id="sub-menu-link"
               className={`flex items-center gap-6 p-2 transition-transform duration-500 group   ${
-                pathname === "/help" ? "bg-blue-600 font-bold" : ""
+                pathname === "/rekening" ? "bg-blue-600 font-bold" : ""
               }`}
             >
               <GoHomeFill className="w-6 h-6  " />
-              <p className="w-full group-hover:translate-x-1.5">
-                Help & Support
-              </p>
+              <p className="w-full group-hover:translate-x-1.5">Rekening</p>
+            </Link>
+            <Link
+              href="/pengaturan"
+              id="sub-menu-link"
+              className={`flex items-center gap-6 p-2 transition-transform duration-500 group   ${
+                pathname === "/pengaturan" ? "bg-blue-600 font-bold" : ""
+              }`}
+            >
+              <GoHomeFill className="w-6 h-6  " />
+              <p className="w-full group-hover:translate-x-1.5">Pengaturan</p>
             </Link>
           </nav>
         </aside>

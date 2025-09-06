@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { registerUser, loginUser } from "../services/auth.service";
 import { prisma } from "../utils/prisma";
 import jwt from "jsonwebtoken";
-import { error } from "console";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -12,62 +11,22 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Semua kolom wajib diisi." });
     }
 
-    const newUser = await prisma.$transaction(async (tx) => {
-      // Step 1: Daftarkan pengguna baru
-      const user = await registerUser({
-        username,
-        email,
-        password,
-        referralCode,
-      });
-
-      // Step 2: Proses logika referralCode jika ada
-      if (referralCode) {
-        // Cari pengguna yang memiliki kode referral tersebut (pemberi referral)
-        const referrer = await tx.user.findUnique({
-          where: { referralCode },
-        });
-
-        if (referrer) {
-          // Hitung tanggal kadaluarsa 3 bulan dari sekarang
-          const expiryDate = new Date();
-          expiryDate.setMonth(expiryDate.getMonth() + 3);
-
-          // Berikan 10.000 poin kepada pemilik kode referral
-          await tx.point.create({
-            data: {
-              userId: referrer.id,
-              amount: 10000,
-              expirationDate: expiryDate,
-            },
-          });
-
-          // Buat promosi diskon 10% untuk pengguna baru
-          await tx.promotion.create({
-            data: {
-              userId: user.id,
-              name: "Referral Discount",
-              code: `REFERRAL-${user.id}`, // Kode unik untuk pengguna baru
-              discountAmount: 10,
-              discountType: "PERCENTAGE",
-              isReferralPromo: true,
-              maxRedemptions: 1, // Hanya bisa digunakan sekali
-              startDate: new Date(),
-              endDate: expiryDate,
-            },
-          });
-        }
-      }
-
-      return user;
+    // Panggil fungsi registerUser yang sudah menangani transaksi
+    const { newUser, referrerWithPoints } = await registerUser({
+      username,
+      email,
+      password,
+      referralCode,
     });
 
-    // Jangan kirim password kembali!
+    // Hapus password dari objek pengguna sebelum dikirim ke klien
     const { password: _, ...userWithoutPassword } = newUser;
 
+    // Kirim respons yang menyertakan data pengguna baru dan informasi referrer
     res.status(201).json({
-      message: "Pendaftaran berhasil! Silakan login.",
+      message: "Pendaftaran berhasil!",
       user: userWithoutPassword,
+      referrerWithPoints,
     });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -86,6 +45,11 @@ export const login = async (req: Request, res: Response) => {
 
     const { token, refreshToken, user } = await loginUser({ email, password });
 
+    const userRoles = await prisma.userRole.findMany({
+      where: { userId: user.id },
+    });
+    const roles = userRoles.map((r) => r.role);
+
     res.status(200).json({
       message: "Login berhasil",
       token,
@@ -94,7 +58,8 @@ export const login = async (req: Request, res: Response) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        role: user.role,
+        referralCode: user.referralCode,
+        roles,
       },
     });
   } catch (error: any) {
@@ -111,7 +76,6 @@ export const getUserProfile = async (req: any, res: Response) => {
         id: true,
         username: true,
         email: true,
-        role: true,
         referralCode: true,
       },
     });
@@ -119,7 +83,15 @@ export const getUserProfile = async (req: any, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: "Pengguna tidak ditemukan." });
     }
-    res.status(200).json(user);
+
+    // Ambil peran pengguna dari tabel UserRole
+    const userRoles = await prisma.userRole.findMany({
+      where: { userId: user.id },
+      select: { role: true },
+    });
+    const roles = userRoles.map((ur) => ur.role);
+
+    res.status(200).json({ ...user, roles });
   } catch (error: any) {
     res.status(500).json({ message: "Terjadi kesalahan pada server." });
   }

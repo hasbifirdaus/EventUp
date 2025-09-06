@@ -5,7 +5,7 @@ export const organizerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.user || req.user.role !== "ORGANIZER") {
+  if (!req.user || !req.user.roles.includes("ORGANIZER")) {
     res.status(403).json({
       message: "Akses ditolak. Anda bukan seorang penyelenggara (ORGANIZER)",
     });

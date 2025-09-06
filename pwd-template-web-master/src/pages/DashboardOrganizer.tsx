@@ -15,6 +15,7 @@ import {
   Legend,
 } from "recharts";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface StatEntry {
@@ -117,10 +118,156 @@ export default function DashboardOrganizer() {
   };
 
   return (
-    <div className="bg-white min-h-screen  flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div
+      id="dashboard-organizer"
+      className="bg-white min-h-screen grid items-center p-4 sm:p-6 lg:p-15"
+    >
+      <div
+        id="dashboard-organizer-events"
+        className="mb-28 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 "
+      >
+        {/*1. Event Aktif */}
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Event Aktif</h4>
+            <Link href="#" className="text-red-500 text-xs">
+              Detail
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              0
+            </p>
+            <p className="text-lg">Event</p>
+          </div>
+        </div>
+
+        {/*2. Event Draft */}
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Event Draft</h4>
+            <Link href="#" className="text-red-500 text-xs">
+              Detail
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              0
+            </p>
+            <p className="text-lg">Event</p>
+          </div>
+        </div>
+
+        {/*3. Total Transaksi */}
+
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Total Transaksi</h4>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              0
+            </p>
+          </div>
+        </div>
+
+        {/*4. Total Tiket Terjual */}
+
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Total Tiket Terjual</h4>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              0
+            </p>
+            <p className="text-lg">Tiket</p>
+          </div>
+        </div>
+
+        {/*5. Total Penjualan */}
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Total Penjualan</h4>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              <span className="mr-2">Rp</span> 0
+            </p>
+          </div>
+        </div>
+
+        {/*6. Total Pengunjung */}
+        <div
+          id="dashboard-organizer-events-box"
+          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+        >
+          <div
+            id=""
+            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
+          >
+            <h4>Total Pengunjung</h4>
+          </div>
+          <div className="flex items-center gap-2">
+            <p
+              id="dashboard-organizer-eventd-active-number"
+              className="text-4xl"
+            >
+              0
+            </p>
+            <p className="text-lg">Orang</p>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-[75rem] border border-gray-100 mx-auto">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-2 text-center">
-          Dasbor Organizer
+          Dashboard Organizer
         </h1>
         <p className="text-gray-500 mb-8 text-center">
           Ringkasan performa event Anda

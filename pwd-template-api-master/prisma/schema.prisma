@@ -78,44 +78,52 @@ enum AuditLogActionEnum {
 
 // ----------------- MODELS -----------------
 model User {
-  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  username          String            @unique @db.VarChar(50)
-  email             String            @unique @db.VarChar(100)
-  password          String            @db.VarChar(255)
-  firstName         String?           @map("first_name") @db.VarChar(25)
-  lastName          String?           @map("last_name") @db.VarChar(25)
-  imageProfileUrl   String?           @map("image_profile_url") @db.VarChar(255)
-  role              UsersRoleEnum     @default(CUSTOMER)
-  referralCode      String?           @unique @map("referral_code") @db.VarChar(50)
-  phoneNumber       String?           @map("phone_number") @db.VarChar(20)
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("updated_at")
-  deletedAt         DateTime?         @map("deleted_at")
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  username        String        @unique @db.VarChar(50)
+  email           String        @unique @db.VarChar(100)
+  password        String        @db.VarChar(255)
+  firstName       String?       @map("first_name") @db.VarChar(25)
+  lastName        String?       @map("last_name") @db.VarChar(25)
+  imageProfileUrl String?       @map("image_profile_url") @db.VarChar(255)
+  role            UsersRoleEnum @default(CUSTOMER)
+  referralCode    String?       @unique @map("referral_code") @db.VarChar(50)
+  phoneNumber     String?       @map("phone_number") @db.VarChar(20)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  deletedAt       DateTime?     @map("deleted_at")
 
-  organizerProfile  OrganizerProfile?
-  events            Event[] // Changed: Moved from OrganizerProfile to User
-  transactions      Transaction[]
-  reviews           Review[]
-  points            Point[]
-  referrals         Referral[]        @relation("Referrer")
-  referredBy        Referral[]        @relation("Referred")
-  promotions        Promotion[]
-  tickets           Ticket[]
-  auditLogs         AuditLog[]
-  RefreshTokens     RefreshToken[]
+  userRoles        UserRole[]
+  organizerProfile OrganizerProfile?
+  events           Event[] // Changed: Moved from OrganizerProfile to User
+  transactions     Transaction[]
+  reviews          Review[]
+  points           Point[]
+  referrals        Referral[]        @relation("Referrer")
+  referredBy       Referral[]        @relation("Referred")
+  promotions       Promotion[]
+  tickets          Ticket[]
+  auditLogs        AuditLog[]
+  RefreshTokens    RefreshToken[]
+}
+
+model UserRole {
+  id     Int           @id @default(autoincrement())
+  user   User          @relation(fields: [userId], references: [id])
+  userId String        @db.Uuid
+  role   UsersRoleEnum
 }
 
 model OrganizerProfile {
-  id              Int      @id @default(autoincrement())
-  userId          String   @unique @map("user_id") @db.Uuid
-  companyName     String?  @map("company_name")
-  npwp            String?
-  bankAccount     String?  @map("bank_account")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  deletedAt       DateTime? @map("deleted_at")
+  id          Int       @id @default(autoincrement())
+  userId      String    @unique @map("user_id") @db.Uuid
+  companyName String?   @map("company_name")
+  npwp        String?
+  bankAccount String?   @map("bank_account")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 
-  user            User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Event {
@@ -133,12 +141,12 @@ model Event {
   updatedAt     DateTime          @updatedAt @map("updated_at")
   deletedAt     DateTime?         @map("deleted_at")
 
-  organizer     User              @relation(fields: [organizerId], references: [id]) // Changed: Reference User model
-  transactions  Transaction[]
-  reviews       Review[]
-  promotions    Promotion[]
-  ticketTypes   TicketType[]
-  tickets       Ticket[]
+  organizer    User          @relation(fields: [organizerId], references: [id]) // Changed: Reference User model
+  transactions Transaction[]
+  reviews      Review[]
+  promotions   Promotion[]
+  ticketTypes  TicketType[]
+  tickets      Ticket[]
 
   @@index([category])
   @@index([organizerId])
@@ -146,44 +154,44 @@ model Event {
 }
 
 model TicketType {
-  id              Int               @id @default(autoincrement())
-  eventId         Int               @map("event_id")
-  name            String            @db.VarChar(50)
-  description     String?
-  price           Decimal           @db.Decimal(10, 2)
-  quota           Int
-  isAvailable     Boolean           @default(true) @map("is_available")
-  isSeated        Boolean?
-  createdAt       DateTime          @default(now()) @map("created_at")
-  updatedAt       DateTime          @updatedAt @map("updated_at")
-  deletedAt       DateTime?         @map("deleted_at")
+  id          Int       @id @default(autoincrement())
+  eventId     Int       @map("event_id")
+  name        String    @db.VarChar(50)
+  description String?
+  price       Decimal   @db.Decimal(10, 2)
+  quota       Int
+  isAvailable Boolean   @default(true) @map("is_available")
+  isSeated    Boolean?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
 
-  event           Event             @relation(fields: [eventId], references: [id])
+  event            Event             @relation(fields: [eventId], references: [id])
   transactionItems TransactionItem[]
-  tickets         Ticket[]          // Added: Missing opposite relation field
+  tickets          Ticket[] // Added: Missing opposite relation field
 
   @@unique([eventId, name])
   @@index([eventId])
 }
 
 model Transaction {
-  id              Int                   @id @default(autoincrement())
-  userId          String                @map("user_id") @db.Uuid
-  eventId         Int                   @map("event_id")
-  totalAmount     Decimal               @map("total_amount") @db.Decimal(10, 2)
-  currency        String                @db.VarChar(3) @default("IDR")
-  status          TransactionStatusEnum @default(PENDING)
-  pointUsed       Int?                  @map("point_used")
-  promotionUsed   Promotion?            @relation(fields: [promotionId], references: [id])
-  promotionId     Int?                  @map("promotion_id")
-  createdAt       DateTime              @default(now()) @map("created_at")
-  updatedAt       DateTime              @updatedAt @map("updated_at")
-  deletedAt       DateTime?             @map("deleted_at")
+  id            Int                   @id @default(autoincrement())
+  userId        String                @map("user_id") @db.Uuid
+  eventId       Int                   @map("event_id")
+  totalAmount   Decimal               @map("total_amount") @db.Decimal(10, 2)
+  currency      String                @default("IDR") @db.VarChar(3)
+  status        TransactionStatusEnum @default(PENDING)
+  pointUsed     Int?                  @map("point_used")
+  promotionUsed Promotion?            @relation(fields: [promotionId], references: [id])
+  promotionId   Int?                  @map("promotion_id")
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
+  deletedAt     DateTime?             @map("deleted_at")
 
-  user            User                  @relation(fields: [userId], references: [id])
-  event           Event                 @relation(fields: [eventId], references: [id])
-  items           TransactionItem[]
-  payment         Payment?
+  user    User              @relation(fields: [userId], references: [id])
+  event   Event             @relation(fields: [eventId], references: [id])
+  items   TransactionItem[]
+  payment Payment?
 
   @@index([userId])
   @@index([eventId])
@@ -191,42 +199,42 @@ model Transaction {
 }
 
 model TransactionItem {
-  id              Int             @id @default(autoincrement())
-  transactionId   Int             @map("transaction_id")
-  ticketTypeId    Int             @map("ticket_type_id")
+  id              Int       @id @default(autoincrement())
+  transactionId   Int       @map("transaction_id")
+  ticketTypeId    Int       @map("ticket_type_id")
   quantity        Int
-  unitPrice       Decimal         @map("unit_price") @db.Decimal(10, 2)
-  discountApplied Decimal?        @map("discount_applied") @db.Decimal(10, 2)
-  createdAt       DateTime        @default(now()) @map("created_at")
-  updatedAt       DateTime        @updatedAt @map("updated_at")
-  deletedAt       DateTime?       @map("deleted_at")
+  unitPrice       Decimal   @map("unit_price") @db.Decimal(10, 2)
+  discountApplied Decimal?  @map("discount_applied") @db.Decimal(10, 2)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
 
-  transaction     Transaction     @relation(fields: [transactionId], references: [id])
-  ticketType      TicketType      @relation(fields: [ticketTypeId], references: [id])
-  tickets         Ticket[]
-  
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  ticketType  TicketType  @relation(fields: [ticketTypeId], references: [id])
+  tickets     Ticket[]
+
   @@index([transactionId])
   @@index([ticketTypeId])
 }
 
 model Ticket {
-  id                Int               @id @default(autoincrement())
-  eventId           Int               @map("event_id")
-  ticketTypeId      Int               @map("ticket_type_id")
-  ownerId           String?           @map("owner_id") @db.Uuid
-  transactionItemId Int               @map("transaction_item_id")
-  ticketCode        String            @unique @db.VarChar(50)
-  status            TicketStatusEnum  @default(AVAILABLE)
-  isActive          Boolean           @default(true)
-  seatNumber        String?           @map("seat_number")
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("updated_at")
-  deletedAt         DateTime?         @map("deleted_at")
+  id                Int              @id @default(autoincrement())
+  eventId           Int              @map("event_id")
+  ticketTypeId      Int              @map("ticket_type_id")
+  ownerId           String?          @map("owner_id") @db.Uuid
+  transactionItemId Int              @map("transaction_item_id")
+  ticketCode        String           @unique @db.VarChar(50)
+  status            TicketStatusEnum @default(AVAILABLE)
+  isActive          Boolean          @default(true)
+  seatNumber        String?          @map("seat_number")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
 
-  event             Event             @relation(fields: [eventId], references: [id])
-  owner             User?             @relation(fields: [ownerId], references: [id])
-  transactionItem   TransactionItem   @relation(fields: [transactionItemId], references: [id])
-  ticketType        TicketType        @relation(fields: [ticketTypeId], references: [id])
+  event           Event           @relation(fields: [eventId], references: [id])
+  owner           User?           @relation(fields: [ownerId], references: [id])
+  transactionItem TransactionItem @relation(fields: [transactionItemId], references: [id])
+  ticketType      TicketType      @relation(fields: [ticketTypeId], references: [id])
 
   @@unique([eventId, seatNumber])
   @@index([ownerId])
@@ -235,101 +243,101 @@ model Ticket {
 }
 
 model Payment {
-  id                  Int               @id @default(autoincrement())
-  amount              Decimal           @db.Decimal(10, 2)
-  transactionId       Int               @unique @map("transaction_id")
-  method              PaymentMethodEnum
-  status              PaymentStatusEnum
-  paidAt              DateTime?         @map("paid_at")
-  currency            String            @db.VarChar(3) @default("IDR")
-  transactionReference String?          @unique @map("transaction_reference")
-  providerResponse    Json?             @map("provider_response")
-  createdAt           DateTime          @default(now()) @map("created_at")
-  updatedAt           DateTime          @updatedAt @map("updated_at")
-  deletedAt           DateTime?         @map("deleted_at")
+  id                   Int               @id @default(autoincrement())
+  amount               Decimal           @db.Decimal(10, 2)
+  transactionId        Int               @unique @map("transaction_id")
+  method               PaymentMethodEnum
+  status               PaymentStatusEnum
+  paidAt               DateTime?         @map("paid_at")
+  currency             String            @default("IDR") @db.VarChar(3)
+  transactionReference String?           @unique @map("transaction_reference")
+  providerResponse     Json?             @map("provider_response")
+  createdAt            DateTime          @default(now()) @map("created_at")
+  updatedAt            DateTime          @updatedAt @map("updated_at")
+  deletedAt            DateTime?         @map("deleted_at")
 
-  transaction         Transaction       @relation(fields: [transactionId], references: [id])
+  transaction Transaction @relation(fields: [transactionId], references: [id])
 }
 
 model Review {
-  id              Int       @id @default(autoincrement())
-  userId          String    @map("user_id") @db.Uuid
-  eventId         Int       @map("event_id")
-  rating          Decimal   @db.Decimal(2, 1)
-  comment         String?   @db.Text
-  isVerified      Boolean   @default(false) @map("is_verified")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-  deletedAt       DateTime? @map("deleted_at")
+  id         Int       @id @default(autoincrement())
+  userId     String    @map("user_id") @db.Uuid
+  eventId    Int       @map("event_id")
+  rating     Decimal   @db.Decimal(2, 1)
+  comment    String?   @db.Text
+  isVerified Boolean   @default(false) @map("is_verified")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
 
-  user            User      @relation(fields: [userId], references: [id])
-  event           Event     @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
 
   @@index([eventId])
   @@index([userId])
 }
 
 model Point {
-  id              Int       @id @default(autoincrement())
-  userId          String    @map("user_id") @db.Uuid
-  amount          Int
-  expirationDate  DateTime  @map("expiration_date")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-  deletedAt       DateTime? @map("deleted_at")
+  id             Int       @id @default(autoincrement())
+  userId         String    @map("user_id") @db.Uuid
+  amount         Int
+  expirationDate DateTime  @map("expiration_date")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
 
-  user            User      @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
 model Referral {
-  id              Int       @id @default(autoincrement())
-  referrerId      String    @map("referrer_id") @db.Uuid
-  referredUserId  String    @unique @map("referred_user_id") @db.Uuid
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-  deletedAt       DateTime? @map("deleted_at")
+  id             Int       @id @default(autoincrement())
+  referrerId     String    @map("referrer_id") @db.Uuid
+  referredUserId String    @unique @map("referred_user_id") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
 
-  referrer        User      @relation("Referrer", fields: [referrerId], references: [id])
-  referredUser    User      @relation("Referred", fields: [referredUserId], references: [id])
+  referrer     User @relation("Referrer", fields: [referrerId], references: [id])
+  referredUser User @relation("Referred", fields: [referredUserId], references: [id])
 
   @@index([referrerId])
 }
 
 model Promotion {
-  id              Int               @id @default(autoincrement())
-  eventId         Int?              @map("event_id")
-  userId          String?           @map("user_id") @db.Uuid
-  name            String?           @db.VarChar(100)
-  code            String            @unique @db.VarChar(50)
-  discountAmount  Decimal           @map("discount_amount") @db.Decimal(10, 2)
-  discountType    DiscountTypeEnum  @map("discount_type") @default(FIXED)
-  isReferralPromo Boolean           @map("is_referral_promo") @default(false)
-  maxRedemptions  Int?              @map("max_redemptions")
-  usedRedemptions Int               @map("used_redemptions") @default(0)
-  startDate       DateTime          @map("start_date")
-  endDate         DateTime          @map("end_date")
-  createdAt       DateTime          @default(now()) @map("created_at")
-  updatedAt       DateTime          @updatedAt @map("updated_at")
-  deletedAt       DateTime?         @map("deleted_at")
+  id              Int              @id @default(autoincrement())
+  eventId         Int?             @map("event_id")
+  userId          String?          @map("user_id") @db.Uuid
+  name            String?          @db.VarChar(100)
+  code            String           @unique @db.VarChar(50)
+  discountAmount  Decimal          @map("discount_amount") @db.Decimal(10, 2)
+  discountType    DiscountTypeEnum @default(FIXED) @map("discount_type")
+  isReferralPromo Boolean          @default(false) @map("is_referral_promo")
+  maxRedemptions  Int?             @map("max_redemptions")
+  usedRedemptions Int              @default(0) @map("used_redemptions")
+  startDate       DateTime         @map("start_date")
+  endDate         DateTime         @map("end_date")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  deletedAt       DateTime?        @map("deleted_at")
 
-  user            User?             @relation(fields: [userId], references: [id])
-  event           Event?            @relation(fields: [eventId], references: [id])
-  transactions    Transaction[]
+  user         User?         @relation(fields: [userId], references: [id])
+  event        Event?        @relation(fields: [eventId], references: [id])
+  transactions Transaction[]
 
   @@index([eventId])
 }
 
 model AuditLog {
-  id              Int       @id @default(autoincrement())
-  userId          String    @map("user_id") @db.Uuid
-  action          AuditLogActionEnum
-  details         Json?
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
+  id        Int                @id @default(autoincrement())
+  userId    String             @map("user_id") @db.Uuid
+  action    AuditLogActionEnum
+  details   Json?
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
 
-  user            User      @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
@@ -342,4 +350,3 @@ model RefreshToken {
   createdAt DateTime @default(now())
   expiresAt DateTime @default(now())
 }
-

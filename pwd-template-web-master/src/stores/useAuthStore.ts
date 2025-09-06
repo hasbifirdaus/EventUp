@@ -5,12 +5,13 @@ interface User {
   id: string;
   username: string;
   email: string;
-  role: string;
+  roles: string[];
+  referralCode?: string;
 }
 
 interface Authstate {
   accessToken: string | null;
-  user: { id: string; username: string; email: string; role: string } | null;
+  user: User | null;
   setAccessToken: (token: string | null) => void;
   setUser: (user: Authstate["user"]) => void;
   logout: () => void;
@@ -20,7 +21,7 @@ interface Authstate {
 export const useAuthStore = create<Authstate>()(
   persist(
     (set) => ({
-      accessToken: null, // awalnya null
+      accessToken: null, //awalnya null
       user: null,
       setAccessToken: (token: string | null) => set({ accessToken: token }),
       setUser: (user) => set({ user }),
@@ -28,12 +29,10 @@ export const useAuthStore = create<Authstate>()(
       _hasHydrated: false,
     }),
     {
-      name: "auth-storage", // nama key di localStorage
+      name: "auth-storage", //nama key di localStorage
       onRehydrateStorage: () => (state) => {
         // Panggil setelah store selesai memuat data dari localStorage
-        if (state) {
-          state._hasHydrated = true;
-        }
+        state && (state._hasHydrated = true);
       },
     }
   )
