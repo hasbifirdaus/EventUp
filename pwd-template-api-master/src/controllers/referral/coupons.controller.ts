@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../../utils/prisma";
+import prisma from "../../utils/prisma";
 import { disconnect } from "process";
 
 //Mengambil semua promosi (kupon)  untuk pengguna yang sedang login
@@ -12,7 +12,7 @@ export const getMyPromotions = async (req: any, res: Response) => {
       orderBy: { endDate: "desc" },
     });
 
-    //format data untuk frontend
+    //Data untuk frontend
     const formattedPromotions = promotions.map((promo) => {
       const isExpired = new Date(promo.endDate) < new Date();
 

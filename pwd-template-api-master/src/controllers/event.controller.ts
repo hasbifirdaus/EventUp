@@ -137,3 +137,39 @@ export const deleteEvent = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error.", error });
   }
 };
+
+export const getOrganizerEvents = async (req: Request, res: Response) => {
+  try {
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ message: "Unauthorized." });
+    }
+    const userId = req.user.userId;
+    const now = new Date(); // Mengambil semua event milik organizer
+
+    const allEvents = await prisma.event.findMany({
+      where: {
+        organizerId: userId,
+      },
+      orderBy: {
+        startDateTime: "asc",
+      },
+    }); // Mengelompokkan event berdasarkan status
+
+    const activeEvents = allEvents.filter(
+      (event) => event.isActive && event.endDateTime > now
+    );
+    const draftEvents = allEvents.filter((event) => !event.isActive);
+    const pastEvents = allEvents.filter(
+      (event) => event.isActive && event.endDateTime < now
+    );
+
+    res.status(200).json({
+      activeEvents,
+      draftEvents,
+      pastEvents,
+    });
+  } catch (error) {
+    console.error("Gagal mengambil event organizer:", error);
+    res.status(500).json({ message: "Gagal mengambil daftar event." });
+  }
+};

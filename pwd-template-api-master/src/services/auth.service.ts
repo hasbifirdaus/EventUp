@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 
@@ -11,7 +11,7 @@ export const registerUser = async (data: {
   referralCode?: string;
 }) => {
   try {
-    // Jalankan semua operasi dalam satu transaksi untuk menjamin konsistensi
+    // Jalankan semua operasi dalam satu transaksi
     const transactionResult = await prisma.$transaction(async (tx) => {
       // 1. Hash password untuk keamanan
       const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -91,7 +91,7 @@ export const registerUser = async (data: {
             select: { amount: true },
           });
           const totalPoints = allReferrerPoints.reduce(
-            (sum, point) => sum + point.amount,
+            (sum: number, point: { amount: number }) => sum + point.amount,
             0
           );
 
@@ -136,7 +136,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
     where: { userId: user.id },
   });
 
-  const roles = userRoles.map((r) => r.role);
+  const roles = userRoles.map((r: { role: string }) => r.role);
 
   // 3. Buat JWT (JSON Web Token)
   const token = jwt.sign(

@@ -1,8 +1,26 @@
 import { Request, Response } from "express";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 import { snap } from "../config/midtrans.config";
 
 export const createSnapPaymentToken = async (req: Request, res: Response) => {
+  interface ItemDetail {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+  }
+
+  interface ITransactionItem {
+    ticketTypeId: number;
+    ticketType: {
+      name: string;
+    };
+    unitPrice: {
+      toNumber: () => number;
+    };
+    quantity: number;
+  }
+
   try {
     const { transactionId } = req.body;
 
@@ -27,12 +45,14 @@ export const createSnapPaymentToken = async (req: Request, res: Response) => {
     }
 
     // Buat daftar item dari transaksi
-    const itemDetails = transaction.items.map((item) => ({
-      id: `TICKET-${item.ticketTypeId}`,
-      name: item.ticketType.name,
-      price: item.unitPrice.toNumber(),
-      quantity: item.quantity,
-    }));
+    const itemDetails: ItemDetail[] = transaction.items.map(
+      (item: ITransactionItem) => ({
+        id: `TICKET-${item.ticketTypeId}`,
+        name: item.ticketType.name,
+        price: item.unitPrice.toNumber(),
+        quantity: item.quantity,
+      })
+    );
 
     // Hitung total harga item tanpa diskon
     let grossAmountFromItems = itemDetails.reduce(

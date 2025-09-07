@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 
 // Mengambil semua transaksi untuk pengguna yang sedang login
 export const getMyTransactions = async (req: any, res: Response) => {

@@ -1,3 +1,4 @@
+// src/routes/event.routes.ts
 import { Router } from "express";
 import {
   createEvent,
@@ -5,49 +6,46 @@ import {
   getEvents,
   updateEvent,
   deleteEvent,
+  getOrganizerEvents,
 } from "../controllers/event.controller";
 import {
   createTicketType,
   getTicketTypesByEvent,
 } from "../controllers/ticketTypes.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { organizerMiddleware } from "../middlewares/organizerMiddleware";
+import { authMiddleware, authorizeRole } from "../middlewares/auth.middleware"; // Import authorizeRole
 import asyncHandler from "../middlewares/asyncHandler";
 
 const eventRouter = Router();
-////  ROUTE EVENT  ////
-//Route yang diprotect untuk membuat event baru
+
+// Route untuk organizer
 eventRouter.post(
   "/",
   authMiddleware,
-  organizerMiddleware,
+  authorizeRole(["ORGANIZER"]),
   asyncHandler(createEvent)
 );
-
-//Route public untuk melihat semua event
-eventRouter.get("/", asyncHandler(getEvents));
-eventRouter.get("/:id", asyncHandler(getEventById));
-
-//Update & Deleate Event
 eventRouter.put(
   "/:id",
   authMiddleware,
-  organizerMiddleware,
+  authorizeRole(["ORGANIZER"]),
   asyncHandler(updateEvent)
 );
 eventRouter.delete(
   "/:id",
   authMiddleware,
-  organizerMiddleware,
+  authorizeRole(["ORGANIZER"]),
   asyncHandler(deleteEvent)
 );
-
-////  ROUTE TICKETTYPE  ////
-eventRouter.post(
-  "/:eventId/ticket-types",
+eventRouter.get(
+  "/organizer",
   authMiddleware,
-  organizerMiddleware,
-  asyncHandler(createTicketType)
+  authorizeRole(["ORGANIZER"]),
+  asyncHandler(getOrganizerEvents)
 );
+
+// Route public
+eventRouter.get("/", asyncHandler(getEvents));
+eventRouter.get("/:id", asyncHandler(getEventById));
 eventRouter.get("/:eventId/ticket-types", asyncHandler(getTicketTypesByEvent));
+
 export default eventRouter;

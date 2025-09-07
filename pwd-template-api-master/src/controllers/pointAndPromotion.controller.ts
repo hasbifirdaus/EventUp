@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 
 // API untuk mendapatkan total poin pengguna
 export const getUserPoints = async (req: Request, res: Response) => {
@@ -45,7 +45,7 @@ export const getUserPoints = async (req: Request, res: Response) => {
   }
 };
 
-// API to create a new promotion
+// API untuk buat promosi baru (new promotion)
 export const createPromotion = async (req: Request, res: Response) => {
   try {
     const {

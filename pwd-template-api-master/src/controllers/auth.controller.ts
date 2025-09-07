@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { registerUser, loginUser } from "../services/auth.service";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 import jwt from "jsonwebtoken";
 
 export const register = async (req: Request, res: Response) => {
@@ -48,7 +48,7 @@ export const login = async (req: Request, res: Response) => {
     const userRoles = await prisma.userRole.findMany({
       where: { userId: user.id },
     });
-    const roles = userRoles.map((r) => r.role);
+    const roles = userRoles.map((r: { role: string }) => r.role);
 
     res.status(200).json({
       message: "Login berhasil",
@@ -89,7 +89,7 @@ export const getUserProfile = async (req: any, res: Response) => {
       where: { userId: user.id },
       select: { role: true },
     });
-    const roles = userRoles.map((ur) => ur.role);
+    const roles = userRoles.map((ur: { role: string }) => ur.role);
 
     res.status(200).json({ ...user, roles });
   } catch (error: any) {

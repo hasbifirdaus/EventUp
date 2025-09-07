@@ -10,6 +10,7 @@ import { handleMidtransNotification } from "./controllers/midtrans.webhook.contr
 import historyRouter from "./routes/history.routes";
 import couponsRouter from "./routes/referral/coupons.routes";
 import handleMidtransNotificationRouter from "./routes/handleMidtransNotification.routes";
+import "dotenv/config";
 
 const app: Express = express();
 const port: number = 8000;
@@ -38,6 +39,7 @@ app.use("/api", handleMidtransNotificationRouter);
 
 //Error handler middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
   res.status(500).json({
     success: false,
     message: err?.message,

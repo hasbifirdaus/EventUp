@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import {
@@ -15,8 +14,16 @@ import {
   Legend,
 } from "recharts";
 import { useAuthStore } from "@/stores/useAuthStore";
+import api from "@/utils/api";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import {
+  FaChartLine,
+  FaTicketAlt,
+  FaCalendarAlt,
+  FaEdit,
+  FaExchangeAlt,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
 
 interface StatEntry {
   day?: string;
@@ -26,10 +33,13 @@ interface StatEntry {
   tickets: number;
 }
 
+// Interface yang disinkronkan dengan respons backend baru
 interface DashboardData {
   totalEvents: number;
+  totalDraftEvents: number;
   totalTicketsSold: number;
   totalRevenue: number;
+  totalTransactions: number;
   stats: {
     daily: StatEntry[];
     monthly: StatEntry[];
@@ -45,6 +55,40 @@ const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
+interface SummaryCardProps {
+  title: string;
+  value: number;
+  unit?: string;
+  icon: React.ReactNode;
+  currency?: boolean;
+}
+
+const SummaryCard: React.FC<SummaryCardProps> = ({
+  title,
+  value,
+  unit,
+  icon,
+  currency = false,
+}) => (
+  <motion.div
+    className="grid gap-5 border-2 border-gray-200 p-6 rounded-md text-gray-700 flex-1 shadow-md"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+    <div className="flex items-center justify-between border-b-2 border-gray-100 pb-2">
+      <h4 className="font-semibold text-lg">{title}</h4>
+      <div className="text-xl text-indigo-600">{icon}</div>
+    </div>
+    <div className="flex items-center gap-2">
+      <p className="text-4xl font-bold">
+        {currency ? formatCurrency(value) : value}
+      </p>
+      {unit && <p className="text-lg text-gray-500">{unit}</p>}
+    </div>
+  </motion.div>
+);
+
 export default function DashboardOrganizer() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
@@ -52,61 +96,31 @@ export default function DashboardOrganizer() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [range, setRange] = useState<"daily" | "monthly" | "yearly">("monthly");
+  const { user } = useAuthStore();
 
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Mengakses state Zustand hanya setelah terhidrasi di sisi klien
-  useEffect(() => {
-    const { accessToken, _hasHydrated } = useAuthStore.getState();
-    setAccessToken(accessToken);
-    setIsHydrated(_hasHydrated);
-
-    const unsubscribe = useAuthStore.subscribe((state) => {
-      setAccessToken(state.accessToken);
-      setIsHydrated(state._hasHydrated);
-    });
-
-    return () => unsubscribe();
+  const fetchDashboardData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Panggil endpoint dashboard yang sudah diperbarui
+      const response = await api.get<DashboardData>("/dashboard/organizer");
+      setDashboardData(response.data);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Gagal memuat data dashboard.");
+      console.error("Error fetching dashboard data:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    if (!isHydrated) {
-      return;
+    if (user) {
+      fetchDashboardData();
+    } else {
+      setLoading(false);
+      setError("Silakan login untuk melihat dashboard.");
     }
-
-    const fetchDashboardData = async () => {
-      try {
-        if (!accessToken) {
-          // Ganti useRouter dengan navigasi langsung
-          window.location.href = "/";
-          return;
-        }
-
-        const response = await axios.get<DashboardData>(
-          "http://localhost:8000/api/dashboard/organizer",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        setDashboardData(response.data);
-      } catch (err: any) {
-        if (err.response) {
-          setError(err.response.data.message || "Gagal memuat data dashboard.");
-        } else {
-          setError("Terjadi kesalahan. Silakan coba lagi.");
-        }
-        console.error("Error fetching dashboard data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [accessToken, isHydrated]);
+  }, [user, fetchDashboardData]);
 
   const formatLabel = (entry: StatEntry): string => {
     if (entry.day)
@@ -120,275 +134,162 @@ export default function DashboardOrganizer() {
   return (
     <div
       id="dashboard-organizer"
-      className="bg-white min-h-screen grid items-center p-4 sm:p-6 lg:p-15"
+      className="bg-gray-50 min-h-screen p-4 sm:p-8 lg:p-12"
     >
-      <div
-        id="dashboard-organizer-events"
-        className="mb-28 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 "
-      >
-        {/*1. Event Aktif */}
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
+      <div className="max-w-7xl mx-auto">
+        {/* <motion.h1
+          className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2 text-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Event Aktif</h4>
-            <Link href="#" className="text-red-500 text-xs">
-              Detail
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              0
-            </p>
-            <p className="text-lg">Event</p>
-          </div>
-        </div>
-
-        {/*2. Event Draft */}
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
-        >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Event Draft</h4>
-            <Link href="#" className="text-red-500 text-xs">
-              Detail
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              0
-            </p>
-            <p className="text-lg">Event</p>
-          </div>
-        </div>
-
-        {/*3. Total Transaksi */}
-
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
-        >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Total Transaksi</h4>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              0
-            </p>
-          </div>
-        </div>
-
-        {/*4. Total Tiket Terjual */}
-
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
-        >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Total Tiket Terjual</h4>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              0
-            </p>
-            <p className="text-lg">Tiket</p>
-          </div>
-        </div>
-
-        {/*5. Total Penjualan */}
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
-        >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Total Penjualan</h4>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              <span className="mr-2">Rp</span> 0
-            </p>
-          </div>
-        </div>
-
-        {/*6. Total Pengunjung */}
-        <div
-          id="dashboard-organizer-events-box"
-          className="grid gap-5 border-2 border-gray-400  p-6 rounded-md text-gray-400 flex-1"
-        >
-          <div
-            id=""
-            className="flex items-center justify-between border-b-2 border-gray-200 pb-2"
-          >
-            <h4>Total Pengunjung</h4>
-          </div>
-          <div className="flex items-center gap-2">
-            <p
-              id="dashboard-organizer-eventd-active-number"
-              className="text-4xl"
-            >
-              0
-            </p>
-            <p className="text-lg">Orang</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-[75rem] border border-gray-100 mx-auto">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-2 text-center">
           Dashboard Organizer
-        </h1>
-        <p className="text-gray-500 mb-8 text-center">
+        </motion.h1> */}
+        <p className="text-gray-500 mb-12 text-center text-lg">
           Ringkasan performa event Anda
         </p>
 
         {loading && (
-          <div className="text-gray-500 flex flex-col items-center">
-            <div className="animate-spin h-10 w-10 text-indigo-600 border-4 border-current border-t-transparent rounded-full"></div>
-            <p className="mt-4 text-lg">Memuat data dasbor...</p>
+          <div className="flex justify-center items-center h-[50vh] flex-col">
+            <div className="animate-spin h-12 w-12 text-indigo-600 border-4 border-current border-t-transparent rounded-full"></div>
+            <p className="mt-4 text-lg text-gray-500">Memuat data dasbor...</p>
           </div>
         )}
 
         {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl relative"
-            role="alert"
-          >
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl relative text-center">
             <strong className="font-bold">Error!</strong>
             <span className="block sm:inline ml-2">{error}</span>
+            <Link
+              href="/login"
+              className="font-semibold ml-4 text-indigo-600 hover:underline"
+            >
+              Login Sekarang
+            </Link>
           </div>
         )}
 
-        {dashboardData && (
-          <div>
-            {/* Summary cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl p-6 shadow-xl">
-                <p className="text-lg font-semibold opacity-90">
-                  Total Pendapatan
-                </p>
-                <p className="text-4xl sm:text-5xl font-bold mt-2">
-                  {formatCurrency(dashboardData.totalRevenue)}
-                </p>
-              </div>
-              <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl p-6 shadow-xl">
-                <p className="text-lg font-semibold opacity-90">
-                  Total Tiket Terjual
-                </p>
-                <p className="text-4xl sm:text-5xl font-bold mt-2">
-                  {dashboardData.totalTicketsSold}
-                </p>
-              </div>
-              <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl p-6 shadow-xl">
-                <p className="text-lg font-semibold opacity-90">Jumlah Event</p>
-                <p className="text-4xl sm:text-5xl font-bold mt-2">
-                  {dashboardData.totalEvents}
-                </p>
-              </div>
+        {!loading && !error && dashboardData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Summary Cards Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+              <SummaryCard
+                title="Total Event"
+                value={dashboardData.totalEvents}
+                unit="Event"
+                icon={<FaCalendarAlt />}
+              />
+              <SummaryCard
+                title="Event Draft"
+                value={dashboardData.totalDraftEvents}
+                unit="Event"
+                icon={<FaEdit />}
+              />
+              <SummaryCard
+                title="Total Tiket Terjual"
+                value={dashboardData.totalTicketsSold}
+                unit="Tiket"
+                icon={<FaTicketAlt />}
+              />
+              <SummaryCard
+                title="Total Transaksi"
+                value={dashboardData.totalTransactions}
+                unit="Transaksi"
+                icon={<FaExchangeAlt />}
+              />
+              <SummaryCard
+                title="Total Pendapatan"
+                value={dashboardData.totalRevenue}
+                currency={true}
+                icon={<FaChartLine />}
+              />
             </div>
-
-            {/* Range selector */}
-            <div className="flex gap-4 mb-6 justify-center">
-              {["daily", "monthly", "yearly"].map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setRange(r as "daily" | "monthly" | "yearly")}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
-                    range === r
-                      ? "bg-indigo-600 text-white shadow-lg"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  {r === "daily"
-                    ? "Harian"
-                    : r === "monthly"
-                    ? "Bulanan"
-                    : "Tahunan"}
-                </button>
-              ))}
-            </div>
-
-            {/* Chart */}
-            <div className="bg-gray-50 p-6 rounded-2xl shadow-inner border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                Statistik{" "}
-                {range === "daily"
-                  ? "Harian"
-                  : range === "monthly"
-                  ? "Bulanan"
-                  : "Tahunan"}
-              </h2>
-              {dashboardData.stats[range].length > 0 ? (
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart
-                    data={dashboardData.stats[range].map((entry) => ({
-                      ...entry,
-                      label: formatLabel(entry),
-                    }))}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="label" />
-                    <YAxis />
-                    <Tooltip
-                      formatter={(value, name) =>
-                        name === "revenue"
-                          ? formatCurrency(value as number)
-                          : value
+            {/* ... Chart ... */}
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-100">
+              <div className="flex justify-between items-center mb-6 flex-col sm:flex-row gap-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Statistik Penjualan
+                </h2>
+                <div className="flex gap-2">
+                  {["daily", "monthly", "yearly"].map((r) => (
+                    <button
+                      key={r}
+                      onClick={() =>
+                        setRange(r as "daily" | "monthly" | "yearly")
                       }
-                    />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="#4F46E5"
-                      name="Pendapatan"
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="tickets"
-                      stroke="#10B981"
-                      name="Tiket Terjual"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                      className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+                        range === r
+                          ? "bg-indigo-600 text-white shadow-lg"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      }`}
+                    >
+                      {r === "daily"
+                        ? "Harian"
+                        : r === "monthly"
+                        ? "Bulanan"
+                        : "Tahunan"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {dashboardData.stats[range].length > 0 ? (
+                <div className="h-[300px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={dashboardData.stats[range].map((entry) => ({
+                        ...entry,
+                        label: formatLabel(entry),
+                      }))}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                      <XAxis dataKey="label" stroke="#333" />
+                      <YAxis stroke="#333" />
+                      <Tooltip
+                        formatter={(value, name) =>
+                          name === "Pendapatan"
+                            ? formatCurrency(value as number)
+                            : value
+                        }
+                      />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="revenue"
+                        stroke="#8884d8"
+                        name="Pendapatan"
+                        activeDot={{ r: 8 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="tickets"
+                        stroke="#82ca9d"
+                        name="Tiket Terjual"
+                        activeDot={{ r: 8 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               ) : (
-                <p className="text-gray-400 text-lg text-center">
-                  Tidak ada data statistik {range}.
-                </p>
+                <div className="flex items-center justify-center h-[300px] flex-col">
+                  <p className="text-gray-400 text-lg text-center">
+                    Tidak ada data statistik untuk periode yang dipilih.
+                  </p>
+                  <Link
+                    href="/create-event"
+                    className="mt-4 text-indigo-600 font-semibold hover:underline"
+                  >
+                    Buat Event Pertama Anda
+                  </Link>
+                </div>
               )}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

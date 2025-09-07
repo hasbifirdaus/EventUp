@@ -35,15 +35,33 @@ export const authMiddleware = (
 };
 
 //Middleware untuk otorisasi berbasis peran (hanya untuk peran tertentu)
-export const authorizeRole = (roles: string[]) => {
+export const authorizeRole = (requiredRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const userRoles = (req as any).user.roles;
-    const hasPermission = roles.some((role) => userRoles.includes(role));
+    try {
+      const userRoles = (req as any).user?.roles;
 
-    if (!hasPermission) {
-      return res
-        .status(403)
-        .json({ message: "Forbidden : Anda tidak memiliki akses" });
+      if (!userRoles || !Array.isArray(userRoles)) {
+        res
+          .status(403)
+          .json({ message: "Akses ditolak. Informasi peran hilang." });
+        return;
+      }
+
+      const hasPermission = requiredRoles.some((role) =>
+        userRoles.includes(role)
+      );
+
+      if (!hasPermission) {
+        res
+          .status(403)
+          .json({ message: "Forbidden: Anda tidak memiliki akses" });
+        return;
+      }
+      next();
+    } catch (error) {
+      console.error("Error di middleware authorizeRole:", error);
+      res.status(500).json({ message: "Kesalahan server saat otorisasi." });
+      return;
     }
   };
 };
