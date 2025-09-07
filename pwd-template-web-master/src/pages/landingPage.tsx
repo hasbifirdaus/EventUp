@@ -9,6 +9,9 @@ import { FaCompass } from "react-icons/fa";
 import { FaCalendarPlus } from "react-icons/fa6";
 import { FaTicketAlt } from "react-icons/fa";
 import { RiDiscountPercentFill } from "react-icons/ri";
+import PaymentStatusAlert from "@/components/PaymentStatusAlert";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LandingPage = () => {
   const [open, setOpen] = useState(false);
@@ -61,6 +64,8 @@ const LandingPage = () => {
   };
   return (
     <div id="landing-page" className="bg-white min-h-screen">
+      <PaymentStatusAlert />
+      <ToastContainer position="top-right" autoClose={5000} />
       <section
         id="navbar"
         className="bg-blue-900 h-20 flex items-center justify-between "
@@ -83,7 +88,10 @@ const LandingPage = () => {
           {!user && (
             <>
               <ul className="text-white flex gap-5">
-                <Link href="#" className="flex items-center gap-1.5">
+                <Link
+                  href="/jelajah-event"
+                  className="flex items-center gap-1.5"
+                >
                   <FaCompass className="" />
                   Jelajah event
                 </Link>
@@ -119,7 +127,10 @@ const LandingPage = () => {
                         Buat Event
                       </Link>
 
-                      <Link href="#" className="flex items-center gap-1.5">
+                      <Link
+                        href="/jelajah-event"
+                        className="flex items-center gap-1.5"
+                      >
                         <FaCompass className="text-[1rem]" />
                         Jelajah event
                       </Link>
@@ -142,7 +153,10 @@ const LandingPage = () => {
                         Tiket Saya
                       </Link>
 
-                      <Link href="#" className="flex items-center gap-1.5">
+                      <Link
+                        href="/jelajah-event"
+                        className="flex items-center gap-1.5"
+                      >
                         <FaCompass className="text-[1rem]" />
                         Jelajah event
                       </Link>
@@ -219,7 +233,7 @@ const LandingPage = () => {
                       </Link>
 
                       <Link
-                        href="#"
+                        href="/member/events"
                         id="sub-menu-link"
                         className="group flex items-center text-d no-underline mt-3"
                       >
@@ -232,7 +246,7 @@ const LandingPage = () => {
                       <hr className="border-0 h-[0.5px] w-full bg-[#ccc] mt-4 mb-2.5" />
 
                       <Link
-                        href="#"
+                        href="/member/profile"
                         id="sub-menu-link"
                         className="group flex items-center text-d no-underline mt-3"
                       >
@@ -280,7 +294,7 @@ const LandingPage = () => {
                     {/* Role CUSTOMER */}
                     <div id="role-customer">
                       <Link
-                        href="/member"
+                        href="/jelajah-event"
                         id="sub-menu-link"
                         className="group flex items-center text-d no-underline mt-3"
                       >

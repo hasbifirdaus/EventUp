@@ -66,6 +66,11 @@ export const createSnapPaymentToken = async (req: Request, res: Response) => {
         email: transaction.user.email,
         phone: transaction.user.phoneNumber || null,
       },
+      callbacks: {
+        finish: `http://localhost:3000/?status=success&transactionId=${transaction.id}`, // sukses
+        pending: `http://localhost:3000/?status=pending&transactionId=${transaction.id}`, // pending
+        error: `http://localhost:3000/?status=error&transactionId=${transaction.id}`, // gagal
+      },
     };
 
     const snapToken = await snap.createTransaction(snapPayload);

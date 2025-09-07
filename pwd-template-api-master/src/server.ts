@@ -9,6 +9,7 @@ import transactionRouter from "./routes/transaction.routes";
 import { handleMidtransNotification } from "./controllers/midtrans.webhook.controller";
 import historyRouter from "./routes/history.routes";
 import couponsRouter from "./routes/referral/coupons.routes";
+import handleMidtransNotificationRouter from "./routes/handleMidtransNotification.routes";
 
 const app: Express = express();
 const port: number = 8000;
@@ -32,6 +33,8 @@ app.use("/api/history", historyRouter);
 
 app.post("/api/midtrans-webhook", handleMidtransNotification);
 app.post("/api/midtrans-webhook/", handleMidtransNotification);
+
+app.use("/api", handleMidtransNotificationRouter);
 
 //Error handler middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

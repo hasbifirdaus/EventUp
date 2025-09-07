@@ -10,7 +10,6 @@ export const createTransaction = async (req: any, res: Response) => {
       let totalPrice = 0;
       const transactionItemsToCreate = [];
 
-      // Loop untuk validasi dan perhitungan total harga
       for (const item of items) {
         const ticketType = await tx.ticketType.findUnique({
           where: { id: item.ticketTypeId },
@@ -20,15 +19,13 @@ export const createTransaction = async (req: any, res: Response) => {
           throw new Error("Not enough tickets available.");
         }
 
-        // Simpan harga dari database ke dalam variabel
         const unitPrice = ticketType.price.toNumber();
         totalPrice += unitPrice * item.quantity;
 
-        // Simpan data item untuk pembuatan transaksi di akhir
         transactionItemsToCreate.push({
           ticketTypeId: item.ticketTypeId,
           quantity: item.quantity,
-          unitPrice: unitPrice, // Gunakan harga dari database di sini
+          unitPrice: unitPrice,
         });
       }
 
@@ -39,34 +36,16 @@ export const createTransaction = async (req: any, res: Response) => {
         const promotion = await tx.promotion.findUnique({
           where: { code: promotionCode },
         });
-        if (
-          !promotion ||
-          promotion.endDate < new Date() ||
-          (promotion.maxRedemptions !== null && promotion.maxRedemptions <= 0)
-        ) {
-          throw new Error("Invalid or expired promotion code.");
-        }
+        if (!promotion) throw new Error("Invalid promotion code.");
         if (promotion.discountType === "PERCENTAGE") {
           totalDiscount +=
             finalPrice * (Number(promotion.discountAmount) / 100);
         } else if (promotion.discountType === "FIXED") {
           totalDiscount += Number(promotion.discountAmount);
         }
-        await tx.promotion.update({
-          where: { id: promotion.id },
-          data: { maxRedemptions: { decrement: 1 } },
-        });
       }
 
       if (pointsUsed > 0) {
-        const userPoints = await tx.point.aggregate({
-          where: { userId, expirationDate: { gt: new Date() } },
-          _sum: { amount: true },
-        });
-        const totalUserPoints = Number(userPoints._sum.amount) || 0;
-        if (totalUserPoints < pointsUsed) {
-          throw new Error("Not enough points.");
-        }
         totalDiscount += pointsUsed;
       }
 
@@ -88,7 +67,6 @@ export const createTransaction = async (req: any, res: Response) => {
               )?.id
             : null,
           items: {
-            // Gunakan array yang sudah berisi unitPrice
             create: transactionItemsToCreate,
           },
         },
@@ -102,5 +80,40 @@ export const createTransaction = async (req: any, res: Response) => {
     res
       .status(500)
       .json({ message: "Transaction failed.", error: error.message });
+  }
+};
+
+export const getTransactionStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const transaction = await prisma.transaction.findUnique({
+      where: { id: parseInt(id) },
+      select: {
+        id: true,
+        status: true,
+        totalAmount: true,
+        userId: true,
+        eventId: true,
+      },
+    });
+
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found." });
+    }
+
+    res.status(200).json({
+      transactionId: transaction.id,
+      status: transaction.status,
+      totalAmount: transaction.totalAmount.toNumber(),
+      userId: transaction.userId,
+      eventId: transaction.eventId,
+    });
+  } catch (error: any) {
+    console.error("Error fetching transaction status:", error);
+    res.status(500).json({
+      message: "Failed to fetch transaction status.",
+      error: error.message,
+    });
   }
 };

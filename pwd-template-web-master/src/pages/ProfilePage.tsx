@@ -85,20 +85,28 @@ const ProfilePage = () => {
         </div>
 
         <div className="py-4 grid gap-3 border-b-[0.5px] border-gray-400">
-          <p className="font-bold">Kupon ({coupons?.length ?? 0})</p>
+          <p className="font-bold">
+            Kupon (
+            {coupons?.filter((c) => new Date(c.validUntil) > new Date())
+              .length ?? 0}
+            )
+          </p>
 
-          {coupons?.length > 0 ? (
+          {coupons?.filter((c) => new Date(c.validUntil) > new Date()).length >
+          0 ? (
             <ul className="ml-4 text-sm text-gray-500 list-disc">
-              {coupons.map((coupon, i) => (
-                <li key={i}>
-                  Kode: {coupon.code} - Diskon: {coupon.discount} - Berlaku
-                  sampai{" "}
-                  {new Date(coupon.validUntil).toLocaleDateString("id-ID")}
-                </li>
-              ))}
+              {coupons
+                .filter((coupon) => new Date(coupon.validUntil) > new Date())
+                .map((coupon, i) => (
+                  <li key={i}>
+                    Kode: {coupon.code} - Diskon: {coupon.discount} - Berlaku
+                    sampai{" "}
+                    {new Date(coupon.validUntil).toLocaleDateString("id-ID")}
+                  </li>
+                ))}
             </ul>
           ) : (
-            <p className="ml-4 text-sm text-gray-500">Tidak ada kupon</p>
+            <p className="ml-4 text-sm text-gray-500">Tidak ada kupon aktif</p>
           )}
         </div>
       </section>

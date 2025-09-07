@@ -1,105 +1,172 @@
 import { Request, Response } from "express";
 import { prisma } from "../utils/prisma";
 import { v4 as uuidv4 } from "uuid";
-import { TicketStatusEnum } from "../generated/prisma";
-const midtransClient = require("midtrans-client");
+import { TicketStatusEnum } from "../../src/generated/prisma";
+import crypto from "crypto";
 
 export const handleMidtransNotification = async (
   req: Request,
   res: Response
-) => {
+): Promise<void> => {
   try {
-    const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true";
     const serverKey = process.env.MIDTRANS_SERVER_KEY as string;
 
-    const core = new midtransClient.CoreApi({
-      isProduction,
-      serverKey,
-    });
+    // 1. Signature Key Validation
 
-    const statusResponse = await core.transaction.notification(req.body);
-    const { transaction_status, order_id, fraud_status } = statusResponse;
-    const transactionId = order_id.split("-").pop();
+    const receivedSignature = req.body.signature_key;
+    const payloadForSignature = [
+      req.body.order_id,
+      req.body.status_code,
+      req.body.gross_amount,
+      serverKey,
+    ].join("");
+
+    const expectedSignature = crypto
+      .createHash("sha512")
+      .update(payloadForSignature)
+      .digest("hex");
+
+    // kondisi untuk bypass validasi di lingkungan development
+    if (process.env.NODE_ENV !== "development") {
+      if (receivedSignature !== expectedSignature) {
+        console.error("Invalid signature:", receivedSignature);
+        res.status(403).send("Invalid signature");
+        return;
+      }
+
+      //untuk bypass
+    } else {
+      console.log("SKIPPING signature validation in DEVELOPMENT environment.");
+    }
+
+    // 2. Respon cepat ke Midtrans
+
+    res.status(200).send("OK"); // Kirim OK segera supaya Midtrans tidak retry
+
+    // 3. Proses transaction async
+
+    const transactionStatus = req.body.transaction_status;
+    const orderId = req.body.order_id;
+    const fraudStatus = req.body.fraud_status;
+
+    const transactionId = parseInt(orderId.split("-").pop() || "");
+    if (isNaN(transactionId)) {
+      console.error("Invalid transactionId:", orderId);
+      return;
+    }
 
     await prisma.$transaction(async (tx) => {
-      // Menggunakan `include` untuk memuat relasi 'items'
       const transaction = await tx.transaction.findUnique({
-        where: { id: parseInt(transactionId as string) },
-        include: { items: true },
+        where: { id: transactionId },
+        include: {
+          items: true,
+          promotionUsed: true,
+          user: { include: { points: true } },
+        },
       });
 
       if (!transaction) {
-        console.error("Transaction not found for ID:", transactionId);
-        return res.status(404).send("Transaction not found.");
+        console.error("Transaction not found:", transactionId);
+        return;
       }
 
       if (transaction.status === "PAID") {
-        console.log("Transaction already PAID, returning OK.");
-        return res.status(200).send("OK");
+        console.log("Transaction already PAID:", transactionId);
+        return;
       }
 
-      // Gabungkan logika `settlement` dan `capture`
-      if (
-        (transaction_status === "capture" && fraud_status === "accept") ||
-        transaction_status === "settlement"
-      ) {
-        console.log(`Processing '${transaction_status}' status...`);
+      // 4. Status PAID
 
-        // Perbarui status transaksi
+      if (
+        (transactionStatus === "capture" && fraudStatus === "accept") ||
+        transactionStatus === "settlement"
+      ) {
+        console.log(`Processing PAID for transaction ${transactionId}...`);
+
+        // Update promo
+        if (
+          transaction.promotionUsed?.maxRedemptions &&
+          transaction.promotionUsed.maxRedemptions > 0
+        ) {
+          await tx.promotion.update({
+            where: { id: transaction.promotionUsed.id },
+            data: { maxRedemptions: { decrement: 1 } },
+          });
+        }
+
+        //Deduct points
+        if (transaction.pointUsed && transaction.pointUsed > 0) {
+          let remainingPoints = transaction.pointUsed;
+          const userPoints = await tx.point.findMany({
+            where: {
+              userId: transaction.userId,
+              expirationDate: { gt: new Date() },
+              amount: { gt: 0 },
+            },
+            orderBy: { expirationDate: "asc" },
+          });
+
+          for (const p of userPoints) {
+            if (remainingPoints <= 0) break;
+            const deduct = Math.min(p.amount, remainingPoints);
+            await tx.point.update({
+              where: { id: p.id },
+              data: { amount: p.amount - deduct },
+            });
+            remainingPoints -= deduct;
+          }
+        }
+
+        // Update transaction status
         await tx.transaction.update({
           where: { id: transaction.id },
           data: { status: "PAID" },
         });
 
-        // Gunakan data 'items' yang sudah dimuat dari `include`
-        const transactionItems = transaction.items;
-
-        if (transactionItems.length === 0) {
-          console.error("No transaction items found.");
-          return; // Menghentikan proses jika tidak ada item
-        }
-
-        const allTicketsToCreate: any[] = [];
-        for (const item of transactionItems) {
-          // Kurangi kuota tiket
-          await tx.ticketType.update({
+        //4d. Kurangi kuota tiket & buat tiket
+        const ticketsToCreate: any[] = [];
+        for (const item of transaction.items) {
+          const ticketType = await tx.ticketType.findUnique({
             where: { id: item.ticketTypeId },
-            data: { quota: { decrement: item.quantity } },
           });
+          if (!ticketType) continue;
 
-          // Buat tiket
-          for (let i = 0; i < item.quantity; i++) {
-            allTicketsToCreate.push({
-              eventId: transaction.eventId,
-              ticketTypeId: item.ticketTypeId,
-              ownerId: transaction.userId,
-              transactionItemId: item.id,
-              ticketCode: `TKT-${uuidv4()}`,
-              status: TicketStatusEnum.SOLD,
+          const quantityToDeduct = Math.min(item.quantity, ticketType.quota);
+          if (quantityToDeduct > 0) {
+            await tx.ticketType.update({
+              where: { id: item.ticketTypeId },
+              data: { quota: { decrement: quantityToDeduct } },
             });
+
+            for (let i = 0; i < quantityToDeduct; i++) {
+              ticketsToCreate.push({
+                eventId: transaction.eventId,
+                ticketTypeId: item.ticketTypeId,
+                ownerId: transaction.userId,
+                transactionItemId: item.id,
+                ticketCode: `TKT-${uuidv4()}`,
+                status: TicketStatusEnum.SOLD,
+              });
+            }
           }
         }
-        await tx.ticket.createMany({ data: allTicketsToCreate });
-        console.log(
-          `${allTicketsToCreate.length} tickets created successfully.`
-        );
-      } else if (
-        ["deny", "cancel", "expire"].includes(transaction_status as string)
-      ) {
-        console.log(`Processing '${transaction_status}' status...`);
-        // Perbarui status menjadi CANCELLED
+
+        if (ticketsToCreate.length > 0) {
+          await tx.ticket.createMany({ data: ticketsToCreate });
+          console.log(`${ticketsToCreate.length} tickets created.`);
+        }
+      }
+
+      // 5. Status CANCELLED / DENY / EXPIRE
+      else if (["deny", "cancel", "expire"].includes(transactionStatus)) {
+        console.log(`Processing CANCELLED for transaction ${transactionId}...`);
         await tx.transaction.update({
           where: { id: transaction.id },
           data: { status: "CANCELLED" },
         });
       }
     });
-
-    res.status(200).send("OK");
-  } catch (error: any) {
-    console.error("Webhook error:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to handle webhook.", error: error.message });
+  } catch (err: any) {
+    console.error("Webhook processing error:", err);
   }
 };
