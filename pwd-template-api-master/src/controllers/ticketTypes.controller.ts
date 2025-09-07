@@ -34,6 +34,7 @@ export const getTicketTypesByEvent = async (req: Request, res: Response) => {
       },
     });
 
+    // Kode ini sudah tidak diperlukan karena findMany selalu mengembalikan array
     res.status(200).json(ticketTypes);
   } catch (error) {
     res

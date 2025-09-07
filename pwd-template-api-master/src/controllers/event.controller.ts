@@ -1,4 +1,3 @@
-// src/controllers/event.controller.ts
 import { Request, Response } from "express";
 import { PrismaClient } from "../generated/prisma";
 
@@ -34,8 +33,14 @@ export const createEvent = async (req: any, res: Response) => {
     res
       .status(201)
       .json({ message: "Event berhasil dibuat.", event: newEvent });
-  } catch (error) {
-    res.status(500).json({ message: "Terjadi kesalahan pada server." });
+  } catch (error: any) {
+    res.status(500).json({
+      status: "error",
+      message: error.message || "Terjadi kesalahan pada server.",
+      error: error.name || "InternalServerError",
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined,
+      path: req.originalUrl,
+    });
   }
 };
 
