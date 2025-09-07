@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 import { v4 as uuidv4 } from "uuid";
 import { TicketStatusEnum } from "../../src/generated/prisma";
 import crypto from "crypto";
@@ -123,7 +123,7 @@ export const handleMidtransNotification = async (
           data: { status: "PAID" },
         });
 
-        //4d. Kurangi kuota tiket & buat tiket
+        //Kurangi kuota tiket & buat tiket
         const ticketsToCreate: any[] = [];
         for (const item of transaction.items) {
           const ticketType = await tx.ticketType.findUnique({

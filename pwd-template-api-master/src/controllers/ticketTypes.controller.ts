@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../utils/prisma";
+import prisma from "../utils/prisma";
 
 // Buat TicketType baru untuk acara tertentu
 export const createTicketType = async (req: Request, res: Response) => {
@@ -33,8 +33,6 @@ export const getTicketTypesByEvent = async (req: Request, res: Response) => {
         eventId: parseInt(eventId),
       },
     });
-
-    // Kode ini sudah tidak diperlukan karena findMany selalu mengembalikan array
     res.status(200).json(ticketTypes);
   } catch (error) {
     res
