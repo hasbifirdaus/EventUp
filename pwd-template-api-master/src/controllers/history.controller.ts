@@ -17,7 +17,24 @@ export const getMyTransactions = async (req: any, res: Response) => {
             startDateTime: true,
           },
         },
-        items: true,
+        items: {
+          include: {
+            ticketType: {
+              select: {
+                name: true,
+                price: true,
+              },
+            },
+          },
+        },
+        promotionUsed: {
+          // <--- perbaikan di sini
+          select: {
+            id: true,
+            name: true,
+            code: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -50,6 +67,7 @@ export const getMyTickets = async (req: any, res: Response) => {
             imageUrl: true,
             location: true,
             startDateTime: true,
+            endDateTime: true,
           },
         },
         ticketType: {

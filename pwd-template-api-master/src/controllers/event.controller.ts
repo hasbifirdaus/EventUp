@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "../generated/prisma";
-
-const prisma = new PrismaClient();
+import prisma from "../utils/prisma";
 
 // API untuk membuat event baru (hanya untuk organizer)
 export const createEvent = async (req: any, res: Response) => {

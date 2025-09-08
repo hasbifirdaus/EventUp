@@ -30,3 +30,7 @@ body {
   height: 100%;
   overflow-x: hidden;
 }
+
+.Toastify__toast-container {
+  z-index: 9999 !important;
+}

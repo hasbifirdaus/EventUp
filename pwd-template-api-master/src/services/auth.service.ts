@@ -116,20 +116,25 @@ export const registerUser = async (data: {
 };
 
 // Fungsi untuk login pengguna
-export const loginUser = async (data: { email: string; password: string }) => {
-  // 1. Cari pengguna berdasarkan email
-  const user = await prisma.user.findUnique({
-    where: { email: data.email },
+export const loginUser = async (data: {
+  identifier: string;
+  password: string;
+}) => {
+  // 1. Cari pengguna berdasarkan email atau username
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ email: data.identifier }, { username: data.identifier }],
+    },
   });
 
   if (!user) {
-    throw new Error("Email atau password salah.");
+    throw new Error("Email / Username salah.");
   }
 
   // 2. Bandingkan password yang dimasukkan dengan yang di database
   const isPasswordValid = await bcrypt.compare(data.password, user.password);
   if (!isPasswordValid) {
-    throw new Error("Email atau password salah.");
+    throw new Error("Password salah.");
   }
 
   const userRoles = await prisma.userRole.findMany({
