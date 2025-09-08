@@ -1,148 +1,199 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import Link from "next/link"
-import { ArrowLeft, Upload, LinkIcon, Calendar, MapPin, DollarSign, Star, Ticket, Plus, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { motion } from "framer-motion"
+import { useState } from "react";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Upload,
+  LinkIcon,
+  Calendar,
+  Ticket,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
+import api from "@/utils/api";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface TicketType {
-  id: string
-  name: string
-  price: number
-  originalPrice?: number
-  available: number
-  description: string
-  features: string[]
+  id: string;
+  name: string;
+  price: number;
+  available: number;
+  description: string;
+  isSeated: boolean;
+  features: string[];
 }
 
-interface PromoCode {
-  id: string
-  code: string
-  discount: number
-  type: "percentage" | "fixed"
-  description: string
+interface EventData {
+  title: string;
+  description: string;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  location: string;
+  category: string;
+  image: string;
+  imageType: "upload" | "url";
+  isOnline: boolean;
 }
+
+const eventCategories = [
+  "MUSIC",
+  "SPORT",
+  "SEMINAR",
+  "WORKSHOP",
+  "CONFERENCE",
+  "OTHER",
+];
+
+const initialEventData: EventData = {
+  title: "",
+  description: "",
+  startDate: "",
+  startTime: "",
+  endDate: "",
+  endTime: "",
+  location: "",
+  category: "",
+  image: "",
+  imageType: "upload",
+  isOnline: false,
+};
 
 export default function CreateEventPage() {
-  const [eventData, setEventData] = useState({
-    title: "",
-    description: "",
-    date: "",
-    time: "",
-    location: "",
-    category: "",
-    image: "",
-    imageType: "upload" as "upload" | "url",
-  })
+  const [eventData, setEventData] = useState<EventData>(initialEventData);
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
-  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([
-    {
-      id: "1",
-      name: "Regular",
-      price: 100000,
-      available: 100,
-      description: "Standard admission ticket",
-      features: ["General admission", "Event materials"],
-    },
-  ])
-
-  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([
-    {
-      id: "1",
-      code: "EARLYBIRD",
-      discount: 20,
-      type: "percentage",
-      description: "Early bird discount",
-    },
-  ])
-
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string>("")
+  const handleEventChange = (field: keyof EventData, value: string | boolean) =>
+    setEventData((prev) => ({ ...prev, [field]: value }));
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file)
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = (ev) => setImagePreview(ev.target?.result as string);
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleImageUrlChange = (url: string) => {
-    setEventData({ ...eventData, image: url })
-    setImagePreview(url)
-  }
+    handleEventChange("image", url);
+    setImagePreview(url);
+  };
 
   const addTicketType = () => {
-    const newTicket: TicketType = {
-      id: Date.now().toString(),
-      name: "",
-      price: 0,
-      available: 0,
-      description: "",
-      features: [],
+    setTicketTypes((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        name: "",
+        price: 0,
+        available: 0,
+        description: "",
+        isSeated: false,
+        features: [],
+      },
+    ]);
+  };
+
+  const updateTicketType = (
+    id: string,
+    field: keyof TicketType,
+    value: any
+  ) => {
+    setTicketTypes((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
+    );
+  };
+
+  const removeTicketType = (id: string) =>
+    setTicketTypes((prev) => prev.filter((t) => t.id !== id));
+
+  const resetForm = () => {
+    setEventData(initialEventData);
+    setTicketTypes([]);
+    setImageFile(null);
+    setImagePreview("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const startDateTime = new Date(
+        `${eventData.startDate}T${eventData.startTime}:00`
+      );
+      const endDateTime = new Date(
+        `${eventData.endDate}T${eventData.endTime}:00`
+      );
+      if (endDateTime <= startDateTime) {
+        alert("End date/time must be after start date/time");
+        return;
+      }
+
+      let imageUrl = eventData.image;
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        const uploadRes = await api.post<{ url: string }>("/upload", formData);
+        imageUrl = uploadRes.data.url;
+      }
+
+      const createEventRes = await api.post<{
+        message: string;
+        event: { id: string };
+      }>("/events", {
+        ...eventData,
+        imageUrl,
+        startDateTime,
+        endDateTime,
+      });
+
+      const eventId = createEventRes.data.event.id;
+
+      for (const ticket of ticketTypes) {
+        await api.post(`/events/${eventId}/ticket-types`, {
+          name: ticket.name,
+          description: ticket.description,
+          price: ticket.price,
+          quota: ticket.available,
+          isAvailable: true,
+          isSeated: ticket.isSeated,
+        });
+      }
+
+      alert("Event and tickets created successfully!");
+      resetForm();
+    } catch (error: any) {
+      console.error(error);
+      alert(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to create event"
+      );
     }
-    setTicketTypes([...ticketTypes, newTicket])
-  }
+  };
 
-  const updateTicketType = (id: string, field: keyof TicketType, value: any) => {
-    setTicketTypes(ticketTypes.map((ticket) => (ticket.id === id ? { ...ticket, [field]: value } : ticket)))
-  }
-
-  const removeTicketType = (id: string) => {
-    setTicketTypes(ticketTypes.filter((ticket) => ticket.id !== id))
-  }
-
-  const addPromoCode = () => {
-    const newPromo: PromoCode = {
-      id: Date.now().toString(),
-      code: "",
-      discount: 0,
-      type: "percentage",
-      description: "",
-    }
-    setPromoCodes([...promoCodes, newPromo])
-  }
-
-  const updatePromoCode = (id: string, field: keyof PromoCode, value: any) => {
-    setPromoCodes(promoCodes.map((promo) => (promo.id === id ? { ...promo, [field]: value } : promo)))
-  }
-
-  const removePromoCode = (id: string) => {
-    setPromoCodes(promoCodes.filter((promo) => promo.id !== id))
-  }
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(price)
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically send the data to your backend
-    console.log("Event Data:", eventData)
-    console.log("Ticket Types:", ticketTypes)
-    console.log("Promo Codes:", promoCodes)
-    alert("Event created successfully! (This is a demo)")
-  }
+  const imageButtonVariants = (imageType: "upload" | "url") =>
+    eventData.imageType === imageType ? "default" : "outline";
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 border-b border-white/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -151,7 +202,10 @@ export default function CreateEventPage() {
               <span className="text-xl font-bold text-gray-900">EventUp</span>
             </div>
             <Link href="/">
-              <Button variant="outline" className="flex items-center space-x-2 bg-transparent">
+              <Button
+                variant="outline"
+                className="flex items-center space-x-2 bg-transparent"
+              >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Home</span>
               </Button>
@@ -168,12 +222,16 @@ export default function CreateEventPage() {
           className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
         >
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Create Your Event</h1>
-            <p className="text-lg text-gray-600">Share your amazing event with the world</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              Create Your Event
+            </h1>
+            <p className="text-lg text-gray-600">
+              Share your amazing event with the world
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Basic Event Information */}
+            {/* Event Details */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -187,7 +245,7 @@ export default function CreateEventPage() {
                   <Input
                     id="title"
                     value={eventData.title}
-                    onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
+                    onChange={(e) => handleEventChange("title", e.target.value)}
                     placeholder="Enter event title"
                     required
                   />
@@ -198,344 +256,267 @@ export default function CreateEventPage() {
                   <Textarea
                     id="description"
                     value={eventData.description}
-                    onChange={(e) => setEventData({ ...eventData, description: e.target.value })}
+                    onChange={(e) =>
+                      handleEventChange("description", e.target.value)
+                    }
                     placeholder="Describe your event"
                     rows={4}
                     required
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <Label htmlFor="date">Date</Label>
+                    <Label>Start Date</Label>
                     <Input
-                      id="date"
                       type="date"
-                      value={eventData.date}
-                      onChange={(e) => setEventData({ ...eventData, date: e.target.value })}
+                      value={eventData.startDate}
+                      onChange={(e) =>
+                        handleEventChange("startDate", e.target.value)
+                      }
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="time">Time</Label>
+                    <Label>Start Time</Label>
                     <Input
-                      id="time"
                       type="time"
-                      value={eventData.time}
-                      onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
+                      value={eventData.startTime}
+                      onChange={(e) =>
+                        handleEventChange("startTime", e.target.value)
+                      }
                       required
                     />
                   </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="location">Location</Label>
-                  <Input
-                    id="location"
-                    value={eventData.location}
-                    onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
-                    placeholder="Event location"
-                    required
-                  />
+                  <div>
+                    <Label>End Date</Label>
+                    <Input
+                      type="date"
+                      value={eventData.endDate}
+                      onChange={(e) =>
+                        handleEventChange("endDate", e.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>End Time</Label>
+                    <Input
+                      type="time"
+                      value={eventData.endTime}
+                      onChange={(e) =>
+                        handleEventChange("endTime", e.target.value)
+                      }
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <Label htmlFor="category">Category</Label>
-                  <Input
-                    id="category"
+                  <Select
                     value={eventData.category}
-                    onChange={(e) => setEventData({ ...eventData, category: e.target.value })}
-                    placeholder="e.g., Technology, Music, Food"
+                    onValueChange={(val) => handleEventChange("category", val)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-200">
+                      {eventCategories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="location">Location / Online URL</Label>
+                  <Input
+                    type={eventData.isOnline ? "url" : "text"}
+                    value={eventData.location}
+                    onChange={(e) =>
+                      handleEventChange("location", e.target.value)
+                    }
+                    placeholder={
+                      eventData.isOnline
+                        ? "https://zoom.us/..."
+                        : "Event location"
+                    }
                     required
                   />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Event Image */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Upload className="w-5 h-5" />
-                  <span>Event Image</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex space-x-4">
-                  <Button
-                    type="button"
-                    variant={eventData.imageType === "upload" ? "default" : "outline"}
-                    onClick={() => setEventData({ ...eventData, imageType: "upload" })}
-                    className="flex items-center space-x-2"
-                  >
-                    <Upload className="w-4 h-4" />
-                    <span>Upload File</span>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={eventData.imageType === "url" ? "default" : "outline"}
-                    onClick={() => setEventData({ ...eventData, imageType: "url" })}
-                    className="flex items-center space-x-2"
-                  >
-                    <LinkIcon className="w-4 h-4" />
-                    <span>Image URL</span>
-                  </Button>
-                </div>
-
-                {eventData.imageType === "upload" ? (
-                  <div>
-                    <Label htmlFor="imageFile">Upload Image</Label>
-                    <Input id="imageFile" type="file" accept="image/*" onChange={handleImageUpload} />
-                  </div>
-                ) : (
-                  <div>
-                    <Label htmlFor="imageUrl">Image URL</Label>
+                  <div className="flex items-center space-x-2 mt-2">
                     <Input
-                      id="imageUrl"
-                      value={eventData.image}
-                      onChange={(e) => handleImageUrlChange(e.target.value)}
-                      placeholder="https://example.com/image.jpg"
+                      className="w-4 h-4"
+                      id="isOnline"
+                      type="checkbox"
+                      checked={eventData.isOnline}
+                      onChange={(e) =>
+                        handleEventChange("isOnline", e.target.checked)
+                      }
                     />
+                    <Label htmlFor="isOnline" className="mb-0">
+                      Event Online
+                    </Label>
                   </div>
-                )}
+                </div>
 
-                {imagePreview && (
-                  <div className="mt-4">
-                    <Label>Preview</Label>
-                    <div className="aspect-video w-full max-w-md mx-auto overflow-hidden rounded-lg border">
-                      <img
-                        src={imagePreview || "/placeholder.svg"}
-                        alt="Event preview"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                {/* Event Image */}
+                <div>
+                  <Label>Event Image</Label>
+                  <div className="flex items-center space-x-2 mt-2">
+                    <Button
+                      type="button"
+                      variant={imageButtonVariants("upload")}
+                      onClick={() => handleEventChange("imageType", "upload")}
+                      className="text-neutral-400"
+                    >
+                      <Upload className="w-4 h-4 mr-1" /> Upload
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={imageButtonVariants("url")}
+                      onClick={() => handleEventChange("imageType", "url")}
+                      className="text-neutral-400"
+                    >
+                      <LinkIcon className="w-4 h-4 mr-1 " /> URL
+                    </Button>
                   </div>
-                )}
+                  {eventData.imageType === "upload" ? (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="mt-2"
+                    />
+                  ) : (
+                    <Input
+                      type="url"
+                      placeholder="https://example.com/image.jpg"
+                      value={eventData.image || ""}
+                      onChange={(e) => handleImageUrlChange(e.target.value)}
+                    />
+                  )}
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="mt-2 w-64 h-36 object-cover rounded-md"
+                    />
+                  )}
+                </div>
               </CardContent>
             </Card>
 
             {/* Ticket Types */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Ticket className="w-5 h-5" />
-                    <span>Ticket Types</span>
-                  </div>
-                  <Button type="button" onClick={addTicketType} size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Ticket
-                  </Button>
+                <CardTitle className="flex items-center space-x-2">
+                  <Ticket className="w-5 h-5" />
+                  <span>Ticket Types</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                {ticketTypes.map((ticket, index) => (
-                  <div key={ticket.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Ticket Type {index + 1}</h4>
-                      {ticketTypes.length > 1 && (
-                        <Button type="button" variant="outline" size="sm" onClick={() => removeTicketType(ticket.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
+                {ticketTypes.map((ticket) => (
+                  <Card
+                    key={ticket.id}
+                    className="border border-gray-200 p-4 relative"
+                  >
+                    <div className="absolute -top-4 -right-4 bg-neutral-200 rounded-md">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => removeTicketType(ticket.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
-                        <Label>Ticket Name</Label>
+                        <Label>Name</Label>
                         <Input
                           value={ticket.name}
-                          onChange={(e) => updateTicketType(ticket.id, "name", e.target.value)}
-                          placeholder="e.g., VIP, Regular, Business"
+                          onChange={(e) =>
+                            updateTicketType(ticket.id, "name", e.target.value)
+                          }
                         />
                       </div>
                       <div>
-                        <Label>Price (IDR)</Label>
+                        <Label>Price</Label>
                         <Input
                           type="number"
                           value={ticket.price}
-                          onChange={(e) => updateTicketType(ticket.id, "price", Number.parseInt(e.target.value) || 0)}
-                          placeholder="0"
+                          onChange={(e) =>
+                            updateTicketType(
+                              ticket.id,
+                              "price",
+                              Number(e.target.value)
+                            )
+                          }
                         />
                       </div>
                       <div>
-                        <Label>Available Quantity</Label>
+                        <Label>Quota</Label>
                         <Input
                           type="number"
                           value={ticket.available}
                           onChange={(e) =>
-                            updateTicketType(ticket.id, "available", Number.parseInt(e.target.value) || 0)
+                            updateTicketType(
+                              ticket.id,
+                              "available",
+                              Number(e.target.value)
+                            )
                           }
-                          placeholder="0"
-                        />
-                      </div>
-                      <div>
-                        <Label>Original Price (Optional)</Label>
-                        <Input
-                          type="number"
-                          value={ticket.originalPrice || ""}
-                          onChange={(e) =>
-                            updateTicketType(ticket.id, "originalPrice", Number.parseInt(e.target.value) || undefined)
-                          }
-                          placeholder="For showing discounts"
                         />
                       </div>
                     </div>
-
-                    <div>
+                    <div className="mt-4">
                       <Label>Description</Label>
                       <Textarea
                         value={ticket.description}
-                        onChange={(e) => updateTicketType(ticket.id, "description", e.target.value)}
-                        placeholder="Describe what's included"
-                        rows={2}
-                      />
-                    </div>
-
-                    <div>
-                      <Label>Features (comma-separated)</Label>
-                      <Input
-                        value={ticket.features.join(", ")}
                         onChange={(e) =>
                           updateTicketType(
                             ticket.id,
-                            "features",
-                            e.target.value.split(", ").filter((f) => f.trim()),
+                            "description",
+                            e.target.value
                           )
                         }
-                        placeholder="e.g., VIP seating, Welcome drink, Certificate"
+                        rows={2}
                       />
                     </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Promo Codes */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Star className="w-5 h-5" />
-                    <span>Promo Codes</span>
-                  </div>
-                  <Button type="button" onClick={addPromoCode} size="sm">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Promo
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {promoCodes.map((promo, index) => (
-                  <div key={promo.id} className="border rounded-lg p-4 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-medium">Promo Code {index + 1}</h4>
-                      <Button type="button" variant="outline" size="sm" onClick={() => removePromoCode(promo.id)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <Label>Promo Code</Label>
-                        <Input
-                          value={promo.code}
-                          onChange={(e) => updatePromoCode(promo.id, "code", e.target.value.toUpperCase())}
-                          placeholder="EARLYBIRD"
-                        />
-                      </div>
-                      <div>
-                        <Label>Discount</Label>
-                        <Input
-                          type="number"
-                          value={promo.discount}
-                          onChange={(e) => updatePromoCode(promo.id, "discount", Number.parseInt(e.target.value) || 0)}
-                          placeholder="20"
-                        />
-                      </div>
-                      <div>
-                        <Label>Type</Label>
-                        <select
-                          value={promo.type}
-                          onChange={(e) => updatePromoCode(promo.id, "type", e.target.value as "percentage" | "fixed")}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                          <option value="percentage">Percentage (%)</option>
-                          <option value="fixed">Fixed Amount (IDR)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label>Description</Label>
+                    <div className="flex items-center space-x-2 mt-2">
                       <Input
-                        value={promo.description}
-                        onChange={(e) => updatePromoCode(promo.id, "description", e.target.value)}
-                        placeholder="Early bird discount for first 100 buyers"
+                        type="checkbox"
+                        className="w-4 h-4"
+                        checked={ticket.isSeated}
+                        onChange={(e) =>
+                          updateTicketType(
+                            ticket.id,
+                            "isSeated",
+                            e.target.checked
+                          )
+                        }
                       />
+                      <Label className="mb-0">Seated Ticket</Label>
                     </div>
-                  </div>
+                  </Card>
                 ))}
+                <Button type="button" onClick={addTicketType}>
+                  <Plus className="w-4 h-4 mr-1" /> Add Ticket Type
+                </Button>
               </CardContent>
             </Card>
 
-            {/* Preview */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Event Preview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="border rounded-lg overflow-hidden">
-                  {imagePreview && (
-                    <div className="aspect-video relative overflow-hidden">
-                      <img
-                        src={imagePreview || "/placeholder.svg"}
-                        alt={eventData.title}
-                        className="w-full h-full object-cover"
-                      />
-                      {eventData.category && (
-                        <Badge className="absolute top-3 left-3 bg-blue-600 text-white">{eventData.category}</Badge>
-                      )}
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{eventData.title || "Event Title"}</h3>
-                    <p className="text-gray-600 mb-4">
-                      {eventData.description || "Event description will appear here"}
-                    </p>
-                    <div className="space-y-2 text-sm text-gray-600">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {eventData.date ? new Date(eventData.date).toLocaleDateString("id-ID") : "Date"} •{" "}
-                          {eventData.time || "Time"}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>{eventData.location || "Location"}</span>
-                      </div>
-                      {ticketTypes.length > 0 && (
-                        <div className="flex items-center space-x-2">
-                          <DollarSign className="w-4 h-4" />
-                          <span>Starting from {formatPrice(Math.min(...ticketTypes.map((t) => t.price)))}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Submit Button */}
-            <div className="flex justify-center">
-              <Button type="submit" size="lg" className="bg-blue-600 hover:bg-blue-700 px-12">
-                Create Event
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              className="w-full cursor-pointer hover:bg-gray-300 hover:font-bold"
+            >
+              Create Event
+            </Button>
           </form>
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

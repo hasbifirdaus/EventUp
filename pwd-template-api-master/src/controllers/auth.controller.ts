@@ -35,15 +35,18 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return res
         .status(400)
-        .json({ message: "Email dan password wajib diisi." });
+        .json({ message: "Email / Username dan password wajib diisi." });
     }
 
-    const { token, refreshToken, user } = await loginUser({ email, password });
+    const { token, refreshToken, user } = await loginUser({
+      identifier,
+      password,
+    });
 
     const userRoles = await prisma.userRole.findMany({
       where: { userId: user.id },

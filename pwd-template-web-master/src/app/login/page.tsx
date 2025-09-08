@@ -1,10 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useFormik } from "formik";
+import { useFormik, FormikHelpers } from "formik";
 import { loginValidationSchema } from "./_schemas/loginValidationSchema";
 import api from "@/utils/api";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/stores/useAuthStore";
+import ToastProvider from "@/components/ToastProvider";
+
+type TLoginFormValues = {
+  identifier: string;
+  password: string;
+};
 
 export default function Login() {
   type TLoginResponse = {
@@ -14,7 +20,7 @@ export default function Login() {
       id: string;
       username: string;
       email: string;
-      role: string;
+      roles: string[];
     };
   };
 
@@ -22,31 +28,51 @@ export default function Login() {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const setUser = useAuthStore((state) => state.setUser);
 
-  const formik = useFormik({
-    initialValues: { email: "", password: "" },
-    validationSchema: loginValidationSchema,
-    onSubmit: async (values) => {
-      try {
-        const res = await api.post<TLoginResponse>("/login", values);
-        if (res.data.token) {
-          setAccessToken(res.data.token);
-          setUser(res.data.user);
-          toast.success("Login berhasil!");
-          router.push("/");
-        } else {
-          toast.error("Login gagal, token tidak ditemukan");
-        }
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || "Login gagal");
+  //handler login
+  const handleLogin = async (values: {
+    identifier: string;
+    password: string;
+  }) => {
+    try {
+      const res = await api.post<TLoginResponse>("/login", values);
+
+      if (!res.data.token) {
+        toast.error("Login gagal, token tidak ditemukan");
+        return;
       }
+
+      //simpan token & user ke store
+      setAccessToken(res.data.token);
+      setUser(res.data.user);
+
+      toast.success("Login berhasil");
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Login gagal");
+    }
+  };
+
+  //Formik setup
+  const formik = useFormik<TLoginFormValues>({
+    initialValues: { identifier: "", password: "" },
+    validationSchema: loginValidationSchema,
+    onSubmit: (
+      values: TLoginFormValues,
+      actions: FormikHelpers<TLoginFormValues>
+    ) => {
+      handleLogin(values);
+      actions.setSubmitting(false);
     },
   });
 
   return (
     <div className="bg-gray-100 h-screen grid grid-cols-1 ">
       <section className=" text-black w-full  bg-[url('/img/login/pattern-blue.png')] bg-cover bg-center h-[33vh]">
+        <ToastProvider />
         <form
-          onSubmit={formik?.handleSubmit}
+          onSubmit={formik.handleSubmit}
           className="bg-neutral-50 rounded-lg flex flex-col gap-1.5 shadow-lg p-8 w-md max-w-2xl mt-36 mx-auto"
         >
           <div className="flex flex-col items-center ">
@@ -65,19 +91,19 @@ export default function Login() {
 
           <div>
             <label htmlFor="" className="text-gray-500 font-light ">
-              Email
+              Email ata Username
             </label>
             <input
-              type="email"
-              name="email"
-              value={formik?.values?.email}
-              onChange={formik?.handleChange}
+              type="text"
+              name="identifier"
+              value={formik.values.identifier}
+              onChange={formik.handleChange}
               placeholder=""
               className="w-full p-3 border border-gray-300 rounded-sm h-12 my-2.5"
             />
           </div>
-          {formik?.errors.email && formik?.touched.email && (
-            <div id="feedback">{formik?.errors.email}</div>
+          {formik?.errors.identifier && formik.touched.identifier && (
+            <div id="feedback">{formik.errors.identifier}</div>
           )}
           <div>
             <label htmlFor="" className="text-gray-500 font-light">
@@ -86,14 +112,14 @@ export default function Login() {
             <input
               type="password"
               name="password"
-              value={formik?.values.password}
-              onChange={formik?.handleChange}
+              value={formik.values.password}
+              onChange={formik.handleChange}
               placeholder=""
               className="w-full p-3 border border-gray-300 rounded-sm h-12 mt-2.5 mb-3"
             />
           </div>
-          {formik?.errors.password && formik?.touched?.password && (
-            <div id="feedback">{formik?.errors.password}</div>
+          {formik?.errors.password && formik.touched.password && (
+            <div id="feedback">{formik.errors.password}</div>
           )}
           <button
             type="submit"

@@ -1,9 +1,7 @@
 import { Response } from "express";
-import { PrismaClient } from "../generated/prisma";
+import prisma from "../utils/prisma";
 import { format } from "date-fns";
 import { TransactionStatusEnum } from "../../src/generated/prisma";
-
-const prisma = new PrismaClient();
 
 export const getOrganizerDashboard = async (req: any, res: Response) => {
   try {

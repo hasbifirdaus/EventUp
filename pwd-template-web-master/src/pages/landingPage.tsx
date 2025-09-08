@@ -146,7 +146,7 @@ const LandingPage = () => {
                       </Link> */}
 
                       <Link
-                        href="#"
+                        href="/tiket-saya"
                         className="flex items-center gap-1.5 cursor-pointer"
                       >
                         <FaTicketAlt className="text-[1rem]" />
@@ -305,11 +305,24 @@ const LandingPage = () => {
                       </Link>
 
                       <Link
-                        href="#"
+                        href="/tiket-saya"
                         id="sub-menu-link"
                         className="group flex items-center text-d no-underline mt-3"
                       >
                         <p className="w-full hover:font-bold ">Tiket Saya</p>
+                        <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
+                          &gt;
+                        </span>
+                      </Link>
+
+                      <Link
+                        href="/transaksi-saya"
+                        id="sub-menu-link"
+                        className="group flex items-center text-d no-underline mt-3"
+                      >
+                        <p className="w-full hover:font-bold ">
+                          Transaksi Saya
+                        </p>
                         <span className="text-xl transition-transform duration-500 group-hover:translate-x-1.5">
                           &gt;
                         </span>

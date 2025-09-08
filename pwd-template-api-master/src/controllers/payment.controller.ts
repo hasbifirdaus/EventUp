@@ -33,7 +33,9 @@ export const createSnapPaymentToken = async (req: Request, res: Response) => {
       include: {
         items: {
           include: {
-            ticketType: true,
+            ticketType: {
+              select: { name: true, price: true },
+            },
           },
         },
         user: true,

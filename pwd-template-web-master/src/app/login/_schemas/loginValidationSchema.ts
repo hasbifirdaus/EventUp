@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
 export const loginValidationSchema = Yup.object({
-  email: Yup.string().email("Email tidak valid").required("Wajib diisi"),
-  password: Yup.string().required("Wajib diisi"),
+  identifier: Yup.string().required("Email atau username wajib diisi"),
+  password: Yup.string().required("Password wajib diisi"),
 });
