@@ -28,7 +28,6 @@ export const getMyTransactions = async (req: any, res: Response) => {
           },
         },
         promotionUsed: {
-          // <--- perbaikan di sini
           select: {
             id: true,
             name: true,

@@ -5,6 +5,7 @@ import api from "@/utils/api";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Calendar, Clock, X } from "lucide-react";
 import QRCode from "react-qr-code";
+import Link from "next/link";
 
 interface IMyTicket {
   id: number;
@@ -56,6 +57,11 @@ const MyTicketsPage = () => {
 
   return (
     <div className="p-10 bg-white min-h-screen">
+      <Link className="p-10 cursor-pointer" href="/">
+        <button className="bg-blue-700 max-w-56 text-white rounded-full p-3">
+          Back
+        </button>
+      </Link>
       <section className="max-w-5xl mx-auto p-6 rounded-md shadow-xl bg-gray-50 text-gray-700">
         <h2 className="text-2xl font-bold py-4 mb-4 flex items-center gap-2">
           Tiket Saya

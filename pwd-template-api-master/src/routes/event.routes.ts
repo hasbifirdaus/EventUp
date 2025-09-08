@@ -46,7 +46,6 @@ eventRouter.get(
 eventRouter.post(
   "/:eventId/ticket-types",
   authMiddleware,
-  authorizeRole(["ORGANIZER"]),
   asyncHandler(createTicketType)
 );
 

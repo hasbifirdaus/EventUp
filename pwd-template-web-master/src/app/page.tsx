@@ -1,9 +1,9 @@
-import LandingPage from "@/pages/landingPage";
+import Navbar from "@/pages/Navbar";
 
 export default function Home() {
   return (
     <>
-      <LandingPage />
+      <Navbar />
     </>
   );
 }

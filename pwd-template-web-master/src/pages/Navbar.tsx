@@ -8,12 +8,12 @@ import LandingPageJonathan from "./landingPageJonathan";
 import { FaCompass } from "react-icons/fa";
 import { FaCalendarPlus } from "react-icons/fa6";
 import { FaTicketAlt } from "react-icons/fa";
-import { RiDiscountPercentFill } from "react-icons/ri";
+
 import PaymentStatusAlert from "@/components/PaymentStatusAlert";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const LandingPage = () => {
+const Navbar = () => {
   const [open, setOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
   const [roles, setRoles] = useState<string[]>([]);
@@ -377,4 +377,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default Navbar;
