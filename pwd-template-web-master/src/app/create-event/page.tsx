@@ -183,9 +183,13 @@ export default function CreateEventPage() {
         typeof error === "object" &&
         error !== null &&
         "response" in error &&
-        typeof (error as any).response?.data?.message === "string"
+        typeof (error as { response?: { data?: { message?: string } } })
+          ?.response?.data?.message === "string"
       ) {
-        alert((error as any).response.data.message);
+        alert(
+          (error as { response: { data: { message: string } } }).response.data
+            .message
+        );
       } else if (error instanceof Error) {
         alert(error.message);
       } else {

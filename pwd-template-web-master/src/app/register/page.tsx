@@ -17,21 +17,21 @@ export default function Register() {
         toast.success("Pendaftaran berhasil? silahkan login");
         router.push("/login");
       } catch (err: unknown) {
-        // jika error dari Axios
-        if (
-          typeof err === "object" &&
-          err !== null &&
-          "response" in err &&
-          typeof (err as any).response?.data?.message === "string"
-        ) {
-          toast.error((err as any).response.data.message);
-        }
-        // jika error standar JS
-        else if (err instanceof Error) {
+        type AxiosLikeError = {
+          response?: {
+            data?: {
+              message?: string;
+            };
+          };
+        };
+
+        const axiosErr = err as AxiosLikeError;
+
+        if (axiosErr.response?.data?.message) {
+          toast.error(axiosErr.response.data.message);
+        } else if (err instanceof Error) {
           toast.error(err.message);
-        }
-        // fallback jika tipe error lain
-        else {
+        } else {
           console.error(err);
           toast.error("Pendaftaran gagal");
         }

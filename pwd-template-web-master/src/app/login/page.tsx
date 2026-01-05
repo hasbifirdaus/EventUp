@@ -35,13 +35,11 @@ export default function Login() {
   }) => {
     try {
       const res = await api.post<TLoginResponse>("/login", values);
-
       if (!res.data.token) {
         toast.error("Login gagal, token tidak ditemukan");
         return;
       }
 
-      //simpan token & user ke store
       setAccessToken(res.data.token);
       setUser(res.data.user);
 
@@ -50,13 +48,18 @@ export default function Login() {
         router.push("/");
       }, 500);
     } catch (err: unknown) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof (err as any).response?.data?.message === "string"
-      ) {
-        toast.error((err as any).response.data.message);
+      type AxiosLikeError = {
+        response?: {
+          data?: {
+            message?: string;
+          };
+        };
+      };
+
+      const axiosErr = err as AxiosLikeError;
+
+      if (axiosErr.response?.data?.message) {
+        toast.error(axiosErr.response.data.message);
       } else if (err instanceof Error) {
         toast.error(err.message);
       } else {

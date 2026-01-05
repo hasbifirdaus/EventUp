@@ -101,17 +101,23 @@ export default function DashboardOrganizer() {
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     setError(null);
+
+    type AxiosLikeError = {
+      response?: {
+        data?: {
+          message?: string;
+        };
+      };
+    };
+
     try {
       const response = await api.get<DashboardData>("/dashboard/organizer");
       setDashboardData(response.data);
     } catch (err: unknown) {
-      if (
-        typeof err === "object" &&
-        err !== null &&
-        "response" in err &&
-        typeof (err as any).response?.data?.message === "string"
-      ) {
-        setError((err as any).response.data.message);
+      const axiosErr = err as AxiosLikeError;
+
+      if (axiosErr.response?.data?.message) {
+        setError(axiosErr.response.data.message);
       } else if (err instanceof Error) {
         setError(err.message);
       } else {
