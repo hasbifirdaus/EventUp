@@ -13,11 +13,16 @@ import handleMidtransNotificationRouter from "./routes/handleMidtransNotificatio
 import "dotenv/config";
 
 const app: Express = express();
-const port: number = 8000;
+const port = process.env.PORT || 8000;
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://NAMAPROJECT.vercel.app",
+];
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // asal frontend
+    origin: allowedOrigins, // asal frontend
     credentials: true, // izinkan cookie / header auth
   })
 );
