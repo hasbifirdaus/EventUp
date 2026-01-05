@@ -1,9 +1,9 @@
-"use client"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { ArrowLeft, Phone } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowLeft, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function AboutPage() {
   return (
@@ -25,7 +25,10 @@ export default function AboutPage() {
               <span className="text-xl font-bold text-gray-900">EventUp</span>
             </Link>
             <Link href="/">
-              <Button variant="outline" className="flex items-center space-x-2 bg-transparent">
+              <Button
+                variant="outline"
+                className="flex items-center space-x-2 bg-transparent"
+              >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Back to Home</span>
               </Button>
@@ -43,10 +46,13 @@ export default function AboutPage() {
           className="bg-white py-16 lg:py-24"
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 text-balance">About EventUp</h1>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 text-balance">
+              About EventUp
+            </h1>
             <p className="text-lg lg:text-xl text-gray-600 mb-8 max-w-3xl mx-auto text-pretty">
-              We're passionate about connecting people with amazing experiences. EventUp makes discovering and booking
-              events simple, enjoyable, and accessible for everyone.
+              We&apos;re passionate about connecting people with amazing
+              experiences. EventUp makes discovering and booking events simple,
+              enjoyable, and accessible for everyone.
             </p>
           </div>
         </motion.section>
@@ -60,11 +66,14 @@ export default function AboutPage() {
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Our Mission
+              </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                To make event discovery effortless and help people create unforgettable memories through amazing
-                experiences. We believe every event has the power to bring people together and create lasting
-                connections.
+                To make event discovery effortless and help people create
+                unforgettable memories through amazing experiences. We believe
+                every event has the power to bring people together and create
+                lasting connections.
               </p>
             </div>
           </div>
@@ -79,9 +88,12 @@ export default function AboutPage() {
         >
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Meet Our Team</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                Meet Our Team
+              </h2>
               <p className="text-lg text-gray-600">
-                The passionate individuals behind EventUp who work tirelessly to bring you the best event experiences.
+                The passionate individuals behind EventUp who work tirelessly to
+                bring you the best event experiences.
               </p>
             </div>
 
@@ -97,11 +109,16 @@ export default function AboutPage() {
                     <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
                       <span className="text-2xl font-bold text-white">J</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Jonathan</h3>
-                    <p className="text-blue-600 font-medium mb-4">Co-Founder & CEO</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Jonathan
+                    </h3>
+                    <p className="text-blue-600 font-medium mb-4">
+                      Co-Founder & CEO
+                    </p>
                     <p className="text-gray-600 mb-6">
-                      Passionate about technology and events, Jonathan leads our vision to revolutionize how people
-                      discover and attend events.
+                      Passionate about technology and events, Jonathan leads our
+                      vision to revolutionize how people discover and attend
+                      events.
                     </p>
                     <div className="flex justify-center space-x-4">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -124,11 +141,16 @@ export default function AboutPage() {
                     <div className="w-24 h-24 bg-green-600 rounded-full mx-auto mb-4 flex items-center justify-center">
                       <span className="text-2xl font-bold text-white">H</span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Hasbi</h3>
-                    <p className="text-green-600 font-medium mb-4">Co-Founder & CTO</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Hasbi
+                    </h3>
+                    <p className="text-green-600 font-medium mb-4">
+                      Co-Founder & CTO
+                    </p>
                     <p className="text-gray-600 mb-6">
-                      With expertise in software development and user experience, Hasbi ensures our platform delivers
-                      seamless event discovery.
+                      With expertise in software development and user
+                      experience, Hasbi ensures our platform delivers seamless
+                      event discovery.
                     </p>
                     <div className="flex justify-center space-x-4">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -153,10 +175,15 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Get in Touch</h2>
             <p className="text-xl text-blue-100 mb-8">
-              Have questions or want to partner with us? We'd love to hear from you.
+              Have questions or want to partner with us? We&apos;d love to hear
+              from you.
             </p>
             <Link href="/contact">
-              <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="bg-white text-blue-600 hover:bg-gray-100"
+              >
                 Contact Us
               </Button>
             </Link>
@@ -164,5 +191,5 @@ export default function AboutPage() {
         </motion.section>
       </div>
     </div>
-  )
+  );
 }

@@ -21,7 +21,7 @@ interface Authstate {
 export const useAuthStore = create<Authstate>()(
   persist(
     (set) => ({
-      accessToken: null, //awalnya null
+      accessToken: null,
       user: null,
       setAccessToken: (token: string | null) => set({ accessToken: token }),
       setUser: (user) => set({ user }),
@@ -29,10 +29,11 @@ export const useAuthStore = create<Authstate>()(
       _hasHydrated: false,
     }),
     {
-      name: "auth-storage", //nama key di localStorage
+      name: "auth-storage",
       onRehydrateStorage: () => (state) => {
-        // Panggil setelah store selesai memuat data dari localStorage
-        state && (state._hasHydrated = true);
+        if (state) {
+          state._hasHydrated = true;
+        }
       },
     }
   )

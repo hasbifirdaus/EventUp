@@ -102,12 +102,22 @@ export default function DashboardOrganizer() {
     setLoading(true);
     setError(null);
     try {
-      // Panggil endpoint dashboard yang sudah diperbarui
       const response = await api.get<DashboardData>("/dashboard/organizer");
       setDashboardData(response.data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Gagal memuat data dashboard.");
-      console.error("Error fetching dashboard data:", err);
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        typeof (err as any).response?.data?.message === "string"
+      ) {
+        setError((err as any).response.data.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        console.error("Error fetching dashboard data:", err);
+        setError("Gagal memuat data dashboard.");
+      }
     } finally {
       setLoading(false);
     }

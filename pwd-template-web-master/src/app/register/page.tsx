@@ -1,8 +1,6 @@
 "use client";
 
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { registerValidationSchema } from "./_schemas/registerValidationSchema";
@@ -18,8 +16,25 @@ export default function Register() {
         await api.post("/register", values);
         toast.success("Pendaftaran berhasil? silahkan login");
         router.push("/login");
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || "Pendaftaran gagal");
+      } catch (err: unknown) {
+        // jika error dari Axios
+        if (
+          typeof err === "object" &&
+          err !== null &&
+          "response" in err &&
+          typeof (err as any).response?.data?.message === "string"
+        ) {
+          toast.error((err as any).response.data.message);
+        }
+        // jika error standar JS
+        else if (err instanceof Error) {
+          toast.error(err.message);
+        }
+        // fallback jika tipe error lain
+        else {
+          console.error(err);
+          toast.error("Pendaftaran gagal");
+        }
       }
     },
   });

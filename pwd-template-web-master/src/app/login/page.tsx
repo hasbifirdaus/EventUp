@@ -49,8 +49,20 @@ export default function Login() {
       setTimeout(() => {
         router.push("/");
       }, 500);
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Login gagal");
+    } catch (err: unknown) {
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        typeof (err as any).response?.data?.message === "string"
+      ) {
+        toast.error((err as any).response.data.message);
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        console.error(err);
+        toast.error("Login gagal");
+      }
     }
   };
 

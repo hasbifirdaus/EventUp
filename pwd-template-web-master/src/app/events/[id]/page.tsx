@@ -28,10 +28,16 @@ type TicketType = {
   available: number;
   description: string;
   features: string[];
-  originalPrice?: number; // 👈 just make it optional
+  originalPrice?: number;
 };
 
-// Mock event data with enhanced ticket types and pricing
+type Promo = {
+  code: string;
+  discount: number;
+  type: "percentage" | "fixed";
+  description: string;
+};
+
 const mockEventDetails = {
   1: {
     id: 1,
@@ -538,7 +544,7 @@ export default function EventDetailPage() {
   const [selectedTicketType, setSelectedTicketType] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [promoCode, setPromoCode] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<any>(null);
+  const [appliedPromo, setAppliedPromo] = useState<Promo | null>(null);
   const [promoError, setPromoError] = useState("");
 
   if (!event) {
@@ -582,7 +588,7 @@ export default function EventDetailPage() {
       (p) => p.code.toLowerCase() === promoCode.toLowerCase()
     );
     if (promo) {
-      setAppliedPromo(promo);
+      setAppliedPromo(promo as Promo);
       setPromoError("");
     } else {
       setPromoError("Invalid promo code");
@@ -731,7 +737,7 @@ export default function EventDetailPage() {
                     </p>
 
                     <h4 className="text-lg font-semibold text-gray-900 mb-3">
-                      What's Included
+                      What&apos;s Included
                     </h4>
                     <ul className="space-y-2">
                       {event.features.map((feature, index) => (

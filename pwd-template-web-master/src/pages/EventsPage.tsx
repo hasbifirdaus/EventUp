@@ -2,12 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import api from "@/utils/api";
-import {
-  FaCalendarPlus,
-  FaPen,
-  FaCheckCircle,
-  FaHistory,
-} from "react-icons/fa";
+import { FaPen, FaCheckCircle, FaHistory } from "react-icons/fa";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 
@@ -40,6 +35,7 @@ const EventsPage = () => {
       const response = await api.get<IEventsResponse>("/events/organizer");
       setEvents(response.data);
     } catch (err) {
+      console.error("Error fetching events:", err);
       setError("Gagal memuat event. Silakan coba lagi.");
     } finally {
       setLoading(false);

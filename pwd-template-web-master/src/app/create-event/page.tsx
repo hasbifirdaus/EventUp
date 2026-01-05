@@ -112,16 +112,15 @@ export default function CreateEventPage() {
     ]);
   };
 
-  const updateTicketType = (
+  const updateTicketType = <K extends keyof TicketType>(
     id: string,
-    field: keyof TicketType,
-    value: any
+    field: K,
+    value: TicketType[K]
   ) => {
     setTicketTypes((prev) =>
       prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
     );
   };
-
   const removeTicketType = (id: string) =>
     setTicketTypes((prev) => prev.filter((t) => t.id !== id));
 
@@ -179,13 +178,20 @@ export default function CreateEventPage() {
 
       alert("Event and tickets created successfully!");
       resetForm();
-    } catch (error: any) {
-      console.error(error);
-      alert(
-        error.response?.data?.message ||
-          error.message ||
-          "Failed to create event"
-      );
+    } catch (error: unknown) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        typeof (error as any).response?.data?.message === "string"
+      ) {
+        alert((error as any).response.data.message);
+      } else if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        console.error(error);
+        alert("Failed to create event");
+      }
     }
   };
 

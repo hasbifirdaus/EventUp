@@ -1,15 +1,8 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePointStore } from "@/stores/usePointStore";
 import { useCouponStore } from "@/stores/useCouponStore";
-
-interface IPromotion {
-  code: string;
-  discount: string;
-  validUntil: string;
-  status: "active" | "expired";
-}
 
 const ProfilePage = () => {
   const user = useAuthStore((state) => state.user);
