@@ -17,7 +17,7 @@ const port = process.env.PORT || 8000;
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://NAMAPROJECT.vercel.app",
+  "https://event-up-six.vercel.app",
 ];
 
 app.use(
