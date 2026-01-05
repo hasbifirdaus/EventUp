@@ -165,7 +165,7 @@ export default function ReviewAndRatingPage() {
     );
     if (eventReviews.length === 0) return 0;
     const sum = eventReviews.reduce((acc, review) => acc + review.rating, 0);
-    return (sum / eventReviews.length).toFixed(1);
+    return parseFloat((sum / eventReviews.length).toFixed(1));
   };
 
   const getReviewCount = (eventId: number) => {
@@ -333,23 +333,25 @@ export default function ReviewAndRatingPage() {
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="flex items-center">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`w-4 h-4 ${
-                                  star <=
-                                  Math.round(
-                                    Number.parseFloat(
-                                      getAverageRating(
-                                        Number.parseInt(filterEventId)
-                                      )
+                            {[1, 2, 3, 4, 5].map((star) => {
+                              const average =
+                                filterEventId !== "all"
+                                  ? getAverageRating(
+                                      Number.parseInt(filterEventId)
                                     )
-                                  )
-                                    ? "fill-yellow-400 text-yellow-400"
-                                    : "text-gray-300"
-                                }`}
-                              />
-                            ))}
+                                  : 0;
+
+                              return (
+                                <Star
+                                  key={star}
+                                  className={`w-4 h-4 ${
+                                    star <= average
+                                      ? "fill-yellow-400 text-yellow-400"
+                                      : "text-gray-300"
+                                  }`}
+                                />
+                              );
+                            })}
                           </div>
                           <span className="text-sm text-gray-600">
                             {getAverageRating(Number.parseInt(filterEventId))} (

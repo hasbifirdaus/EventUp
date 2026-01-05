@@ -6,7 +6,7 @@ interface IRefreshResponse {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "https://eventup-kw25.onrender.com/api",
   withCredentials: true, // Cookie refresh token dikirim otomatis
 });
 

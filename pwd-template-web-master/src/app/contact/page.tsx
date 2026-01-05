@@ -31,7 +31,7 @@ export default function ContactPage() {
     const body = encodeURIComponent(
       `Name: ${contactForm.fullName}\nEmail: ${contactForm.email}\n\nMessage:\n${contactForm.message}`,
     )
-    window.location.href = `mailto:mythrixen@gmail.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:hasbi.fauzun@gmail.com?subject=${subject}&body=${body}`
   }
 
   return (

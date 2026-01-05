@@ -529,6 +529,9 @@ const mockEventDetails = {
 export default function EventDetailPage() {
   const params = useParams();
   const router = useRouter();
+  if (!params || !params.id) {
+    throw new Error("Event ID not found");
+  }
   const eventId = Number.parseInt(params.id as string);
   const event = mockEventDetails[eventId as keyof typeof mockEventDetails];
 
